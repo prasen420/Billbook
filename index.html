@@ -95,7 +95,9 @@ body{
     background:#e9f7ef;
 }
 
-#billingPage{
+/* COMMON */
+
+.page{
     display:none;
 }
 
@@ -109,12 +111,136 @@ body{
     margin-bottom:18px;
 }
 
-.bill-box{
+.box{
     background:white;
     padding:25px;
     border-radius:12px;
     box-shadow:0 2px 10px rgba(0,0,0,.08);
 }
+
+.box-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.box-title h2{
+    color:#1f7a4d;
+}
+
+.primary-btn{
+    background:#1f7a4d;
+    color:white;
+    border:0;
+    padding:11px 18px;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.secondary-btn{
+    background:#777;
+    color:white;
+    border:0;
+    padding:10px 16px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.danger-btn{
+    background:#dc3545;
+    color:white;
+    border:0;
+    padding:7px 11px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.edit-btn{
+    background:#f0a500;
+    color:white;
+    border:0;
+    padding:7px 11px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+/* PRODUCT */
+
+.product-form{
+    display:none;
+    background:#f8faf9;
+    border:1px solid #ddd;
+    padding:20px;
+    border-radius:10px;
+    margin-bottom:25px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.form-group label{
+    display:block;
+    font-size:13px;
+    font-weight:bold;
+    margin-bottom:6px;
+}
+
+.form-group input,
+.form-group select{
+    width:100%;
+    padding:11px;
+    border:1px solid #ccc;
+    border-radius:6px;
+    font-size:14px;
+}
+
+.form-buttons{
+    margin-top:18px;
+    display:flex;
+    gap:10px;
+}
+
+.search-box{
+    margin-bottom:15px;
+}
+
+.search-box input{
+    width:100%;
+    max-width:400px;
+    padding:11px;
+    border:1px solid #ccc;
+    border-radius:6px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#1f7a4d;
+    color:white;
+    padding:12px;
+    text-align:left;
+}
+
+td{
+    padding:10px;
+    border-bottom:1px solid #ddd;
+}
+
+.empty{
+    text-align:center;
+    padding:30px;
+    color:#777;
+}
+
+/* BILL */
 
 .bill-header{
     display:flex;
@@ -132,47 +258,23 @@ body{
     text-align:right;
 }
 
-.form-grid{
+.customer-grid{
     display:grid;
     grid-template-columns:repeat(3,1fr);
     gap:15px;
     margin-bottom:25px;
 }
 
-.form-group label{
-    display:block;
-    font-size:13px;
-    font-weight:bold;
-    margin-bottom:6px;
+.bill-table{
+    overflow-x:auto;
 }
 
-.form-group input{
-    width:100%;
-    padding:11px;
-    border:1px solid #ccc;
-    border-radius:6px;
-    font-size:14px;
+.bill-table table{
+    min-width:850px;
 }
 
-table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:10px;
-}
-
-th{
-    background:#1f7a4d;
-    color:white;
-    padding:12px;
-    text-align:left;
-}
-
-td{
-    padding:8px;
-    border-bottom:1px solid #ddd;
-}
-
-td input{
+.bill-table td input,
+.bill-table td select{
     width:100%;
     padding:9px;
     border:1px solid #ccc;
@@ -181,15 +283,6 @@ td input{
 
 .amount{
     font-weight:bold;
-}
-
-.delete-btn{
-    background:#dc3545;
-    color:white;
-    border:0;
-    padding:8px 11px;
-    border-radius:5px;
-    cursor:pointer;
 }
 
 .add-btn{
@@ -255,6 +348,7 @@ td input{
 }
 
 @media(max-width:900px){
+
     .cards{
         grid-template-columns:repeat(2,1fr);
     }
@@ -263,8 +357,30 @@ td input{
         grid-template-columns:repeat(2,1fr);
     }
 
-    .form-grid{
+    .form-grid,
+    .customer-grid{
         grid-template-columns:1fr 1fr;
+    }
+}
+
+@media(max-width:600px){
+
+    .container{
+        padding:15px;
+    }
+
+    .cards,
+    .menu,
+    .form-grid,
+    .customer-grid,
+    .payment-section{
+        grid-template-columns:1fr;
+    }
+
+    .header{
+        flex-direction:column;
+        gap:5px;
+        align-items:flex-start;
     }
 
     .bill-header{
@@ -273,33 +389,6 @@ td input{
 
     .invoice-info{
         text-align:left;
-    }
-}
-
-@media(max-width:600px){
-    .container{
-        padding:15px;
-    }
-
-    .cards,
-    .menu,
-    .form-grid,
-    .payment-section{
-        grid-template-columns:1fr;
-    }
-
-    table{
-        font-size:12px;
-    }
-
-    th,td{
-        padding:5px;
-    }
-
-    .header{
-        flex-direction:column;
-        gap:5px;
-        align-items:flex-start;
     }
 }
 
@@ -321,7 +410,7 @@ td input{
         max-width:none;
     }
 
-    .bill-box{
+    .box{
         box-shadow:none;
         padding:10px;
     }
@@ -330,11 +419,13 @@ td input{
         display:block !important;
     }
 
-    #dashboard{
+    #dashboard,
+    #productsPage{
         display:none !important;
     }
 
-    input{
+    input,
+    select{
         border:0 !important;
     }
 
@@ -352,7 +443,8 @@ td input{
     <span>Billing & Business Management</span>
 </div>
 
-<!-- DASHBOARD -->
+
+<!-- ================= DASHBOARD ================= -->
 
 <div id="dashboard" class="container">
 
@@ -380,7 +472,7 @@ td input{
 
         <div class="card">
             <h3>Total Stock</h3>
-            <p>0</p>
+            <p id="dashboardStock">0</p>
         </div>
 
     </div>
@@ -391,7 +483,7 @@ td input{
             🧾 New Bill
         </button>
 
-        <button onclick="comingSoon('Products')">
+        <button onclick="openProducts()">
             📦 Products
         </button>
 
@@ -416,24 +508,231 @@ td input{
 </div>
 
 
-<!-- BILLING PAGE -->
+<!-- ================= PRODUCTS ================= -->
 
-<div id="billingPage" class="container">
+<div id="productsPage" class="container page">
 
     <button class="back-btn" onclick="backDashboard()">
         ← Back to Dashboard
     </button>
 
-    <div class="bill-box">
+    <div class="box">
+
+        <div class="box-title">
+
+            <div>
+                <h2>Products</h2>
+                <p>Manage your products and stock</p>
+            </div>
+
+            <button
+                class="primary-btn"
+                onclick="showProductForm()">
+                + Add Product
+            </button>
+
+        </div>
+
+
+        <!-- PRODUCT FORM -->
+
+        <div id="productForm" class="product-form">
+
+            <h3 id="productFormTitle">
+                Add New Product
+            </h3>
+
+            <br>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>Product Name *</label>
+
+                    <input
+                        type="text"
+                        id="productName"
+                        placeholder="Enter product name">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>SKU / Product Code</label>
+
+                    <input
+                        type="text"
+                        id="productSKU"
+                        placeholder="Example: PROD001">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Barcode</label>
+
+                    <input
+                        type="text"
+                        id="productBarcode"
+                        placeholder="Enter barcode">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Purchase Price</label>
+
+                    <input
+                        type="number"
+                        id="purchasePrice"
+                        min="0"
+                        value="0"
+                        placeholder="0">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Selling Price *</label>
+
+                    <input
+                        type="number"
+                        id="sellingPrice"
+                        min="0"
+                        value="0"
+                        placeholder="0">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>GST %</label>
+
+                    <select id="productGST">
+
+                        <option value="0">0%</option>
+                        <option value="5">5%</option>
+                        <option value="12">12%</option>
+                        <option value="18">18%</option>
+                        <option value="28">28%</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Opening Stock</label>
+
+                    <input
+                        type="number"
+                        id="productStock"
+                        min="0"
+                        value="0"
+                        placeholder="0">
+
+                </div>
+
+            </div>
+
+
+            <div class="form-buttons">
+
+                <button
+                    class="primary-btn"
+                    onclick="saveProduct()">
+                    Save Product
+                </button>
+
+                <button
+                    class="secondary-btn"
+                    onclick="hideProductForm()">
+                    Cancel
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- SEARCH -->
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="productSearch"
+                placeholder="🔍 Search product..."
+                oninput="displayProducts()">
+
+        </div>
+
+
+        <!-- PRODUCT TABLE -->
+
+        <div style="overflow-x:auto;">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>#</th>
+                        <th>Product Name</th>
+                        <th>SKU</th>
+                        <th>Purchase Price</th>
+                        <th>Selling Price</th>
+                        <th>GST</th>
+                        <th>Stock</th>
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="productsTable">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= BILLING ================= -->
+
+<div id="billingPage" class="container page">
+
+    <button class="back-btn" onclick="backDashboard()">
+        ← Back to Dashboard
+    </button>
+
+    <div class="box">
 
         <div class="bill-header">
 
             <div>
+
                 <h2>BillBook Invoice</h2>
+
                 <p>Sales Invoice</p>
+
             </div>
 
             <div class="invoice-info">
+
                 <p>
                     <strong>Invoice No:</strong>
                     <span id="invoiceNumber"></span>
@@ -443,6 +742,7 @@ td input{
                     <strong>Date:</strong>
                     <span id="invoiceDate"></span>
                 </p>
+
             </div>
 
         </div>
@@ -450,60 +750,100 @@ td input{
 
         <!-- CUSTOMER -->
 
-        <div class="form-grid">
+        <div class="customer-grid">
 
             <div class="form-group">
+
                 <label>Customer Name</label>
+
                 <input
                     type="text"
                     id="customerName"
                     placeholder="Enter customer name">
+
             </div>
 
+
             <div class="form-group">
+
                 <label>Mobile Number</label>
+
                 <input
                     type="text"
                     id="customerMobile"
                     placeholder="Enter mobile number">
+
             </div>
 
+
             <div class="form-group">
+
                 <label>Customer Address</label>
+
                 <input
                     type="text"
                     id="customerAddress"
                     placeholder="Enter address">
+
             </div>
 
         </div>
 
 
-        <!-- PRODUCTS -->
-
         <h3>Products</h3>
 
-        <table>
 
-            <thead>
-                <tr>
-                    <th style="width:35%">Product</th>
-                    <th style="width:12%">Qty</th>
-                    <th style="width:15%">Price</th>
-                    <th style="width:15%">GST %</th>
-                    <th style="width:15%">Amount</th>
-                    <th class="delete-column">Action</th>
-                </tr>
-            </thead>
+        <div class="bill-table">
 
-            <tbody id="productTable">
+            <table>
 
-            </tbody>
+                <thead>
 
-        </table>
+                    <tr>
 
-        <button class="add-btn" onclick="addProduct()">
+                        <th style="width:30%">
+                            Product
+                        </th>
+
+                        <th style="width:10%">
+                            Qty
+                        </th>
+
+                        <th style="width:15%">
+                            Price
+                        </th>
+
+                        <th style="width:12%">
+                            GST %
+                        </th>
+
+                        <th style="width:15%">
+                            Amount
+                        </th>
+
+                        <th class="delete-column">
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="billProductTable">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <button
+            class="add-btn"
+            onclick="addBillProduct()">
+
             + Add Product
+
         </button>
 
 
@@ -512,21 +852,35 @@ td input{
         <div class="summary">
 
             <div class="summary-row">
+
                 <span>Subtotal</span>
-                <span>₹ <span id="subtotal">0.00</span></span>
+
+                <span>
+                    ₹ <span id="subtotal">0.00</span>
+                </span>
+
             </div>
 
+
             <div class="summary-row">
+
                 <span>GST</span>
-                <span>₹ <span id="gstTotal">0.00</span></span>
+
+                <span>
+                    ₹ <span id="gstTotal">0.00</span>
+                </span>
+
             </div>
+
 
             <div class="summary-row">
 
                 <span>Discount</span>
 
                 <span>
+
                     ₹
+
                     <input
                         type="number"
                         id="discount"
@@ -534,13 +888,20 @@ td input{
                         min="0"
                         oninput="calculateBill()"
                         style="width:100px;padding:5px;">
+
                 </span>
 
             </div>
 
+
             <div class="summary-row total">
+
                 <span>Grand Total</span>
-                <span>₹ <span id="grandTotal">0.00</span></span>
+
+                <span>
+                    ₹ <span id="grandTotal">0.00</span>
+                </span>
+
             </div>
 
         </div>
@@ -554,9 +915,7 @@ td input{
 
                 <label>Payment Method</label>
 
-                <select
-                    id="paymentMethod"
-                    style="width:100%;padding:11px;border:1px solid #ccc;border-radius:6px;">
+                <select id="paymentMethod">
 
                     <option>Cash</option>
                     <option>UPI</option>
@@ -567,6 +926,7 @@ td input{
                 </select>
 
             </div>
+
 
             <div class="form-group">
 
@@ -599,20 +959,23 @@ td input{
         </div>
 
 
-        <!-- BUTTONS -->
-
         <div class="actions">
 
             <button
                 class="action-btn clear-btn"
                 onclick="clearBill()">
+
                 Clear
+
             </button>
+
 
             <button
                 class="action-btn print-btn"
                 onclick="printBill()">
+
                 🖨️ Print Bill
+
             </button>
 
         </div>
@@ -624,129 +987,573 @@ td input{
 
 <script>
 
-let productCount = 0;
+/* ================= PRODUCTS DATA ================= */
+
+let products =
+    JSON.parse(
+        localStorage.getItem("billbook_products")
+    ) || [];
+
+let editingProductId = null;
 
 
-/* OPEN BILLING */
+/* ================= DASHBOARD ================= */
 
-function openBilling(){
+function showPage(pageId){
 
     document.getElementById("dashboard").style.display = "none";
 
-    document.getElementById("billingPage").style.display = "block";
+    document.getElementById("productsPage").style.display = "none";
+
+    document.getElementById("billingPage").style.display = "none";
+
+    document.getElementById(pageId).style.display = "block";
+
+}
+
+
+function backDashboard(){
+
+    showPage("dashboard");
+
+    updateDashboard();
+
+}
+
+
+/* ================= PRODUCT PAGE ================= */
+
+function openProducts(){
+
+    showPage("productsPage");
+
+    displayProducts();
+
+    updateDashboard();
+
+}
+
+
+function showProductForm(){
+
+    document.getElementById("productForm").style.display = "block";
+
+    document.getElementById("productFormTitle").innerText =
+        "Add New Product";
+
+    editingProductId = null;
+
+    clearProductForm();
+
+}
+
+
+function hideProductForm(){
+
+    document.getElementById("productForm").style.display = "none";
+
+    editingProductId = null;
+
+    clearProductForm();
+
+}
+
+
+function clearProductForm(){
+
+    document.getElementById("productName").value = "";
+
+    document.getElementById("productSKU").value = "";
+
+    document.getElementById("productBarcode").value = "";
+
+    document.getElementById("purchasePrice").value = 0;
+
+    document.getElementById("sellingPrice").value = 0;
+
+    document.getElementById("productGST").value = 0;
+
+    document.getElementById("productStock").value = 0;
+
+}
+
+
+/* ================= SAVE PRODUCT ================= */
+
+function saveProduct(){
+
+    const name =
+        document.getElementById("productName").value.trim();
+
+    const sku =
+        document.getElementById("productSKU").value.trim();
+
+    const barcode =
+        document.getElementById("productBarcode").value.trim();
+
+    const purchase =
+        parseFloat(
+            document.getElementById("purchasePrice").value
+        ) || 0;
+
+    const selling =
+        parseFloat(
+            document.getElementById("sellingPrice").value
+        ) || 0;
+
+    const gst =
+        parseFloat(
+            document.getElementById("productGST").value
+        ) || 0;
+
+    const stock =
+        parseFloat(
+            document.getElementById("productStock").value
+        ) || 0;
+
+
+    if(!name){
+
+        alert("Please enter product name.");
+
+        return;
+
+    }
+
+
+    if(selling <= 0){
+
+        alert("Please enter selling price.");
+
+        return;
+
+    }
+
+
+    if(editingProductId){
+
+        const index =
+            products.findIndex(
+                p => p.id === editingProductId
+            );
+
+        if(index !== -1){
+
+            products[index] = {
+
+                ...products[index],
+
+                name,
+                sku,
+                barcode,
+                purchase,
+                selling,
+                gst,
+                stock
+
+            };
+
+        }
+
+    }
+
+    else{
+
+        products.push({
+
+            id: Date.now(),
+
+            name,
+            sku,
+            barcode,
+            purchase,
+            selling,
+            gst,
+            stock
+
+        });
+
+    }
+
+
+    localStorage.setItem(
+        "billbook_products",
+        JSON.stringify(products)
+    );
+
+
+    alert("Product saved successfully!");
+
+    hideProductForm();
+
+    displayProducts();
+
+    updateDashboard();
+
+}
+
+
+/* ================= DISPLAY PRODUCTS ================= */
+
+function displayProducts(){
+
+    const table =
+        document.getElementById("productsTable");
+
+    const search =
+        document.getElementById("productSearch")
+        .value
+        .toLowerCase();
+
+
+    table.innerHTML = "";
+
+
+    const filtered =
+        products.filter(product =>
+
+            product.name
+                .toLowerCase()
+                .includes(search)
+
+            ||
+
+            product.sku
+                .toLowerCase()
+                .includes(search)
+
+        );
+
+
+    if(filtered.length === 0){
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="8"
+                    class="empty">
+
+                    No products found.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    filtered.forEach((product,index) => {
+
+        const row =
+            document.createElement("tr");
+
+
+        row.innerHTML = `
+
+            <td>${index + 1}</td>
+
+            <td>
+                <strong>${escapeHtml(product.name)}</strong>
+            </td>
+
+            <td>
+                ${escapeHtml(product.sku || "-")}
+            </td>
+
+            <td>
+                ₹ ${Number(product.purchase).toFixed(2)}
+            </td>
+
+            <td>
+                ₹ ${Number(product.selling).toFixed(2)}
+            </td>
+
+            <td>
+                ${product.gst}%
+            </td>
+
+            <td>
+                <strong>${product.stock}</strong>
+            </td>
+
+            <td>
+
+                <button
+                    class="edit-btn"
+                    onclick="editProduct(${product.id})">
+
+                    Edit
+
+                </button>
+
+                <button
+                    class="danger-btn"
+                    onclick="deleteProduct(${product.id})">
+
+                    Delete
+
+                </button>
+
+            </td>
+
+        `;
+
+
+        table.appendChild(row);
+
+    });
+
+}
+
+
+/* ================= EDIT PRODUCT ================= */
+
+function editProduct(id){
+
+    const product =
+        products.find(
+            p => p.id === id
+        );
+
+
+    if(!product){
+        return;
+    }
+
+
+    editingProductId = id;
+
+
+    document.getElementById("productForm").style.display = "block";
+
+    document.getElementById("productFormTitle").innerText =
+        "Edit Product";
+
+
+    document.getElementById("productName").value =
+        product.name;
+
+    document.getElementById("productSKU").value =
+        product.sku;
+
+    document.getElementById("productBarcode").value =
+        product.barcode;
+
+    document.getElementById("purchasePrice").value =
+        product.purchase;
+
+    document.getElementById("sellingPrice").value =
+        product.selling;
+
+    document.getElementById("productGST").value =
+        product.gst;
+
+    document.getElementById("productStock").value =
+        product.stock;
+
+}
+
+
+/* ================= DELETE PRODUCT ================= */
+
+function deleteProduct(id){
+
+    const product =
+        products.find(
+            p => p.id === id
+        );
+
+
+    if(!product){
+        return;
+    }
+
+
+    if(
+        !confirm(
+            "Delete " +
+            product.name +
+            "?"
+        )
+    ){
+
+        return;
+
+    }
+
+
+    products =
+        products.filter(
+            p => p.id !== id
+        );
+
+
+    localStorage.setItem(
+        "billbook_products",
+        JSON.stringify(products)
+    );
+
+
+    displayProducts();
+
+    updateDashboard();
+
+}
+
+
+/* ================= BILLING ================= */
+
+function openBilling(){
+
+    showPage("billingPage");
 
     createInvoiceNumber();
 
     setDate();
 
-    if(productCount === 0){
-        addProduct();
-    }
+
+    document.getElementById(
+        "billProductTable"
+    ).innerHTML = "";
+
+
+    addBillProduct();
 
 }
 
 
-/* BACK */
-
-function backDashboard(){
-
-    document.getElementById("billingPage").style.display = "none";
-
-    document.getElementById("dashboard").style.display = "block";
-
-}
-
-
-/* INVOICE NUMBER */
+/* ================= INVOICE NUMBER ================= */
 
 function createInvoiceNumber(){
 
-    const number =
+    document.getElementById("invoiceNumber")
+        .innerText =
         "INV-" +
         Date.now().toString().slice(-6);
 
-    document.getElementById("invoiceNumber").innerText = number;
-
 }
 
 
-/* DATE */
+/* ================= DATE ================= */
 
 function setDate(){
 
-    const today = new Date();
-
-    const date =
-        today.toLocaleDateString(
-            "en-IN"
-        );
-
-    document.getElementById("invoiceDate").innerText = date;
+    document.getElementById("invoiceDate")
+        .innerText =
+        new Date().toLocaleDateString("en-IN");
 
 }
 
 
-/* ADD PRODUCT */
+/* ================= BILL PRODUCT ================= */
 
-function addProduct(){
-
-    productCount++;
+function addBillProduct(){
 
     const table =
-        document.getElementById("productTable");
+        document.getElementById(
+            "billProductTable"
+        );
+
 
     const row =
         document.createElement("tr");
 
+
+    let options =
+        `<option value="">Select Product</option>`;
+
+
+    products.forEach(product => {
+
+        options += `
+
+            <option value="${product.id}">
+
+                ${escapeHtml(product.name)}
+
+            </option>
+
+        `;
+
+    });
+
+
     row.innerHTML = `
 
         <td>
-            <input
-                type="text"
-                placeholder="Product name"
-                class="product-name">
+
+            <select
+                class="bill-product"
+                onchange="productSelected(this)">
+
+                ${options}
+
+            </select>
+
         </td>
 
+
         <td>
+
             <input
                 type="number"
                 value="1"
                 min="1"
-                class="qty"
+                class="bill-qty"
                 oninput="calculateBill()">
+
         </td>
 
+
         <td>
+
             <input
                 type="number"
                 value="0"
                 min="0"
-                class="price"
+                class="bill-price"
                 oninput="calculateBill()">
+
         </td>
 
+
         <td>
+
             <input
                 type="number"
                 value="0"
                 min="0"
-                class="gst"
+                class="bill-gst"
                 oninput="calculateBill()">
+
         </td>
+
 
         <td class="amount">
             ₹ 0.00
         </td>
 
+
         <td class="delete-column">
+
             <button
-                class="delete-btn"
-                onclick="deleteProduct(this)">
+                class="danger-btn"
+                onclick="deleteBillProduct(this)">
+
                 ×
+
             </button>
+
         </td>
 
     `;
+
 
     table.appendChild(row);
 
@@ -755,9 +1562,52 @@ function addProduct(){
 }
 
 
-/* DELETE PRODUCT */
+/* ================= PRODUCT SELECT ================= */
 
-function deleteProduct(button){
+function productSelected(select){
+
+    const id =
+        Number(select.value);
+
+
+    const product =
+        products.find(
+            p => p.id === id
+        );
+
+
+    const row =
+        select.closest("tr");
+
+
+    if(!product){
+
+        row.querySelector(".bill-price").value = 0;
+
+        row.querySelector(".bill-gst").value = 0;
+
+        calculateBill();
+
+        return;
+
+    }
+
+
+    row.querySelector(".bill-price").value =
+        product.selling;
+
+    row.querySelector(".bill-gst").value =
+        product.gst;
+
+
+    calculateBill();
+
+}
+
+
+/* ================= DELETE BILL PRODUCT ================= */
+
+function deleteBillProduct(button){
 
     button.closest("tr").remove();
 
@@ -766,48 +1616,57 @@ function deleteProduct(button){
 }
 
 
-/* CALCULATE BILL */
+/* ================= CALCULATE BILL ================= */
 
 function calculateBill(){
 
     const rows =
         document.querySelectorAll(
-            "#productTable tr"
+            "#billProductTable tr"
         );
+
 
     let subtotal = 0;
 
     let gstTotal = 0;
 
+
     rows.forEach(row => {
 
         const qty =
             parseFloat(
-                row.querySelector(".qty").value
+                row.querySelector(".bill-qty").value
             ) || 0;
+
 
         const price =
             parseFloat(
-                row.querySelector(".price").value
+                row.querySelector(".bill-price").value
             ) || 0;
+
 
         const gst =
             parseFloat(
-                row.querySelector(".gst").value
+                row.querySelector(".bill-gst").value
             ) || 0;
+
 
         const base =
             qty * price;
 
+
         const gstAmount =
             base * gst / 100;
+
 
         const total =
             base + gstAmount;
 
+
         row.querySelector(".amount")
             .innerText =
             "₹ " + total.toFixed(2);
+
 
         subtotal += base;
 
@@ -823,9 +1682,12 @@ function calculateBill(){
 
 
     const grandTotal =
-        subtotal +
-        gstTotal -
-        discount;
+        Math.max(
+            subtotal +
+            gstTotal -
+            discount,
+            0
+        );
 
 
     const paid =
@@ -853,10 +1715,7 @@ function calculateBill(){
 
     document.getElementById("grandTotal")
         .innerText =
-        Math.max(
-            grandTotal,
-            0
-        ).toFixed(2);
+        grandTotal.toFixed(2);
 
 
     document.getElementById("dueAmount")
@@ -866,7 +1725,7 @@ function calculateBill(){
 }
 
 
-/* CLEAR BILL */
+/* ================= CLEAR BILL ================= */
 
 function clearBill(){
 
@@ -875,7 +1734,9 @@ function clearBill(){
             "Are you sure you want to clear this bill?"
         )
     ){
+
         return;
+
     }
 
 
@@ -890,20 +1751,23 @@ function clearBill(){
     document.getElementById("paidAmount").value = 0;
 
 
-    document.getElementById("productTable").innerHTML = "";
+    document.getElementById(
+        "billProductTable"
+    ).innerHTML = "";
 
-    productCount = 0;
 
-    addProduct();
+    addBillProduct();
 
     createInvoiceNumber();
+
+    setDate();
 
     calculateBill();
 
 }
 
 
-/* PRINT */
+/* ================= PRINT ================= */
 
 function printBill(){
 
@@ -914,7 +1778,46 @@ function printBill(){
 }
 
 
-/* COMING SOON */
+/* ================= DASHBOARD STOCK ================= */
+
+function updateDashboard(){
+
+    const totalStock =
+        products.reduce(
+            (total,product) =>
+                total +
+                Number(product.stock || 0),
+            0
+        );
+
+
+    document.getElementById(
+        "dashboardStock"
+    ).innerText = totalStock;
+
+}
+
+
+/* ================= HTML SECURITY ================= */
+
+function escapeHtml(value){
+
+    return String(value)
+
+        .replace(/&/g,"&amp;")
+
+        .replace(/</g,"&lt;")
+
+        .replace(/>/g,"&gt;")
+
+        .replace(/"/g,"&quot;")
+
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* ================= COMING SOON ================= */
 
 function comingSoon(name){
 
@@ -924,6 +1827,11 @@ function comingSoon(name){
     );
 
 }
+
+
+/* ================= START ================= */
+
+updateDashboard();
 
 </script>
 
