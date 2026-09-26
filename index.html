@@ -1986,29 +1986,31 @@ function printBill(){
 
     rows.forEach(row => {
 
-        const productSelect =
+        const productInput =
             row.querySelector(".bill-product");
 
         const qtyInput =
             row.querySelector(".bill-qty");
 
-        if(!productSelect || !qtyInput){
+        if(!productInput || !qtyInput){
             return;
         }
 
-        const productId =
-            Number(productSelect.value);
+        const productName =
+            productInput.value.trim().toLowerCase();
 
         const qty =
             parseFloat(qtyInput.value) || 0;
 
-        if(!productId || qty <= 0){
+        if(!productName || qty <= 0){
             return;
         }
 
         const product =
             savedProducts.find(
-                p => Number(p.id) === productId
+                p =>
+                    p.name.trim().toLowerCase() ===
+                    productName
             );
 
         if(product){
@@ -2042,7 +2044,7 @@ function printBill(){
     }
     else{
 
-        alert("Please select a product and enter quantity.");
+        alert("Product not found or quantity is invalid.");
 
         return;
     }
