@@ -1228,7 +1228,9 @@ td{
 
                     <label>Customer *</label>
 
-                    <select id="paymentCustomer">
+                    <select
+    id="paymentCustomer"
+    onchange="updatePaymentDue()">
 
                         <option value="">
                             Select Customer
@@ -3300,6 +3302,391 @@ function deleteCustomer(id){
     );
 
     displayCustomers();
+
+}
+    /* ================= PAYMENTS ================= */
+
+function getPayments(){
+
+    return JSON.parse(
+        localStorage.getItem(
+            "billbook_payments"
+        )
+    ) || [];
+
+}
+
+
+function openPayments(){
+
+    showPage("paymentsPage");
+
+    loadPaymentCustomers();
+
+    setPaymentDate();
+
+    displayPayments();
+
+}
+
+
+function loadPaymentCustomers(){
+
+    const select =
+        document.getElementById(
+            "paymentCustomer"
+        );
+
+    const customers =
+        getCustomers();
+
+    select.innerHTML = `
+        <option value="">
+            Select Customer
+        </option>
+    `;
+
+    customers.forEach(customer => {
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+        option.value =
+            customer.name;
+
+        option.textContent =
+            customer.name;
+
+        select.appendChild(option);
+
+    });
+
+}
+
+
+function getCustomerDue(customerName){
+
+    const history =
+        getBillHistory();
+
+    const payments =
+        getPayments();
+
+    const totalBillsDue =
+        history.reduce(
+            (total,bill) => {
+
+                if(
+                    (
+                        bill.customerName ||
+                        ""
+                    ).trim().toLowerCase() ===
+                    customerName
+                        .trim()
+                        .toLowerCase()
+                ){
+
+                    return total +
+                        Number(
+                            bill.due || 0
+                        );
+
+                }
+
+                return total;
+
+            },
+            0
+        );
+
+    const totalPayments =
+        payments.reduce(
+            (total,payment) => {
+
+                if(
+                    (
+                        payment.customerName ||
+                        ""
+                    ).trim().toLowerCase() ===
+                    customerName
+                        .trim()
+                        .toLowerCase()
+                ){
+
+                    return total +
+                        Number(
+                            payment.amount || 0
+                        );
+
+                }
+
+                return total;
+
+            },
+            0
+        );
+
+    return Math.max(
+        totalBillsDue -
+        totalPayments,
+        0
+    );
+
+}
+
+
+function updatePaymentDue(){
+
+    const customerName =
+        document.getElementById(
+            "paymentCustomer"
+        ).value;
+
+    const due =
+        customerName
+            ? getCustomerDue(
+                customerName
+            )
+            : 0;
+
+    document.getElementById(
+        "paymentCurrentDue"
+    ).value =
+        "₹ " +
+        due.toFixed(2);
+
+}
+
+
+function setPaymentDate(){
+
+    const input =
+        document.getElementById(
+            "paymentDate"
+        );
+
+    if(input){
+
+        input.value =
+            new Date()
+                .toISOString()
+                .split("T")[0];
+
+    }
+
+}
+
+
+function savePayment(){
+
+    const customerName =
+        document.getElementById(
+            "paymentCustomer"
+        ).value;
+
+    const amount =
+        parseFloat(
+            document.getElementById(
+                "paymentAmount"
+            ).value
+        ) || 0;
+
+    const method =
+        document.getElementById(
+            "paymentMethod"
+        ).value;
+
+    const date =
+        document.getElementById(
+            "paymentDate"
+        ).value;
+
+    if(!customerName){
+
+        alert(
+            "Please select a customer."
+        );
+
+        return;
+
+    }
+
+    if(amount <= 0){
+
+        alert(
+            "Please enter a valid payment amount."
+        );
+
+        return;
+
+    }
+
+    const currentDue =
+        getCustomerDue(
+            customerName
+        );
+
+    if(currentDue <= 0){
+
+        alert(
+            "This customer has no due amount."
+        );
+
+        return;
+
+    }
+
+    if(amount > currentDue){
+
+        alert(
+            "Payment amount cannot be greater than current due."
+        );
+
+        return;
+
+    }
+
+    let payments =
+        getPayments();
+
+    payments.unshift({
+
+        id:
+            Date.now(),
+
+        customerName:
+            customerName,
+
+        amount:
+            amount,
+
+        method:
+            method,
+
+        date:
+            date
+
+    });
+
+    localStorage.setItem(
+        "billbook_payments",
+        JSON.stringify(
+            payments
+        )
+    );
+
+    document.getElementById(
+        "paymentAmount"
+    ).value = "";
+
+    updatePaymentDue();
+
+    displayPayments();
+
+    alert(
+        "Payment saved successfully!"
+    );
+
+}
+
+
+function displayPayments(){
+
+    const table =
+        document.getElementById(
+            "paymentsTable"
+        );
+
+    const search =
+        (
+            document.getElementById(
+                "paymentSearch"
+            ).value || ""
+        ).toLowerCase();
+
+    const payments =
+        getPayments();
+
+    const filtered =
+        payments.filter(
+            payment =>
+                payment.customerName
+                    .toLowerCase()
+                    .includes(search)
+        );
+
+    table.innerHTML = "";
+
+    if(filtered.length === 0){
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="5"
+                    class="empty">
+
+                    No payments found.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+    filtered.forEach(
+        (payment,index) => {
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+            row.innerHTML = `
+
+                <td>
+                    ${index + 1}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        payment.date
+                    )}
+                </td>
+
+                <td>
+                    <strong>
+                        ${escapeHtml(
+                            payment.customerName
+                        )}
+                    </strong>
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        payment.method
+                    )}
+                </td>
+
+                <td>
+                    ₹ ${Number(
+                        payment.amount
+                    ).toFixed(2)}
+                </td>
+
+            `;
+
+            table.appendChild(row);
+
+        }
+    );
 
 }
     function escapeHtml(value){
