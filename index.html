@@ -1972,10 +1972,17 @@ function printBill(){
 
     calculateBill();
 
+    let savedProducts =
+        JSON.parse(
+            localStorage.getItem("billbook_products")
+        ) || [];
+
     const rows =
         document.querySelectorAll(
             "#billProductTable tr"
         );
+
+    let stockUpdated = false;
 
     rows.forEach(row => {
 
@@ -2000,8 +2007,8 @@ function printBill(){
         }
 
         const product =
-            products.find(
-                p => p.id === productId
+            savedProducts.find(
+                p => Number(p.id) === productId
             );
 
         if(product){
@@ -2012,18 +2019,33 @@ function printBill(){
                     0
                 );
 
+            stockUpdated = true;
         }
 
     });
 
-    localStorage.setItem(
-        "billbook_products",
-        JSON.stringify(products)
-    );
+    if(stockUpdated){
 
-    displayProducts();
+        localStorage.setItem(
+            "billbook_products",
+            JSON.stringify(savedProducts)
+        );
 
-    updateDashboard();
+        products = savedProducts;
+
+        displayProducts();
+
+        updateDashboard();
+
+        alert("Stock updated successfully!");
+
+    }
+    else{
+
+        alert("Please select a product and enter quantity.");
+
+        return;
+    }
 
     window.print();
 
