@@ -988,7 +988,67 @@ td{
 
 </div>
 
+<!-- ================= BILL HISTORY ================= -->
 
+<div id="historyPage" class="container page">
+
+    <button class="back-btn" onclick="backDashboard()">
+        ← Back to Dashboard
+    </button>
+
+    <div class="box">
+
+        <div class="box-title">
+
+            <div>
+                <h2>Bill History</h2>
+                <p>View your saved invoices</p>
+            </div>
+
+        </div>
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="billHistorySearch"
+                placeholder="🔍 Search invoice or customer..."
+                oninput="displayBillHistory()">
+
+        </div>
+
+        <div style="overflow-x:auto;">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>#</th>
+                        <th>Invoice No</th>
+                        <th>Date</th>
+                        <th>Customer</th>
+                        <th>Total</th>
+                        <th>Paid</th>
+                        <th>Due</th>
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="billHistoryTable">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
 <script>
 
 /* ================= PRODUCTS DATA ================= */
