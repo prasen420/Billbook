@@ -2139,7 +2139,230 @@ function updateDashboard(){
 
 /* ================= HTML SECURITY ================= */
 
-function escapeHtml(value){
+/* ================= BILL HISTORY ================= */
+
+function getBillHistory(){
+
+    return JSON.parse(
+        localStorage.getItem("billbook_history")
+    ) || [];
+
+}
+
+
+function openHistory(){
+
+    showPage("historyPage");
+
+    displayBillHistory();
+
+}
+
+
+function displayBillHistory(){
+
+    const table =
+        document.getElementById(
+            "billHistoryTable"
+        );
+
+    const search =
+        (
+            document.getElementById(
+                "billHistorySearch"
+            ).value || ""
+        ).toLowerCase();
+
+    const history =
+        getBillHistory();
+
+    const filtered =
+        history.filter(bill =>
+
+            bill.invoiceNumber
+                .toLowerCase()
+                .includes(search)
+
+            ||
+
+            (bill.customerName || "")
+                .toLowerCase()
+                .includes(search)
+
+        );
+
+    table.innerHTML = "";
+
+    if(filtered.length === 0){
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="8"
+                    class="empty">
+
+                    No bills found.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+    filtered.forEach((bill,index) => {
+
+        const row =
+            document.createElement("tr");
+
+        row.innerHTML = `
+
+            <td>${index + 1}</td>
+
+            <td>
+                <strong>
+                    ${escapeHtml(
+                        bill.invoiceNumber
+                    )}
+                </strong>
+            </td>
+
+            <td>
+                ${escapeHtml(
+                    bill.date
+                )}
+            </td>
+
+            <td>
+                ${escapeHtml(
+                    bill.customerName ||
+                    "Walk-in Customer"
+                )}
+            </td>
+
+            <td>
+                ₹ ${Number(
+                    bill.grandTotal
+                ).toFixed(2)}
+            </td>
+
+            <td>
+                ₹ ${Number(
+                    bill.paid
+                ).toFixed(2)}
+            </td>
+
+            <td>
+                ₹ ${Number(
+                    bill.due
+                ).toFixed(2)}
+            </td>
+
+            <td>
+
+                <button
+                    class="edit-btn"
+                    onclick="viewBill('${bill.invoiceNumber}')">
+
+                    View
+
+                </button>
+
+            </td>
+
+        `;
+
+        table.appendChild(row);
+
+    });
+
+}
+
+
+function viewBill(invoiceNumber){
+
+    const history =
+        getBillHistory();
+
+    const bill =
+        history.find(
+            item =>
+                item.invoiceNumber ===
+                invoiceNumber
+        );
+
+    if(!bill){
+
+        alert("Bill not found.");
+
+        return;
+
+    }
+
+    let itemsText = "";
+
+    bill.items.forEach(item => {
+
+        itemsText +=
+            item.name +
+            " x " +
+            item.qty +
+            " = ₹ " +
+            Number(
+                item.total
+            ).toFixed(2) +
+            "\n";
+
+    });
+
+    const message =
+
+        "Invoice: " +
+        bill.invoiceNumber +
+
+        "\nDate: " +
+        bill.date +
+
+        "\nCustomer: " +
+        (
+            bill.customerName ||
+            "Walk-in Customer"
+        ) +
+
+        "\nMobile: " +
+        (
+            bill.customerMobile ||
+            "-"
+        ) +
+
+        "\n\nProducts:\n" +
+
+        itemsText +
+
+        "\nGrand Total: ₹ " +
+        Number(
+            bill.grandTotal
+        ).toFixed(2) +
+
+        "\nPaid: ₹ " +
+        Number(
+            bill.paid
+        ).toFixed(2) +
+
+        "\nDue: ₹ " +
+        Number(
+            bill.due
+        ).toFixed(2);
+
+    alert(message);
+
+}
+    function escapeHtml(value){
 
     return String(value)
 
