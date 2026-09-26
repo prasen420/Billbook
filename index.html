@@ -3337,8 +3337,16 @@ function loadPaymentCustomers(){
             "paymentCustomer"
         );
 
+    if(!select){
+        return;
+    }
+
     const customers =
-        getCustomers();
+        JSON.parse(
+            localStorage.getItem(
+                "billbook_customers"
+            )
+        ) || [];
 
     select.innerHTML = `
         <option value="">
@@ -3347,6 +3355,10 @@ function loadPaymentCustomers(){
     `;
 
     customers.forEach(customer => {
+
+        if(!customer.name){
+            return;
+        }
 
         const option =
             document.createElement(
