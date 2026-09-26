@@ -1623,57 +1623,54 @@ function deleteBillProduct(button){
 
 function addBillProduct(){
 
-    const table =
-        document.getElementById("billProductTable");
+    const table = document.getElementById("billProductTable");
 
-    const row =
-        document.createElement("tr");
+    const row = document.createElement("tr");
 
     row.innerHTML = `
-
-        <td>
+        <td style="position:relative;">
 
             <input
                 type="text"
-                list="billProductsList"
                 class="bill-product"
                 placeholder="Search product..."
                 autocomplete="off"
-                oninput="productSelected(this)">
+                oninput="showProductSuggestions(this)"
+                onclick="showProductSuggestions(this)"
+            >
+
+            <div class="product-suggestions"></div>
 
         </td>
 
         <td>
-
             <input
                 type="number"
                 value="1"
                 min="1"
                 class="bill-qty"
-                oninput="calculateBill()">
-
+                oninput="calculateBill()"
+            >
         </td>
 
         <td>
-
             <input
                 type="number"
                 value="0"
                 min="0"
                 class="bill-price"
-                oninput="calculateBill()">
-
+                oninput="calculateBill()"
+            >
         </td>
 
         <td>
-
             <input
                 type="number"
                 value="0"
                 min="0"
                 class="bill-gst"
-                oninput="calculateBill()">
-
+                oninput="calculateBill()"
+            >
         </td>
 
         <td class="amount">
@@ -1681,55 +1678,101 @@ function addBillProduct(){
         </td>
 
         <td class="delete-column">
-
             <button
                 class="danger-btn"
                 onclick="deleteBillProduct(this)">
-
                 ×
-
             </button>
-
         </td>
-
     `;
 
     table.appendChild(row);
 
-    updateProductSearchList();
-
     calculateBill();
+}
+
+
+/* ================= PRODUCT SEARCH ================= */
+
+function showProductSuggestions(input){
+
+    const row = input.closest("tr");
+
+    const box =
+        row.querySelector(".product-suggestions");
+
+    const search =
+        input.value.trim().toLowerCase();
+
+    box.innerHTML = "";
+
+    if(!products || products.length === 0){
+        return;
+    }
+
+    const matches =
+        products.filter(product =>
+            product.name
+                .toLowerCase()
+                .includes(search)
+        );
+
+    matches.forEach(product => {
+
+        const item =
+            document.createElement("div");
+
+        item.textContent = product.name;
+
+        item.style.padding = "10px";
+
+        item.style.cursor = "pointer";
+
+        item.style.background = "#ffffff";
+
+        item.style.borderBottom =
+            "1px solid #eeeeee";
+
+        item.onmousedown = function(e){
+
+            e.preventDefault();
+
+            selectBillProduct(input, product);
+
+        };
+
+        box.appendChild(item);
+
+    });
+
+    if(matches.length === 0){
+
+        const empty =
+            document.createElement("div");
+
+        empty.textContent =
+            "No product found";
+
+        empty.style.padding = "10px";
+
+        empty.style.color = "#777";
+
+        box.appendChild(empty);
+
+    }
 
 }
 
 
-/* PRODUCT SEARCH */
+/* ================= SELECT PRODUCT ================= */
 
-function productSelected(input){
-
-    const typedName =
-        input.value.trim().toLowerCase();
-
-    const product =
-        products.find(
-            p =>
-                p.name.trim().toLowerCase() === typedName
-        );
+function selectBillProduct(input, product){
 
     const row =
         input.closest("tr");
 
-    if(!product){
-
-        row.querySelector(".bill-price").value = 0;
-
-        row.querySelector(".bill-gst").value = 0;
-
-        calculateBill();
-
-        return;
-
-    }
+    input.value =
+        product.name;
 
     row.querySelector(".bill-price").value =
         product.selling;
@@ -1737,37 +1780,43 @@ function productSelected(input){
     row.querySelector(".bill-gst").value =
         product.gst;
 
+    const box =
+        row.querySelector(".product-suggestions");
+
+    box.innerHTML = "";
+
     calculateBill();
 
 }
 
 
-/* PRODUCT SEARCH LIST */
+/* ================= PRODUCT SEARCH LIST ================= */
 
 function updateProductSearchList(){
 
-    const list =
-        document.getElementById("billProductsList");
-
-    if(!list){
-        return;
-    }
-
-    list.innerHTML = "";
-
-    products.forEach(product => {
-
-        const option =
-            document.createElement("option");
-
-        option.value =
-            product.name;
-
-        list.appendChild(option);
-
-    });
+    /* Product list is shown while typing */
+    return;
 
 }
+
+
+/* Close product suggestions when clicking outside */
+
+document.addEventListener("click", function(event){
+
+    document
+        .querySelectorAll(".product-suggestions")
+        .forEach(box => {
+
+            if(!box.parentElement.contains(event.target)){
+
+                box.innerHTML = "";
+
+            }
+
+        });
+
+});
     function calculateBill(){
 
     const rows =
