@@ -1979,18 +1979,18 @@ function printBill(){
 
     rows.forEach(row => {
 
-        const productInput =
+        const productSelect =
             row.querySelector(".bill-product");
 
         const qtyInput =
             row.querySelector(".bill-qty");
 
-        if(!productInput || !qtyInput){
+        if(!productSelect || !qtyInput){
             return;
         }
 
         const productId =
-            Number(productInput.value);
+            Number(productSelect.value);
 
         const qty =
             parseFloat(qtyInput.value) || 0;
@@ -2020,6 +2020,8 @@ function printBill(){
         "billbook_products",
         JSON.stringify(products)
     );
+
+    displayProducts();
 
     updateDashboard();
 
