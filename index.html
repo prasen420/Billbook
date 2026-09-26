@@ -1972,6 +1972,57 @@ function printBill(){
 
     calculateBill();
 
+    const rows =
+        document.querySelectorAll(
+            "#billProductTable tr"
+        );
+
+    rows.forEach(row => {
+
+        const productInput =
+            row.querySelector(".bill-product");
+
+        const qtyInput =
+            row.querySelector(".bill-qty");
+
+        if(!productInput || !qtyInput){
+            return;
+        }
+
+        const productId =
+            Number(productInput.value);
+
+        const qty =
+            parseFloat(qtyInput.value) || 0;
+
+        if(!productId || qty <= 0){
+            return;
+        }
+
+        const product =
+            products.find(
+                p => p.id === productId
+            );
+
+        if(product){
+
+            product.stock =
+                Math.max(
+                    Number(product.stock || 0) - qty,
+                    0
+                );
+
+        }
+
+    });
+
+    localStorage.setItem(
+        "billbook_products",
+        JSON.stringify(products)
+    );
+
+    updateDashboard();
+
     window.print();
 
 }
