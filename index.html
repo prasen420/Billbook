@@ -2727,6 +2727,412 @@ function viewBill(invoiceNumber){
     alert(message);
 
 }
+   /* ================= CUSTOMERS ================= */
+
+let editingCustomerId = null;
+
+
+function getCustomers(){
+
+    return JSON.parse(
+        localStorage.getItem(
+            "billbook_customers"
+        )
+    ) || [];
+
+}
+
+
+function openCustomers(){
+
+    showPage("customersPage");
+
+    hideCustomerForm();
+
+    displayCustomers();
+
+}
+
+
+function showCustomerForm(){
+
+    document.getElementById(
+        "customerForm"
+    ).style.display = "block";
+
+}
+
+
+function hideCustomerForm(){
+
+    document.getElementById(
+        "customerForm"
+    ).style.display = "none";
+
+    document.getElementById(
+        "customerFormTitle"
+    ).innerText = "Add Customer";
+
+    document.getElementById(
+        "customerNameForm"
+    ).value = "";
+
+    document.getElementById(
+        "customerMobileForm"
+    ).value = "";
+
+    document.getElementById(
+        "customerAddressForm"
+    ).value = "";
+
+    editingCustomerId = null;
+
+}
+
+
+function saveCustomer(){
+
+    const name =
+        document.getElementById(
+            "customerNameForm"
+        ).value.trim();
+
+    const mobile =
+        document.getElementById(
+            "customerMobileForm"
+        ).value.trim();
+
+    const address =
+        document.getElementById(
+            "customerAddressForm"
+        ).value.trim();
+
+    if(!name){
+
+        alert(
+            "Please enter customer name."
+        );
+
+        return;
+
+    }
+
+    let customers =
+        getCustomers();
+
+    if(editingCustomerId){
+
+        const customer =
+            customers.find(
+                item =>
+                    item.id ===
+                    editingCustomerId
+            );
+
+        if(customer){
+
+            customer.name =
+                name;
+
+            customer.mobile =
+                mobile;
+
+            customer.address =
+                address;
+
+        }
+
+    }
+    else{
+
+        customers.push({
+
+            id:
+                Date.now(),
+
+            name:
+                name,
+
+            mobile:
+                mobile,
+
+            address:
+                address
+
+        });
+
+    }
+
+    localStorage.setItem(
+        "billbook_customers",
+        JSON.stringify(customers)
+    );
+
+    hideCustomerForm();
+
+    displayCustomers();
+
+    alert(
+        "Customer saved successfully!"
+    );
+
+}
+
+
+function displayCustomers(){
+
+    const table =
+        document.getElementById(
+            "customersTable"
+        );
+
+    const search =
+        (
+            document.getElementById(
+                "customerSearch"
+            ).value || ""
+        ).toLowerCase();
+
+    const customers =
+        getCustomers();
+
+    const history =
+        getBillHistory();
+
+    const filtered =
+        customers.filter(customer =>
+
+            customer.name
+                .toLowerCase()
+                .includes(search)
+
+            ||
+
+            customer.mobile
+                .toLowerCase()
+                .includes(search)
+
+            ||
+
+            customer.address
+                .toLowerCase()
+                .includes(search)
+
+        );
+
+    table.innerHTML = "";
+
+    if(filtered.length === 0){
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="7"
+                    class="empty">
+
+                    No customers found.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+    filtered.forEach(
+        (customer,index) => {
+
+            const customerBills =
+                history.filter(
+                    bill =>
+                        (
+                            bill.customerName ||
+                            ""
+                        ).toLowerCase() ===
+                        customer.name
+                            .toLowerCase()
+                );
+
+            const totalDue =
+                customerBills.reduce(
+                    (total,bill) =>
+                        total +
+                        Number(
+                            bill.due || 0
+                        ),
+                    0
+                );
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+            row.innerHTML = `
+
+                <td>
+                    ${index + 1}
+                </td>
+
+                <td>
+                    <strong>
+                        ${escapeHtml(
+                            customer.name
+                        )}
+                    </strong>
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        customer.mobile || "-"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        customer.address || "-"
+                    )}
+                </td>
+
+                <td>
+                    ${customerBills.length}
+                </td>
+
+                <td>
+                    ₹ ${totalDue.toFixed(2)}
+                </td>
+
+                <td>
+
+                    <button
+                        class="edit-btn"
+                        onclick="editCustomer(
+                            ${customer.id}
+                        )">
+
+                        Edit
+
+                    </button>
+
+                    <button
+                        class="danger-btn"
+                        onclick="deleteCustomer(
+                            ${customer.id}
+                        )">
+
+                        Delete
+
+                    </button>
+
+                </td>
+
+            `;
+
+            table.appendChild(row);
+
+        }
+    );
+
+}
+
+
+function editCustomer(id){
+
+    const customers =
+        getCustomers();
+
+    const customer =
+        customers.find(
+            item =>
+                item.id === id
+        );
+
+    if(!customer){
+
+        return;
+
+    }
+
+    editingCustomerId =
+        id;
+
+    document.getElementById(
+        "customerForm"
+    ).style.display = "block";
+
+    document.getElementById(
+        "customerFormTitle"
+    ).innerText =
+        "Edit Customer";
+
+    document.getElementById(
+        "customerNameForm"
+    ).value =
+        customer.name;
+
+    document.getElementById(
+        "customerMobileForm"
+    ).value =
+        customer.mobile;
+
+    document.getElementById(
+        "customerAddressForm"
+    ).value =
+        customer.address;
+
+}
+
+
+function deleteCustomer(id){
+
+    const customers =
+        getCustomers();
+
+    const customer =
+        customers.find(
+            item =>
+                item.id === id
+        );
+
+    if(!customer){
+
+        return;
+
+    }
+
+    if(
+        !confirm(
+            "Delete " +
+            customer.name +
+            "?"
+        )
+    ){
+
+        return;
+
+    }
+
+    const updatedCustomers =
+        customers.filter(
+            item =>
+                item.id !== id
+        );
+
+    localStorage.setItem(
+        "billbook_customers",
+        JSON.stringify(
+            updatedCustomers
+        )
+    );
+
+    displayCustomers();
+
+}
     function escapeHtml(value){
 
     return String(value)
