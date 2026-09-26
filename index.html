@@ -714,6 +714,7 @@ td{
 <!-- ================= BILLING ================= -->
 
 <div id="billingPage" class="container page">
+    <datalist id="billProductsList"></datalist>
 
     <button class="back-btn" onclick="backDashboard()">
         ← Back to Dashboard
@@ -1618,7 +1619,156 @@ function deleteBillProduct(button){
 
 /* ================= CALCULATE BILL ================= */
 
-function calculateBill(){
+/* ================= SEARCHABLE PRODUCT BILL ================= */
+
+function addBillProduct(){
+
+    const table =
+        document.getElementById("billProductTable");
+
+    const row =
+        document.createElement("tr");
+
+    row.innerHTML = `
+
+        <td>
+
+            <input
+                type="text"
+                list="billProductsList"
+                class="bill-product"
+                placeholder="Search product..."
+                autocomplete="off"
+                oninput="productSelected(this)">
+
+        </td>
+
+        <td>
+
+            <input
+                type="number"
+                value="1"
+                min="1"
+                class="bill-qty"
+                oninput="calculateBill()">
+
+        </td>
+
+        <td>
+
+            <input
+                type="number"
+                value="0"
+                min="0"
+                class="bill-price"
+                oninput="calculateBill()">
+
+        </td>
+
+        <td>
+
+            <input
+                type="number"
+                value="0"
+                min="0"
+                class="bill-gst"
+                oninput="calculateBill()">
+
+        </td>
+
+        <td class="amount">
+            ₹ 0.00
+        </td>
+
+        <td class="delete-column">
+
+            <button
+                class="danger-btn"
+                onclick="deleteBillProduct(this)">
+
+                ×
+
+            </button>
+
+        </td>
+
+    `;
+
+    table.appendChild(row);
+
+    updateProductSearchList();
+
+    calculateBill();
+
+}
+
+
+/* PRODUCT SEARCH */
+
+function productSelected(input){
+
+    const typedName =
+        input.value.trim().toLowerCase();
+
+    const product =
+        products.find(
+            p =>
+                p.name.trim().toLowerCase() === typedName
+        );
+
+    const row =
+        input.closest("tr");
+
+    if(!product){
+
+        row.querySelector(".bill-price").value = 0;
+
+        row.querySelector(".bill-gst").value = 0;
+
+        calculateBill();
+
+        return;
+
+    }
+
+    row.querySelector(".bill-price").value =
+        product.selling;
+
+    row.querySelector(".bill-gst").value =
+        product.gst;
+
+    calculateBill();
+
+}
+
+
+/* PRODUCT SEARCH LIST */
+
+function updateProductSearchList(){
+
+    const list =
+        document.getElementById("billProductsList");
+
+    if(!list){
+        return;
+    }
+
+    list.innerHTML = "";
+
+    products.forEach(product => {
+
+        const option =
+            document.createElement("option");
+
+        option.value =
+            product.name;
+
+        list.appendChild(option);
+
+    });
+
+}
+    function calculateBill(){
 
     const rows =
         document.querySelectorAll(
