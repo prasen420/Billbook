@@ -2035,82 +2035,300 @@ function printBill(){
 
     calculateBill();
 
-    let savedProducts =
+    const invoiceNumber =
+        document.getElementById(
+            "invoiceNumber"
+        ).innerText.trim();
+
+    const date =
+        document.getElementById(
+            "invoiceDate"
+        ).innerText.trim();
+
+    const customerName =
+        document.getElementById(
+            "customerName"
+        ).value.trim();
+
+    const customerMobile =
+        document.getElementById(
+            "customerMobile"
+        ).value.trim();
+
+    const customerAddress =
+        document.getElementById(
+            "customerAddress"
+        ).value.trim();
+
+    const paymentMethod =
+        document.getElementById(
+            "paymentMethod"
+        ).value;
+
+    const paid =
+        parseFloat(
+            document.getElementById(
+                "paidAmount"
+            ).value
+        ) || 0;
+
+    const subtotal =
+        parseFloat(
+            document.getElementById(
+                "subtotal"
+            ).innerText
+        ) || 0;
+
+    const gstTotal =
+        parseFloat(
+            document.getElementById(
+                "gstTotal"
+            ).innerText
+        ) || 0;
+
+    const discount =
+        parseFloat(
+            document.getElementById(
+                "discount"
+            ).value
+        ) || 0;
+
+    const grandTotal =
+        parseFloat(
+            document.getElementById(
+                "grandTotal"
+            ).innerText
+        ) || 0;
+
+    const due =
+        Math.max(
+            grandTotal - paid,
+            0
+        );
+
+    let history =
         JSON.parse(
-            localStorage.getItem("billbook_products")
+            localStorage.getItem(
+                "billbook_history"
+            )
         ) || [];
+
+    const alreadySaved =
+        history.some(
+            bill =>
+                bill.invoiceNumber ===
+                invoiceNumber
+        );
+
+    if(alreadySaved){
+
+        window.print();
+
+        return;
+
+    }
 
     const rows =
         document.querySelectorAll(
             "#billProductTable tr"
         );
 
+    const items = [];
+
     let stockUpdated = false;
 
     rows.forEach(row => {
 
         const productInput =
-            row.querySelector(".bill-product");
+            row.querySelector(
+                ".bill-product"
+            );
 
         const qtyInput =
-            row.querySelector(".bill-qty");
+            row.querySelector(
+                ".bill-qty"
+            );
 
-        if(!productInput || !qtyInput){
+        const priceInput =
+            row.querySelector(
+                ".bill-price"
+            );
+
+        const gstInput =
+            row.querySelector(
+                ".bill-gst"
+            );
+
+        if(
+            !productInput ||
+            !qtyInput ||
+            !priceInput ||
+            !gstInput
+        ){
+
             return;
+
         }
 
         const productName =
-            productInput.value.trim().toLowerCase();
+            productInput.value.trim();
 
         const qty =
-            parseFloat(qtyInput.value) || 0;
+            parseFloat(
+                qtyInput.value
+            ) || 0;
 
-        if(!productName || qty <= 0){
+        const price =
+            parseFloat(
+                priceInput.value
+            ) || 0;
+
+        const gst =
+            parseFloat(
+                gstInput.value
+            ) || 0;
+
+        if(
+            !productName ||
+            qty <= 0
+        ){
+
             return;
+
         }
 
+        const base =
+            qty * price;
+
+        const gstAmount =
+            base * gst / 100;
+
+        const total =
+            base + gstAmount;
+
+        items.push({
+
+            name: productName,
+
+            qty: qty,
+
+            price: price,
+
+            gst: gst,
+
+            total: total
+
+        });
+
         const product =
-            savedProducts.find(
+            products.find(
                 p =>
-                    p.name.trim().toLowerCase() ===
+                    p.name
+                        .trim()
+                        .toLowerCase() ===
                     productName
+                        .toLowerCase()
             );
 
         if(product){
 
             product.stock =
                 Math.max(
-                    Number(product.stock || 0) - qty,
+                    Number(
+                        product.stock || 0
+                    ) - qty,
                     0
                 );
 
             stockUpdated = true;
+
         }
 
     });
+
+    if(items.length === 0){
+
+        alert(
+            "Please add at least one product."
+        );
+
+        return;
+
+    }
 
     if(stockUpdated){
 
         localStorage.setItem(
             "billbook_products",
-            JSON.stringify(savedProducts)
+            JSON.stringify(products)
         );
 
-        products = savedProducts;
-
-        displayProducts();
-
-        updateDashboard();
-
-        alert("Stock updated successfully!");
-
     }
-    else{
 
-        alert("Product not found or quantity is invalid.");
+    const bill = {
 
-        return;
-    }
+        invoiceNumber:
+            invoiceNumber,
+
+        date:
+            date,
+
+        customerName:
+            customerName,
+
+        customerMobile:
+            customerMobile,
+
+        customerAddress:
+            customerAddress,
+
+        paymentMethod:
+            paymentMethod,
+
+        subtotal:
+            subtotal,
+
+        gstTotal:
+            gstTotal,
+
+        discount:
+            discount,
+
+        grandTotal:
+            grandTotal,
+
+        paid:
+            paid,
+
+        due:
+            due,
+
+        items:
+            items
+
+    };
+
+    history.unshift(bill);
+
+    localStorage.setItem(
+        "billbook_history",
+        JSON.stringify(history)
+    );
+
+    products =
+        JSON.parse(
+            localStorage.getItem(
+                "billbook_products"
+            )
+        ) || [];
+
+    displayProducts();
+
+    updateDashboard();
+
+    alert(
+        "Bill saved successfully!"
+    );
 
     window.print();
 
