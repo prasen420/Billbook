@@ -2927,6 +2927,184 @@ function openReports(){
     updateReports();
 
 }
+function updateReports(){
+
+    const history =
+        getBillHistory();
+
+    const payments =
+        getPayments();
+
+    const totalSales =
+        history.reduce(
+            (total,bill) =>
+                total +
+                Number(
+                    bill.total ||
+                    bill.grandTotal ||
+                    0
+                ),
+            0
+        );
+
+    const totalBills =
+        history.length;
+
+    const totalPayments =
+        payments.reduce(
+            (total,payment) =>
+                total +
+                Number(
+                    payment.amount || 0
+                ),
+            0
+        );
+
+    const totalBillDue =
+        history.reduce(
+            (total,bill) =>
+                total +
+                Number(
+                    bill.due || 0
+                ),
+            0
+        );
+
+    const totalDue =
+        Math.max(
+            totalBillDue -
+            totalPayments,
+            0
+        );
+
+    const totalStock =
+        products.reduce(
+            (total,product) =>
+                total +
+                Number(
+                    product.stock || 0
+                ),
+            0
+        );
+
+    const today =
+        new Date();
+
+    const todayString =
+        today.toLocaleDateString(
+            "en-IN"
+        );
+
+    const month =
+        today.getMonth();
+
+    const year =
+        today.getFullYear();
+
+    let todaySales = 0;
+
+    let monthSales = 0;
+
+    history.forEach(bill => {
+
+        const billDate =
+            bill.date ||
+            bill.invoiceDate ||
+            "";
+
+        const billTotal =
+            Number(
+                bill.total ||
+                bill.grandTotal ||
+                0
+            );
+
+        if(
+            billDate ===
+            todayString
+        ){
+
+            todaySales +=
+                billTotal;
+
+        }
+
+        const parts =
+            billDate.split("/");
+
+        if(parts.length === 3){
+
+            const day =
+                Number(parts[0]);
+
+            const billMonth =
+                Number(parts[1]) - 1;
+
+            const billYear =
+                Number(parts[2]);
+
+            if(
+                billMonth === month &&
+                billYear === year
+            ){
+
+                monthSales +=
+                    billTotal;
+
+            }
+
+        }
+
+    });
+
+
+    document.getElementById(
+        "reportTotalSales"
+    ).innerText =
+        "₹ " +
+        totalSales.toFixed(2);
+
+
+    document.getElementById(
+        "reportTotalBills"
+    ).innerText =
+        totalBills;
+
+
+    document.getElementById(
+        "reportTotalPayments"
+    ).innerText =
+        "₹ " +
+        totalPayments.toFixed(2);
+
+
+    document.getElementById(
+        "reportTotalDue"
+    ).innerText =
+        "₹ " +
+        totalDue.toFixed(2);
+
+
+    document.getElementById(
+        "reportTotalStock"
+    ).innerText =
+        totalStock;
+
+
+    document.getElementById(
+        "reportTodaySales"
+    ).innerText =
+        "₹ " +
+        todaySales.toFixed(2);
+
+
+    document.getElementById(
+        "reportMonthSales"
+    ).innerText =
+        "₹ " +
+        monthSales.toFixed(2);
+
+}    
 function openHistory(){
 
     showPage("historyPage");
