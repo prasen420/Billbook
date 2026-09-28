@@ -433,6 +433,77 @@ td{
         display:none;
     }
 }
+/* ================= REPORTS DESIGN ================= */
+
+#reportsPage .box {
+    padding: 26px;
+}
+
+#reportsPage .box-title h2 {
+    font-size: 28px;
+    margin-bottom: 4px;
+}
+
+#reportsPage .box-title p {
+    color: #666;
+    margin-bottom: 22px;
+}
+
+#reportsPage .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+#reportsPage .stat-card {
+    background: #ffffff;
+    border: 1px solid #e1e1e1;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-height: 105px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+}
+
+#reportsPage .stat-icon {
+    font-size: 32px;
+    width: 52px;
+    text-align: center;
+}
+
+#reportsPage .stat-label {
+    font-size: 15px;
+    color: #666;
+    margin-bottom: 7px;
+}
+
+#reportsPage .stat-value {
+    font-size: 23px;
+    font-weight: 700;
+    color: #18794e;
+}
+
+#reportsPage .back-btn {
+    margin-bottom: 18px;
+}
+
+@media (max-width: 900px) {
+
+    #reportsPage .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    #reportsPage .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
 </style>
 </head>
 
