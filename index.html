@@ -3101,7 +3101,87 @@ function getBillHistory(){
 
 }
 
-function openReports(){
+function saveSettings(){
+
+    const settings = {
+
+        businessName:
+            document.getElementById(
+                "businessName"
+            ).value.trim(),
+
+        businessMobile:
+            document.getElementById(
+                "businessMobile"
+            ).value.trim(),
+
+        businessGST:
+            document.getElementById(
+                "businessGST"
+            ).value.trim(),
+
+        businessEmail:
+            document.getElementById(
+                "businessEmail"
+            ).value.trim(),
+
+        businessAddress:
+            document.getElementById(
+                "businessAddress"
+            ).value.trim()
+
+    };
+
+    localStorage.setItem(
+        "billbook_settings",
+        JSON.stringify(settings)
+    );
+
+    alert(
+        "Settings saved successfully!"
+    );
+
+}
+
+
+function openSettings(){
+
+    showPage("settingsPage");
+
+    const settings =
+        JSON.parse(
+            localStorage.getItem(
+                "billbook_settings"
+            )
+        ) || {};
+
+    document.getElementById(
+        "businessName"
+    ).value =
+        settings.businessName || "";
+
+    document.getElementById(
+        "businessMobile"
+    ).value =
+        settings.businessMobile || "";
+
+    document.getElementById(
+        "businessGST"
+    ).value =
+        settings.businessGST || "";
+
+    document.getElementById(
+        "businessEmail"
+    ).value =
+        settings.businessEmail || "";
+
+    document.getElementById(
+        "businessAddress"
+    ).value =
+        settings.businessAddress || "";
+
+}
+    function openReports(){
 
     showPage("reportsPage");
 
