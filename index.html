@@ -3093,6 +3093,9 @@ function displayCustomers(){
     const history =
         getBillHistory();
 
+    const payments =
+        getPayments();
+
     const filtered =
         customers.filter(customer =>
 
@@ -3141,24 +3144,64 @@ function displayCustomers(){
     filtered.forEach(
         (customer,index) => {
 
+            const customerName =
+                customer.name
+                    .trim()
+                    .toLowerCase();
+
             const customerBills =
                 history.filter(
                     bill =>
                         (
                             bill.customerName ||
                             ""
-                        ).toLowerCase() ===
-                        customer.name
-                            .toLowerCase()
+                        )
+                        .trim()
+                        .toLowerCase() ===
+                        customerName
                 );
 
-            const totalDue =
+            const totalBillDue =
                 customerBills.reduce(
                     (total,bill) =>
                         total +
                         Number(
                             bill.due || 0
                         ),
+                    0
+                );
+
+            const totalPayments =
+                payments.reduce(
+                    (total,payment) => {
+
+                        if(
+                            (
+                                payment.customerName ||
+                                ""
+                            )
+                            .trim()
+                            .toLowerCase() ===
+                            customerName
+                        ){
+
+                            return total +
+                                Number(
+                                    payment.amount || 0
+                                );
+
+                        }
+
+                        return total;
+
+                    },
+                    0
+                );
+
+            const totalDue =
+                Math.max(
+                    totalBillDue -
+                    totalPayments,
                     0
                 );
 
@@ -3231,100 +3274,6 @@ function displayCustomers(){
 
         }
     );
-
-}
-
-
-function editCustomer(id){
-
-    const customers =
-        getCustomers();
-
-    const customer =
-        customers.find(
-            item =>
-                item.id === id
-        );
-
-    if(!customer){
-
-        return;
-
-    }
-
-    editingCustomerId =
-        id;
-
-    document.getElementById(
-        "customerForm"
-    ).style.display = "block";
-
-    document.getElementById(
-        "customerFormTitle"
-    ).innerText =
-        "Edit Customer";
-
-    document.getElementById(
-        "customerNameForm"
-    ).value =
-        customer.name;
-
-    document.getElementById(
-        "customerMobileForm"
-    ).value =
-        customer.mobile;
-
-    document.getElementById(
-        "customerAddressForm"
-    ).value =
-        customer.address;
-
-}
-
-
-function deleteCustomer(id){
-
-    const customers =
-        getCustomers();
-
-    const customer =
-        customers.find(
-            item =>
-                item.id === id
-        );
-
-    if(!customer){
-
-        return;
-
-    }
-
-    if(
-        !confirm(
-            "Delete " +
-            customer.name +
-            "?"
-        )
-    ){
-
-        return;
-
-    }
-
-    const updatedCustomers =
-        customers.filter(
-            item =>
-                item.id !== id
-        );
-
-    localStorage.setItem(
-        "billbook_customers",
-        JSON.stringify(
-            updatedCustomers
-        )
-    );
-
-    displayCustomers();
 
 }
     /* ================= PAYMENTS ================= */
