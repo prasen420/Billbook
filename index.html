@@ -1383,13 +1383,36 @@ let editingProductId = null;
 
 function showPage(pageId){
 
-    document.getElementById("dashboard").style.display = "none";
+    const pages = [
+        "dashboard",
+        "productsPage",
+        "billingPage",
+        "historyPage",
+        "customersPage",
+        "paymentsPage"
+    ];
 
-    document.getElementById("productsPage").style.display = "none";
+    pages.forEach(id => {
 
-    document.getElementById("billingPage").style.display = "none";
+        const page =
+            document.getElementById(id);
 
-    document.getElementById(pageId).style.display = "block";
+        if(page){
+
+            page.style.display = "none";
+
+        }
+
+    });
+
+    const selectedPage =
+        document.getElementById(pageId);
+
+    if(selectedPage){
+
+        selectedPage.style.display = "block";
+
+    }
 
 }
 
