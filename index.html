@@ -1478,6 +1478,116 @@ td{
     </div>
 
 </div>
+   <!-- ================= SETTINGS ================= -->
+
+<div id="settingsPage" class="container page">
+
+    <button
+        class="back-btn"
+        onclick="backDashboard()">
+
+        ← Back to Dashboard
+
+    </button>
+
+
+    <div class="box">
+
+        <div class="box-title">
+
+            <div>
+
+                <h2>Settings</h2>
+
+                <p>
+                    Manage your business settings
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>Business Name</label>
+
+                <input
+                    type="text"
+                    id="businessName"
+                    placeholder="Enter business name">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Mobile Number</label>
+
+                <input
+                    type="text"
+                    id="businessMobile"
+                    placeholder="Enter mobile number">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>GST Number</label>
+
+                <input
+                    type="text"
+                    id="businessGST"
+                    placeholder="Enter GST number">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Email</label>
+
+                <input
+                    type="email"
+                    id="businessEmail"
+                    placeholder="Enter email">
+
+            </div>
+
+
+            <div class="form-group"
+                 style="grid-column:1 / -1;">
+
+                <label>Business Address</label>
+
+                <textarea
+                    id="businessAddress"
+                    rows="4"
+                    placeholder="Enter business address"></textarea>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-buttons">
+
+            <button
+                class="primary-btn"
+                onclick="saveSettings()">
+
+                Save Settings
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
     <!-- ================= PAYMENTS ================= -->
 
 <div id="paymentsPage" class="container page">
