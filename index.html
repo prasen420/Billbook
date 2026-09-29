@@ -345,8 +345,8 @@ th{
 
 <div class="section-title">GENERAL</div>
 
-<div class="menu active" onclick="openPage('dashboard')">
-▣ Dashboard
+<div class="menu" data-page="dashboard" onclick="openPage('dashboard')">
+  ▣ Dashboard
 </div>
 
 <div class="menu" onclick="openPage('parties')">
@@ -481,7 +481,15 @@ menu.style.display="block";
 
 
 function openPage(page){
+document.querySelectorAll(".menu").forEach(menu => {
+  menu.classList.remove("active");
+});
 
+const activeMenu = document.querySelector(`.menu[data-page="${page}"]`);
+
+if(activeMenu){
+  activeMenu.classList.add("active");
+}
 let title=page
 .replaceAll("_"," ")
 .replace(/\b\w/g,function(x){
