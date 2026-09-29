@@ -349,8 +349,12 @@ th{
 ▣ Dashboard
 </div>
 
-<div class="menu" onclick="openPage('parties')">
+<<div class="menu" onclick="toggleMenu('partyMenu')">
   👤 Parties
+</div>
+
+<div id="partyMenu" class="submenu">
+  <div onclick="openPage('parties')">Parties</div>
 </div>
 
 <div class="menu" onclick="toggleMenu('itemMenu')">
