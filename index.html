@@ -2237,6 +2237,42 @@ function openBilling(){
     setDate();
 
 
+    const settings =
+        JSON.parse(
+            localStorage.getItem(
+                "billbook_settings"
+            )
+        ) || {};
+
+
+    document.getElementById(
+        "invoiceBusinessName"
+    ).innerText =
+        settings.businessName ||
+        "BillBook";
+
+
+    document.getElementById(
+        "invoiceBusinessMobile"
+    ).innerText =
+        settings.businessMobile ||
+        "";
+
+
+    document.getElementById(
+        "invoiceBusinessGST"
+    ).innerText =
+        settings.businessGST ||
+        "";
+
+
+    document.getElementById(
+        "invoiceBusinessAddress"
+    ).innerText =
+        settings.businessAddress ||
+        "";
+
+
     document.getElementById(
         "billProductTable"
     ).innerHTML = "";
