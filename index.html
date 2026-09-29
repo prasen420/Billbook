@@ -392,7 +392,164 @@ td{
     }
 }
 
-@media print{
+/* ================= PROFESSIONAL INVOICE ================= */
+
+#billingPage .box {
+    border: 1px solid #d9d9d9;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+}
+
+#billingPage .bill-header {
+    padding-bottom: 18px;
+    border-bottom: 2px solid #1f7a4d;
+}
+
+#billingPage .bill-header h2 {
+    font-size: 28px;
+    margin: 0;
+    color: #1f7a4d;
+}
+
+#billingPage .bill-header p {
+    margin: 5px 0 0;
+    color: #666;
+}
+
+#billingPage .business-info {
+    margin-top: 15px;
+    padding: 14px 16px;
+    background: #f6faf8;
+    border-left: 4px solid #1f7a4d;
+    border-radius: 6px;
+}
+
+#billingPage .business-info h3 {
+    margin: 0 0 7px;
+    font-size: 20px;
+    color: #1f7a4d;
+}
+
+#billingPage .business-info p {
+    margin: 3px 0;
+    font-size: 13px;
+    color: #444;
+}
+
+#billingPage .invoice-info {
+    background: #f8f8f8;
+    padding: 12px 16px;
+    border-radius: 7px;
+    min-width: 190px;
+}
+
+#billingPage .invoice-info p {
+    margin: 6px 0;
+}
+
+#billingPage .customer-grid {
+    padding: 18px;
+    background: #fafafa;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+}
+
+#billingPage h3 {
+    margin-top: 24px;
+    margin-bottom: 12px;
+}
+
+#billingPage .bill-table table {
+    border: 1px solid #ddd;
+}
+
+#billingPage .bill-table th {
+    background: #1f7a4d;
+    color: white;
+    font-size: 13px;
+}
+
+#billingPage .bill-table td {
+    font-size: 13px;
+}
+
+#billingPage .summary {
+    border-top: 2px solid #ddd;
+    padding-top: 10px;
+}
+
+#billingPage .summary-row.total {
+    border-top: 2px solid #1f7a4d;
+    padding-top: 12px;
+}
+
+#billingPage .payment-section {
+    padding: 16px;
+    background: #f8faf9;
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+}
+
+/* ================= PRINT INVOICE ================= */
+
+@media print {
+
+    @page {
+        size: A4;
+        margin: 12mm;
+    }
+
+    body {
+        background: white !important;
+        margin: 0;
+    }
+
+    .header,
+    .back-btn,
+    .actions,
+    .add-btn {
+        display: none !important;
+    }
+
+    #billingPage {
+        display: block !important;
+        width: 100%;
+    }
+
+    #billingPage .box {
+        border: 0;
+        box-shadow: none;
+        padding: 0;
+    }
+
+    #billingPage .bill-header {
+        border-bottom: 2px solid #1f7a4d;
+    }
+
+    #billingPage .customer-grid {
+        background: white;
+        border: 1px solid #ddd;
+    }
+
+    #billingPage .payment-section {
+        background: white;
+    }
+
+    input,
+    select {
+        border: 0 !important;
+        background: transparent !important;
+        appearance: none;
+    }
+
+    .delete-column {
+        display: none !important;
+    }
+
+    #billingPage .add-btn {
+        display: none !important;
+    }
+}
+    @media print{
 
     body{
         background:white;
