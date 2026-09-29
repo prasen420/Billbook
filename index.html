@@ -952,8 +952,8 @@ placeholder="Search">
 <input class="input"
 type="date">
 
-<button class="primary">
-+ Create ${title}
+<button class="primary" onclick="${page==="parties" ? "openPartyForm()" : ""}">
+  + Create ${title}
 </button>
 
 </div>
@@ -971,7 +971,66 @@ More functionality will be connected in the next development stage.
 `;
 
 }
+function openPartyForm(){
+  document.getElementById("content").innerHTML = `
+    <div class="card">
+      <h2>Add Customer / Party</h2>
 
+      <input id="partyName" placeholder="Customer Name">
+      <input id="partyPhone" placeholder="Mobile Number">
+      <input id="partyEmail" placeholder="Email">
+      <input id="partyGstin" placeholder="GSTIN">
+      <input id="partyAddress" placeholder="Address">
+
+      <select id="partyType">
+        <option value="Customer">Customer</option>
+        <option value="Supplier">Supplier</option>
+      </select>
+
+      <input id="partyOpening" type="number" placeholder="Opening Balance">
+
+      <button class="primary" onclick="saveParty()">
+        Save Customer
+      </button>
+
+      <button onclick="openPage('parties')">
+        Cancel
+      </button>
+    </div>
+  `;
+}
+
+async function saveParty(){
+
+  const name = document.getElementById("partyName").value.trim();
+
+  if(!name){
+    alert("Please enter Customer Name");
+    return;
+  }
+
+  const { data, error } = await supabase
+    .from("parties")
+    .insert([{
+      name: name,
+      phone: document.getElementById("partyPhone").value,
+      email: document.getElementById("partyEmail").value,
+      gstin: document.getElementById("partyGstin").value,
+      address: document.getElementById("partyAddress").value,
+      party_type: document.getElementById("partyType").value,
+      opening_balance: Number(document.getElementById("partyOpening").value) || 0
+    }])
+    .select();
+
+  if(error){
+    console.error(error);
+    alert("Customer save failed: " + error.message);
+    return;
+  }
+
+  alert("Customer saved successfully!");
+  openPage("parties");
+}
 
 function saveCompany(){
 
