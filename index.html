@@ -488,7 +488,203 @@ td{
     border: 1px solid #e1e1e1;
     border-radius: 8px;
 }
+/* ================= SIDE DESIGN INVOICE ================= */
 
+#billingPage .box {
+    position: relative;
+    overflow: hidden;
+    border-left: 9px solid #1f7a4d;
+}
+
+
+/* LEFT SIDE DECORATION */
+
+#billingPage .box::before {
+    content: "";
+    position: absolute;
+
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 4px;
+
+    background: #d8b45a;
+
+    pointer-events: none;
+}
+
+
+/* INVOICE HEADER */
+
+#billingPage .bill-header {
+    position: relative;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    padding: 18px 20px;
+
+    background: linear-gradient(
+        90deg,
+        #f3faf6,
+        #ffffff
+    );
+
+    border-bottom: 3px solid #1f7a4d;
+
+    border-radius: 6px;
+}
+
+
+/* TAX INVOICE LABEL */
+
+#billingPage .bill-header::after {
+    content: "TAX INVOICE";
+
+    position: absolute;
+
+    right: 20px;
+    top: -2px;
+
+    padding: 7px 18px;
+
+    background: #1f7a4d;
+    color: white;
+
+    font-size: 12px;
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    border-radius: 0 0 6px 6px;
+}
+
+
+/* BUSINESS NAME */
+
+#billingPage .business-info h3 {
+    font-size: 22px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.3px;
+
+    margin-bottom: 8px;
+}
+
+
+/* INVOICE NUMBER BOX */
+
+#billingPage .invoice-info {
+    margin-top: 28px;
+
+    border-left: 4px solid #d8b45a;
+
+    background: white;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,0.06);
+}
+
+
+/* CUSTOMER SECTION */
+
+#billingPage .customer-grid {
+    margin-top: 18px;
+
+    border-left: 4px solid #1f7a4d;
+
+    background: #fbfcfb;
+}
+
+
+/* PRODUCT TABLE */
+
+#billingPage .bill-table {
+    margin-top: 10px;
+
+    border-radius: 7px;
+
+    overflow: hidden;
+}
+
+#billingPage .bill-table th {
+    background: #1f7a4d;
+
+    color: white;
+
+    padding: 11px 8px;
+
+    letter-spacing: 0.3px;
+}
+
+#billingPage .bill-table td {
+    padding: 10px 8px;
+
+    border-bottom: 1px solid #e5e5e5;
+}
+
+
+/* TOTAL SECTION */
+
+#billingPage .summary {
+    margin-top: 20px;
+
+    padding: 12px 16px;
+
+    background: #fafcfb;
+
+    border-right: 4px solid #1f7a4d;
+
+    border-radius: 6px;
+}
+
+
+#billingPage .summary-row.total {
+    font-size: 19px;
+
+    color: #1f7a4d;
+
+    font-weight: bold;
+
+    border-top: 2px solid #1f7a4d;
+
+    padding-top: 12px;
+}
+
+
+/* PAYMENT SECTION */
+
+#billingPage .payment-section {
+    margin-top: 18px;
+
+    border-left: 4px solid #d8b45a;
+
+    background: #fafafa;
+}
+
+
+/* PRINT SIDE DESIGN */
+
+@media print {
+
+    #billingPage .box {
+        border-left: 7px solid #1f7a4d;
+
+        box-shadow: none;
+    }
+
+    #billingPage .box::before {
+        display: block;
+    }
+
+    #billingPage .bill-header::after {
+        display: block;
+    }
+
+}
 /* ================= PRINT INVOICE ================= */
 
 @media print {
