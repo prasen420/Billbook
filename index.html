@@ -1,1 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Business ERP</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#f5f6fa;
+    color:#172033;
+}
+
+/* SIDEBAR */
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    width:250px;
+    background:#0d1729;
+    color:white;
+    overflow-y:auto;
+    padding:12px;
+}
+
+.logo{
+    background:#17233a;
+    padding:15px;
+    border-radius:8px;
+    margin-bottom:15px;
+}
+
+.logo h2{
+    font-size:18px;
+}
+
+.logo small{
+    color:#9aa9c0;
+}
+
+.create-btn{
+    width:100%;
+    padding:12px;
+    border:0;
+    border-radius:25px;
+    background:#e4defd;
+    color:#28205e;
+    font-weight:bold;
+    cursor:pointer;
+    margin-bottom:15px;
+}
+
+.section-title{
+    color:#8e9bb0;
+    font-size:11px;
+    margin:18px 8px 8px;
+    font-weight:bold;
+}
+
+.menu{
+    padding:11px;
+    border-radius:7px;
+    cursor:pointer;
+    margin:3px 0;
+    font-size:14px;
+}
+
+.menu:hover,
+.menu.active{
+    background:#2d3c76;
+}
+
+.submenu{
+    display:none;
+    padding-left:20px;
+}
+
+.submenu div{
+    padding:9px;
+    color:#b9c4d5;
+    cursor:pointer;
+    font-size:13px;
+}
+
+.submenu div:hover{
+    color:white;
+}
+
+/* MAIN */
+.main{
+    margin-left:250px;
+    padding:12px;
+}
+
+.topbar{
+    height:58px;
+    background:white;
+    border:1px solid #e1e4ea;
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 18px;
+    margin-bottom:12px;
+}
+
+.topbar h1{
+    font-size:21px;
+}
+
+.primary{
+    background:#4d3bd5;
+    color:white;
+    border:0;
+    padding:10px 17px;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.page{
+    background:white;
+    border:1px solid #e1e4ea;
+    border-radius:8px;
+    padding:18px;
+    min-height:calc(100vh - 82px);
+}
+
+/* CARDS */
+.cards{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin-bottom:15px;
+}
+
+.card{
+    background:white;
+    border:1px solid #e2e5eb;
+    border-radius:8px;
+    padding:17px;
+}
+
+.card small{
+    color:#68758a;
+}
+
+.card h2{
+    margin-top:10px;
+    font-size:24px;
+}
+
+/* TABLE */
+.toolbar{
+    display:flex;
+    gap:10px;
+    margin-bottom:15px;
+    flex-wrap:wrap;
+}
+
+.input,
+select{
+    padding:10px;
+    border:1px solid #d8dce5;
+    border-radius:5px;
+}
+
+.input{
+    min-width:220px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td{
+    border:1px solid #e2e5eb;
+    padding:11px;
+    text-align:left;
+    font-size:13px;
+}
+
+th{
+    background:#f4f5f8;
+}
+
+.status{
+    background:#e8f7ec;
+    color:#18833c;
+    padding:5px 9px;
+    border-radius:15px;
+    font-size:11px;
+}
+
+.unpaid{
+    background:#ffe9e9;
+    color:#b4232d;
+}
+
+/* GRID */
+.two-column{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:15px;
+}
+
+.box{
+    border:1px solid #e1e4ea;
+    border-radius:8px;
+    padding:16px;
+}
+
+.box h3{
+    margin-bottom:15px;
+}
+
+.empty{
+    min-height:250px;
+    border:1px dashed #ccd2dc;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#7a8799;
+    border-radius:6px;
+}
+
+/* POS */
+.pos{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:15px;
+}
+
+.pos-box{
+    background:white;
+    border:1px solid #e1e4ea;
+    border-radius:8px;
+    padding:15px;
+}
+
+.total{
+    background:#f0faf3;
+    padding:18px;
+    font-size:24px;
+    font-weight:bold;
+    margin-top:15px;
+}
+
+/* REPORTS */
+.reports{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:1px;
+    background:#ddd;
+}
+
+.report{
+    background:white;
+    padding:20px;
+    min-height:130px;
+}
+
+.report strong{
+    display:block;
+    margin-bottom:15px;
+}
+
+/* MOBILE */
+@media(max-width:900px){
+
+.sidebar{
+    width:210px;
+}
+
+.main{
+    margin-left:210px;
+}
+
+.cards{
+    grid-template-columns:repeat(2,1fr);
+}
+
+.two-column,
+.pos{
+    grid-template-columns:1fr;
+}
+
+}
+
+@media(max-width:600px){
+
+.sidebar{
+    position:relative;
+    width:100%;
+    height:auto;
+}
+
+.main{
+    margin-left:0;
+}
+
+.cards{
+    grid-template-columns:1fr;
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<div class="logo">
+<h2 id="companyName">YOUR COMPANY</h2>
+<small>Business ERP</small>
+</div>
+
+<button class="create-btn" onclick="openPage('sales')">
+＋ Create Sales Invoice
+</button>
+
+<div class="section-title">GENERAL</div>
+
+<div class="menu active" onclick="openPage('dashboard')">
+▣ Dashboard
+</div>
+
+<div class="menu" onclick="toggleMenu('partyMenu')">
+♙ Parties
+</div>
+
+<div id="partyMenu" class="submenu">
+<div onclick="openPage('parties')">Customers</div>
+<div onclick="openPage('parties')">Suppliers</div>
+<div onclick="openPage('parties')">Ledger</div>
+<div onclick="openPage('parties')">Outstanding</div>
+</div>
+
+<div class="menu" onclick="toggleMenu('itemMenu')">
+◇ Items
+</div>
+
+<div id="itemMenu" class="submenu">
+<div onclick="openPage('items')">Products</div>
+<div onclick="openPage('items')">Inventory</div>
+<div onclick="openPage('godown')">Godown / Warehouse</div>
+<div onclick="openPage('items')">Stock Transfer</div>
+</div>
+
+<div class="menu" onclick="toggleMenu('salesMenu')">
+◈ Sales
+</div>
+
+<div id="salesMenu" class="submenu">
+<div onclick="openPage('sales')">Sales Invoice</div>
+<div onclick="openPage('quotation')">Quotation</div>
+<div onclick="openPage('paymentin')">Payment In</div>
+<div onclick="openPage('salesreturn')">Sales Return</div>
+<div onclick="openPage('credit')">Credit Note</div>
+<div onclick="openPage('delivery')">Delivery Challan</div>
+<div onclick="openPage('proforma')">Proforma Invoice</div>
+</div>
+
+<div class="menu" onclick="toggleMenu('purchaseMenu')">
+▣ Purchases
+</div>
+
+<div id="purchaseMenu" class="submenu">
+<div onclick="openPage('purchase')">Purchase Invoice</div>
+<div onclick="openPage('paymentout')">Payment Out</div>
+<div onclick="openPage('purchasereturn')">Purchase Return</div>
+<div onclick="openPage('debit')">Debit Note</div>
+<div onclick="openPage('po')">Purchase Order</div>
+</div>
+
+<div class="menu" onclick="openPage('reports')">
+▥ Reports
+</div>
+
+<div class="section-title">
+ACCOUNTING SOLUTIONS
+</div>
+
+<div class="menu" onclick="openPage('cash')">
+▤ Cash & Bank
+</div>
+
+<div class="menu" onclick="openPage('einvoice')">
+▤ E-Invoicing
+</div>
+
+<div class="menu" onclick="openPage('automated')">
+◫ Automated Bills
+</div>
+
+<div class="menu" onclick="openPage('expenses')">
+₹ Expenses
+</div>
+
+<div class="menu" onclick="openPage('pos')">
+▣ POS Billing
+</div>
+
+<div class="section-title">
+BUSINESS TOOLS
+</div>
+
+<div class="menu" onclick="openPage('staff')">
+✓ Staff Attendance & Payroll
+</div>
+
+<div class="menu" onclick="openPage('online')">
+🛒 Online Orders
+</div>
+
+<div class="menu" onclick="openPage('sms')">
+✉ SMS Marketing
+</div>
+
+<div class="menu" onclick="openPage('settings')">
+⚙ Settings
+</div>
+
+</div>
+
+
+<!-- MAIN -->
+
+<div class="main">
+
+<div class="topbar">
+
+<h1 id="pageTitle">
+Dashboard
+</h1>
+
+<button class="primary"
+onclick="openPage('sales')">
++ New Invoice
+</button>
+
+</div>
+
+<div class="page" id="content">
+
+</div>
+
+</div>
+
+
+<script>
+
+function toggleMenu(id){
+
+let menu=document.getElementById(id);
+
+if(menu.style.display==="block"){
+menu.style.display="none";
+}else{
+menu.style.display="block";
+}
+
+}
+
+
+function openPage(page){
+
+let title=page
+.replaceAll("_"," ")
+.replace(/\b\w/g,function(x){
+return x.toUpperCase();
+});
+
+document.getElementById("pageTitle").innerText=title;
+
+let content=document.getElementById("content");
+
+
+// DASHBOARD
+
+if(page==="dashboard"){
+
+content.innerHTML=`
+
+<div class="cards">
+
+<div class="card">
+<small>Total Sales</small>
+<h2>₹79,87,985</h2>
+</div>
+
+<div class="card">
+<small>Paid</small>
+<h2>₹75,71,904</h2>
+</div>
+
+<div class="card">
+<small>Unpaid</small>
+<h2>₹4,16,082</h2>
+</div>
+
+<div class="card">
+<small>Cash & Bank</small>
+<h2>₹80,74,522</h2>
+</div>
+
+</div>
+
+<div class="two-column">
+
+<div class="box">
+
+<h3>Recent Sales</h3>
+
+<table>
+
+<tr>
+<th>Date</th>
+<th>Invoice</th>
+<th>Customer</th>
+<th>Amount</th>
+<th>Status</th>
+</tr>
+
+<tr>
+<td>29 Sep 2026</td>
+<td>INV-001</td>
+<td>Customer One</td>
+<td>₹10,797</td>
+<td><span class="status">Paid</span></td>
+</tr>
+
+<tr>
+<td>29 Sep 2026</td>
+<td>INV-002</td>
+<td>Customer Two</td>
+<td>₹8,867</td>
+<td><span class="status unpaid">Unpaid</span></td>
+</tr>
+
+<tr>
+<td>28 Sep 2026</td>
+<td>INV-003</td>
+<td>Customer Three</td>
+<td>₹12,500</td>
+<td><span class="status">Paid</span></td>
+</tr>
+
+</table>
+
+</div>
+
+<div class="box">
+
+<h3>Quick Actions</h3>
+
+<button class="primary"
+onclick="openPage('sales')">
+Create Sales Invoice
+</button>
+
+<br><br>
+
+<button class="primary"
+onclick="openPage('purchase')">
+Create Purchase
+</button>
+
+<br><br>
+
+<button class="primary"
+onclick="openPage('pos')">
+Open POS
+</button>
+
+</div>
+
+</div>
+
+`;
+
+return;
+}
+
+
+// SALES
+
+if(page==="sales"){
+
+content.innerHTML=`
+
+<div class="cards">
+
+<div class="card">
+<small>Total Sales</small>
+<h2>₹79,87,985</h2>
+</div>
+
+<div class="card">
+<small>Paid</small>
+<h2>₹75,71,904</h2>
+</div>
+
+<div class="card">
+<small>Unpaid</small>
+<h2>₹4,16,082</h2>
+</div>
+
+<div class="card">
+<small>Cancelled</small>
+<h2>0</h2>
+</div>
+
+</div>
+
+<div class="toolbar">
+
+<input class="input"
+placeholder="Search invoice">
+
+<input class="input"
+type="date">
+
+<button class="primary">
+Create Sales Invoice
+</button>
+
+</div>
+
+<table>
+
+<tr>
+<th>Date</th>
+<th>Invoice Number</th>
+<th>Party</th>
+<th>Amount</th>
+<th>Status</th>
+</tr>
+
+<tr>
+<td>29 Sep 2026</td>
+<td>INV-001</td>
+<td>Customer One</td>
+<td>₹10,797</td>
+<td><span class="status">Paid</span></td>
+</tr>
+
+<tr>
+<td>29 Sep 2026</td>
+<td>INV-002</td>
+<td>Customer Two</td>
+<td>₹8,867</td>
+<td><span class="status unpaid">Unpaid</span></td>
+</tr>
+
+</table>
+
+`;
+
+return;
+}
+
+
+// POS
+
+if(page==="pos"){
+
+content.innerHTML=`
+
+<div class="pos">
+
+<div class="pos-box">
+
+<div class="toolbar">
+
+<button class="primary">
++ New Item
+</button>
+
+<button class="primary">
+Change Price
+</button>
+
+<button class="primary">
+Change Qty
+</button>
+
+</div>
+
+<input
+class="input"
+style="width:100%"
+placeholder="Search item / barcode / SKU / HSN">
+
+<br><br>
+
+<div class="empty">
+
+Search item or scan barcode
+
+</div>
+
+</div>
+
+
+<div class="pos-box">
+
+<h3>Bill Details</h3>
+
+<p>
+Subtotal
+<span style="float:right">
+₹0
+</span>
+</p>
+
+<br>
+
+<p>
+Tax
+<span style="float:right">
+₹0
+</span>
+</p>
+
+<div class="total">
+
+Total
+
+<span style="float:right">
+₹0
+</span>
+
+</div>
+
+<br>
+
+<input
+class="input"
+style="width:100%"
+placeholder="Customer">
+
+<br><br>
+
+<button class="primary"
+style="width:100%">
+Save & Print Bill
+</button>
+
+</div>
+
+</div>
+
+`;
+
+return;
+}
+
+
+// INVENTORY
+
+if(page==="items"){
+
+content.innerHTML=`
+
+<div class="toolbar">
+
+<input class="input"
+placeholder="Search product">
+
+<button class="primary">
++ Add Item
+</button>
+
+</div>
+
+<table>
+
+<tr>
+<th>Item Name</th>
+<th>Item Code</th>
+<th>Stock</th>
+<th>Purchase Price</th>
+<th>Selling Price</th>
+</tr>
+
+<tr>
+<td>Bamboo Toothbrush Pack of 4</td>
+<td>BT-004</td>
+<td>500 PCS</td>
+<td>₹70</td>
+<td>₹120</td>
+</tr>
+
+<tr>
+<td>Neem Wood Comb</td>
+<td>NC-001</td>
+<td>300 PCS</td>
+<td>₹90</td>
+<td>₹150</td>
+</tr>
+
+<tr>
+<td>Bamboo Water Bottle 500ml</td>
+<td>BW-500</td>
+<td>120 PCS</td>
+<td>₹250</td>
+<td>₹399</td>
+</tr>
+
+<tr>
+<td>Bamboo Paddle Brush</td>
+<td>BP-002</td>
+<td>80 PCS</td>
+<td>₹180</td>
+<td>₹299</td>
+</tr>
+
+</table>
+
+`;
+
+return;
+}
+
+
+// REPORTS
+
+if(page==="reports"){
+
+content.innerHTML=`
+
+<div class="reports">
+
+<div class="report">
+<strong>Accounting</strong>
+Balance Sheet<br><br>
+Profit & Loss<br><br>
+Cash & Bank Report
+</div>
+
+<div class="report">
+<strong>GST Reports</strong>
+GSTR-1<br><br>
+GSTR-2<br><br>
+GSTR-3B<br><br>
+HSN Report
+</div>
+
+<div class="report">
+<strong>Transaction</strong>
+Audit Trail<br><br>
+Bill Wise Profit<br><br>
+Expense Report
+</div>
+
+</div>
+
+`;
+
+return;
+}
+
+
+// SETTINGS
+
+if(page==="settings"){
+
+content.innerHTML=`
+
+<div class="box">
+
+<h3>Business Settings</h3>
+
+<br>
+
+<input
+id="companyInput"
+class="input"
+placeholder="Enter Company Name">
+
+<button class="primary"
+onclick="saveCompany()">
+Save Company
+</button>
+
+<br><br>
+
+<p>
+Invoice Settings
+</p>
+
+<br>
+
+<p>
+GST Settings
+</p>
+
+<br>
+
+<p>
+User & Staff Permissions
+</p>
+
+<br>
+
+<p>
+Print Settings
+</p>
+
+</div>
+
+`;
+
+return;
+}
+
+
+// OTHER MODULES
+
+content.innerHTML=`
+
+<div class="toolbar">
+
+<input class="input"
+placeholder="Search">
+
+<input class="input"
+type="date">
+
+<button class="primary">
++ Create ${title}
+</button>
+
+</div>
+
+<div class="empty">
+
+${title} module is ready.
+
+<br>
+
+More functionality will be connected in the next development stage.
+
+</div>
+
+`;
+
+}
+
+
+function saveCompany(){
+
+let name=document.getElementById("companyInput").value;
+
+if(name.trim()!==""){
+
+document.getElementById("companyName").innerText=name;
+
+alert("Company name updated!");
+
+}
+
+}
+
+
+// START
+
+openPage("dashboard");
+
+</script>
+
+</body>
+</html>
