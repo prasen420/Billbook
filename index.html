@@ -993,13 +993,13 @@ function openPartyForm(){
 
           <div class="party-sidebar">
 
-            <div class="party-tab active">
-              👤 <span>Basic Details</span><b>*</b>
-            </div>
+            <div class="party-tab active" onclick="showPartyTab('basic')">
+  👤 <span>Basic Details</span><b>*</b>
+</div>
 
-            <div class="party-tab">
-              ◎ <span>Address</span>
-            </div>
+            <div class="party-tab" onclick="showPartyTab('address')">
+  ◎ <span>Address</span>
+</div>
 
             <div class="party-section-title">
               Advance Details
@@ -1232,7 +1232,115 @@ function checkPartyForm(){
   }
 }
 
+function showPartyTab(tab){
 
+  const form = document.querySelector(".party-form");
+
+  if(!form) return;
+
+  document.querySelectorAll(".party-tab").forEach(item=>{
+    item.classList.remove("active");
+  });
+
+  if(tab === "address"){
+
+    document.querySelectorAll(".party-tab")[1]
+      .classList.add("active");
+
+    form.innerHTML = `
+
+      <div class="party-card">
+
+        <div class="party-field">
+          <label>Billing Address</label>
+
+          <textarea
+            id="partyAddress"
+            placeholder="Enter Billing Address"
+            style="width:100%;min-height:90px;resize:vertical;">
+          </textarea>
+        </div>
+
+        <div class="party-grid">
+
+          <div class="party-field">
+            <label>Pincode</label>
+
+            <input
+              id="partyPincode"
+              type="text"
+              placeholder="Enter Pin Code">
+          </div>
+
+          <div class="party-field">
+            <label>State</label>
+
+            <select id="partyState">
+              <option value="">Select State</option>
+              <option>West Bengal</option>
+              <option>Maharashtra</option>
+              <option>Delhi</option>
+              <option>Karnataka</option>
+              <option>Tamil Nadu</option>
+              <option>Uttar Pradesh</option>
+              <option>Gujarat</option>
+              <option>Rajasthan</option>
+              <option>Bihar</option>
+              <option>Odisha</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+        </div>
+
+        <small>
+          Note: You can auto populate State & City from Pincode
+        </small>
+
+        <div class="party-field" style="margin-top:20px;">
+          <label>City</label>
+
+          <input
+            id="partyCity"
+            type="text"
+            placeholder="Enter City">
+        </div>
+
+      </div>
+
+      <div class="party-card">
+
+        <div
+          style="
+            border:1px dashed #60a5fa;
+            padding:14px;
+            text-align:center;
+            color:#3b82f6;
+            cursor:pointer;
+            border-radius:5px;
+          "
+          onclick="addShippingAddress()">
+
+          + Add New Shipping Address
+
+        </div>
+
+      </div>
+    `;
+  }
+
+  if(tab === "basic"){
+
+    document.querySelectorAll(".party-tab")[0]
+      .classList.add("active");
+
+    openPartyForm();
+  }
+}
+    function addShippingAddress(){
+
+  alert("Shipping Address section will be added here.");
+}
 function addPartyModalStyles(){
 
   if(document.getElementById("partyModalStyles")){
