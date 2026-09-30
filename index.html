@@ -508,108 +508,272 @@ let content=document.getElementById("content");
 
 // DASHBOARD
 
+// DASHBOARD
+
 if(page==="dashboard"){
 
-content.innerHTML=`
+content.innerHTML = `
 
 <div class="cards">
 
-<div class="card">
-<small>Total Sales</small>
-<h2>₹79,87,985</h2>
+  <div class="card">
+    <small>Total Sales</small>
+    <h2 id="dashTotalSales">₹0</h2>
+  </div>
+
+  <div class="card">
+    <small>Paid</small>
+    <h2 id="dashPaid">₹0</h2>
+  </div>
+
+  <div class="card">
+    <small>Unpaid</small>
+    <h2 id="dashUnpaid">₹0</h2>
+  </div>
+
+  <div class="card">
+    <small>Cash & Bank</small>
+    <h2 id="dashCashBank">₹0</h2>
+  </div>
+
 </div>
 
-<div class="card">
-<small>Paid</small>
-<h2>₹75,71,904</h2>
-</div>
-
-<div class="card">
-<small>Unpaid</small>
-<h2>₹4,16,082</h2>
-</div>
-
-<div class="card">
-<small>Cash & Bank</small>
-<h2>₹80,74,522</h2>
-</div>
-
-</div>
 
 <div class="two-column">
 
-<div class="box">
+  <div class="box">
 
-<h3>Recent Sales</h3>
+    <h3>Recent Sales</h3>
 
-<table>
+    <table>
 
-<tr>
-<th>Date</th>
-<th>Invoice</th>
-<th>Customer</th>
-<th>Amount</th>
-<th>Status</th>
-</tr>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Invoice</th>
+          <th>Customer</th>
+          <th>Amount</th>
+          <th>Status</th>
+        </tr>
+      </thead>
 
-<tr>
-<td>29 Sep 2026</td>
-<td>INV-001</td>
-<td>Customer One</td>
-<td>₹10,797</td>
-<td><span class="status">Paid</span></td>
-</tr>
+      <tbody id="recentSalesBody">
 
-<tr>
-<td>29 Sep 2026</td>
-<td>INV-002</td>
-<td>Customer Two</td>
-<td>₹8,867</td>
-<td><span class="status unpaid">Unpaid</span></td>
-</tr>
+        <tr>
+          <td colspan="5" style="text-align:center;">
+            Loading...
+          </td>
+        </tr>
 
-<tr>
-<td>28 Sep 2026</td>
-<td>INV-003</td>
-<td>Customer Three</td>
-<td>₹12,500</td>
-<td><span class="status">Paid</span></td>
-</tr>
+      </tbody>
 
-</table>
+    </table>
 
-</div>
+  </div>
 
-<div class="box">
 
-<h3>Quick Actions</h3>
+  <div class="box">
 
-<button class="primary"
-onclick="openPage('sales')">
-Create Sales Invoice
-</button>
+    <h3>Quick Actions</h3>
 
-<br><br>
+    <button class="primary"
+      onclick="openPage('sales')">
+      Create Sales Invoice
+    </button>
 
-<button class="primary"
-onclick="openPage('purchase')">
-Create Purchase
-</button>
+    <br><br>
 
-<br><br>
+    <button class="primary"
+      onclick="openPage('purchase')">
+      Create Purchase
+    </button>
 
-<button class="primary"
-onclick="openPage('pos')">
-Open POS
-</button>
+    <br><br>
 
-</div>
+    <button class="primary"
+      onclick="openPage('pos')">
+      Open POS
+    </button>
+
+  </div>
 
 </div>
 
 `;
 
+
+async function loadDashboardData(){
+
+  try{
+
+    const { data: invoices, error } = await supabase
+      .from("invoices")
+      .select("*")
+      .order("created_at", { ascending:false });
+
+
+    if(error){
+
+      console.error(error);
+
+      document.getElementById("recentSalesBody").innerHTML = `
+        <tr>
+          <td colspan="5" style="text-align:center;">
+            No transaction data available
+          </td>
+        </tr>
+      `;
+
+      return;
+
+    }
+
+
+    const list = invoices || [];
+
+
+    // TOTAL SALES
+
+    const totalSales = list.reduce((sum, item) => {
+
+      return sum + Number(item.total_amount || 0);
+
+    }, 0);
+
+
+    // PAID
+
+    const paid = list.reduce((sum, item) => {
+
+      return sum + Number(item.paid_amount || 0);
+
+    }, 0);
+
+
+    // UNPAID
+
+    const unpaid = Math.max(totalSales - paid, 0);
+
+
+    document.getElementById("dashTotalSales").innerText =
+      "₹" + totalSales.toLocaleString("en-IN");
+
+
+    document.getElementById("dashPaid").innerText =
+      "₹" + paid.toLocaleString("en-IN");
+
+
+    document.getElementById("dashUnpaid").innerText =
+      "₹" + unpaid.toLocaleString("en-IN");
+
+
+    // এখন আপাতত Cash & Bank = Paid amount
+    // পরে Cash & Bank module তৈরি হলে
+    // এখানে actual cash + bank balance বসানো হবে।
+
+    document.getElementById("dashCashBank").innerText =
+      "₹" + paid.toLocaleString("en-IN");
+
+
+    // RECENT SALES
+
+    const recent = list.slice(0, 10);
+
+    const tbody =
+      document.getElementById("recentSalesBody");
+
+
+    if(recent.length === 0){
+
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="5"
+              style="text-align:center;padding:25px;">
+            No transactions yet
+          </td>
+        </tr>
+      `;
+
+      return;
+
+    }
+
+
+    tbody.innerHTML = recent.map(item => {
+
+      const date = item.created_at
+        ? new Date(item.created_at).toLocaleDateString(
+            "en-IN",
+            {
+              day:"2-digit",
+              month:"short",
+              year:"numeric"
+            }
+          )
+        : "-";
+
+
+      const invoice =
+        item.invoice_number ||
+        item.invoice_no ||
+        ("INV-" + item.id);
+
+
+      const amount =
+        Number(item.total_amount || 0)
+          .toLocaleString("en-IN");
+
+
+      const status =
+        item.status || "Unpaid";
+
+
+      const statusClass =
+        status.toLowerCase().includes("paid")
+          ? "status"
+          : "status unpaid";
+
+
+      return `
+
+        <tr>
+
+          <td>${date}</td>
+
+          <td>${invoice}</td>
+
+          <td>
+            ${item.party_name || "Customer"}
+          </td>
+
+          <td>₹${amount}</td>
+
+          <td>
+            <span class="${statusClass}">
+              ${status}
+            </span>
+          </td>
+
+        </tr>
+
+      `;
+
+    }).join("");
+
+
+  }catch(error){
+
+    console.error("Dashboard error:", error);
+
+  }
+
+}
+
+
+loadDashboardData();
+
 return;
+
 }
 
 
