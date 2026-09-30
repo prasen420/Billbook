@@ -977,42 +977,550 @@ More functionality will be connected in the next development stage.
 
 }
 function openPartyForm(){
+
   document.getElementById("content").innerHTML = `
-    <div class="card">
-      <h2>Add Customer / Party</h2>
+    
+    <div class="party-modal-overlay">
 
-      <input id="partyName" placeholder="Customer Name">
-      <input id="partyPhone" placeholder="Mobile Number">
-      <input id="partyEmail" placeholder="Email">
-      <input id="partyGstin" placeholder="GSTIN">
-      <input id="partyAddress" placeholder="Address">
+      <div class="party-modal">
 
-      <select id="partyType">
-        <option value="Customer">Customer</option>
-        <option value="Supplier">Supplier</option>
-      </select>
+        <div class="party-modal-header">
+          <h2>Create New Party</h2>
+          <button class="party-close" onclick="openPage('parties')">×</button>
+        </div>
 
-      <input id="partyOpening" type="number" placeholder="Opening Balance">
+        <div class="party-modal-body">
 
-      <button class="primary" onclick="saveParty()">
-        Save Customer
-      </button>
+          <div class="party-sidebar">
 
-      <button onclick="openPage('parties')">
-        Cancel
-      </button>
+            <div class="party-tab active">
+              👤 <span>Basic Details</span><b>*</b>
+            </div>
+
+            <div class="party-tab">
+              ◎ <span>Address</span>
+            </div>
+
+            <div class="party-section-title">
+              Advance Details
+            </div>
+
+            <div class="party-tab">
+              ▣ <span>Credit Settings</span>
+            </div>
+
+            <div class="party-tab">
+              ☎ <span>Contact Person Details</span>
+            </div>
+
+            <div class="party-tab">
+              🏦 <span>Party Bank Account</span>
+            </div>
+
+            <div class="party-tab">
+              ▤ <span>Custom Fields</span>
+            </div>
+
+          </div>
+
+
+          <div class="party-form">
+
+            <div class="party-card">
+
+              <div class="party-grid">
+
+                <div class="party-field">
+                  <label>Party Type <b>*</b></label>
+
+                  <div class="party-type-row">
+
+                    <label class="party-type">
+                      <input type="radio"
+                             name="partyType"
+                             value="Customer"
+                             checked>
+                      <span>Customer</span>
+                    </label>
+
+                    <label class="party-type">
+                      <input type="radio"
+                             name="partyType"
+                             value="Supplier">
+                      <span>Supplier</span>
+                    </label>
+
+                  </div>
+                </div>
+
+
+                <div class="party-field">
+                  <label>Party Category</label>
+
+                  <select id="partyCategory">
+                    <option value="">Search Categories</option>
+                    <option>Retailer</option>
+                    <option>Wholesaler</option>
+                    <option>Distributor</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+
+
+                <div class="party-field">
+                  <label>Party Name <b>*</b></label>
+
+                  <input
+                    id="partyName"
+                    type="text"
+                    placeholder="Enter Name"
+                    oninput="checkPartyForm()">
+                </div>
+
+
+                <div class="party-field">
+                  <label>Mobile Number</label>
+
+                  <input
+                    id="partyPhone"
+                    type="text"
+                    placeholder="Enter Mobile Number">
+                </div>
+
+
+                <div class="party-field">
+                  <label>GSTIN</label>
+
+                  <input
+                    id="partyGstin"
+                    type="text"
+                    placeholder="EX: 29XXXXXX94381XX">
+                  
+                  <small>
+                    Note: You can auto populate party details from GSTIN
+                  </small>
+                </div>
+
+
+                <div class="party-field">
+                  <label>PAN Number</label>
+
+                  <input
+                    id="partyPan"
+                    type="text"
+                    placeholder="Enter PAN Number">
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="party-card">
+
+              <div class="party-grid">
+
+                <div class="party-field">
+                  <label>Email</label>
+
+                  <input
+                    id="partyEmail"
+                    type="email"
+                    placeholder="Enter Email">
+                </div>
+
+
+                <div class="party-field">
+
+                  <label>Opening Balance</label>
+
+                  <div class="opening-balance">
+
+                    <span>₹</span>
+
+                    <input
+                      id="partyOpening"
+                      type="number"
+                      value="0"
+                      min="0">
+
+                    <select id="balanceType">
+                      <option value="To Collect">
+                        To Collect
+                      </option>
+
+                      <option value="To Pay">
+                        To Pay
+                      </option>
+                    </select>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="party-modal-footer">
+
+          <button
+            class="party-cancel"
+            onclick="openPage('parties')">
+            Cancel
+          </button>
+
+          <div class="party-save-buttons">
+
+            <button
+              class="party-save-new"
+              id="saveNewBtn"
+              disabled
+              onclick="saveParty(true)">
+              Save & New
+            </button>
+
+            <button
+              class="party-save"
+              id="savePartyBtn"
+              disabled
+              onclick="saveParty(false)">
+              Save
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
   `;
+
+  addPartyModalStyles();
 }
 
-async function saveParty(){
+
+function checkPartyForm(){
+
+  const name = document
+    .getElementById("partyName")
+    .value
+    .trim();
+
+  const saveBtn =
+    document.getElementById("savePartyBtn");
+
+  const saveNewBtn =
+    document.getElementById("saveNewBtn");
+
+  if(name){
+
+    saveBtn.disabled = false;
+    saveNewBtn.disabled = false;
+
+  }else{
+
+    saveBtn.disabled = true;
+    saveNewBtn.disabled = true;
+
+  }
+}
+
+
+function addPartyModalStyles(){
+
+  if(document.getElementById("partyModalStyles")){
+    return;
+  }
+
+  const style = document.createElement("style");
+
+  style.id = "partyModalStyles";
+
+  style.innerHTML = `
+
+    .party-modal-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(15,23,42,.62);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:9999;
+      padding:20px;
+    }
+
+    .party-modal{
+      width:min(900px,96vw);
+      max-height:90vh;
+      background:#fff;
+      border-radius:10px;
+      overflow:hidden;
+      box-shadow:0 20px 60px rgba(0,0,0,.25);
+      display:flex;
+      flex-direction:column;
+    }
+
+    .party-modal-header{
+      height:76px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 18px;
+      border-bottom:1px solid #e5e7eb;
+    }
+
+    .party-modal-header h2{
+      margin:0;
+      font-size:21px;
+      color:#172033;
+    }
+
+    .party-close{
+      width:38px;
+      height:38px;
+      border:1px solid #d8dce5;
+      background:#fff;
+      border-radius:5px;
+      font-size:25px;
+      cursor:pointer;
+      color:#374151;
+    }
+
+    .party-modal-body{
+      display:flex;
+      min-height:450px;
+      overflow:auto;
+    }
+
+    .party-sidebar{
+      width:225px;
+      border-right:1px solid #e1e5eb;
+      padding:12px 0;
+      flex-shrink:0;
+    }
+
+    .party-tab{
+      padding:13px 22px;
+      color:#64748b;
+      font-size:14px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      cursor:pointer;
+    }
+
+    .party-tab.active{
+      margin:0 8px;
+      border-radius:8px;
+      background:#efedff;
+      color:#4f46e5;
+      font-weight:600;
+    }
+
+    .party-tab b{
+      color:#4f46e5;
+    }
+
+    .party-section-title{
+      padding:28px 22px 12px;
+      font-size:13px;
+      font-weight:700;
+      color:#374151;
+    }
+
+    .party-form{
+      flex:1;
+      padding:16px;
+      background:#fff;
+    }
+
+    .party-card{
+      border:1px solid #dfe3ea;
+      border-radius:8px;
+      padding:18px;
+      margin-bottom:16px;
+    }
+
+    .party-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:20px 16px;
+    }
+
+    .party-field label{
+      display:block;
+      font-size:13px;
+      color:#64748b;
+      margin-bottom:7px;
+    }
+
+    .party-field label b{
+      color:#4f46e5;
+    }
+
+    .party-field input,
+    .party-field select{
+      width:100%;
+      height:39px;
+      border:1px solid #cfd5df;
+      border-radius:5px;
+      padding:0 12px;
+      box-sizing:border-box;
+      font-size:14px;
+      background:#fff;
+      outline:none;
+    }
+
+    .party-field input:focus,
+    .party-field select:focus{
+      border-color:#6366f1;
+    }
+
+    .party-field small{
+      display:block;
+      margin-top:8px;
+      font-size:11px;
+      color:#6b7280;
+    }
+
+    .party-type-row{
+      display:flex;
+      gap:14px;
+    }
+
+    .party-type{
+      height:39px;
+      border:1px solid #cfd5df;
+      border-radius:5px;
+      padding:0 14px;
+      display:flex !important;
+      align-items:center;
+      gap:9px;
+      cursor:pointer;
+      flex:1;
+      margin:0 !important;
+    }
+
+    .party-type input{
+      width:auto;
+      height:auto;
+    }
+
+    .opening-balance{
+      display:flex;
+      height:39px;
+      border:1px solid #cfd5df;
+      border-radius:5px;
+      overflow:hidden;
+    }
+
+    .opening-balance span{
+      padding:10px 12px;
+      background:#f8fafc;
+      color:#374151;
+    }
+
+    .opening-balance input{
+      border:0;
+      border-radius:0;
+      flex:1;
+    }
+
+    .opening-balance select{
+      width:125px;
+      border:0;
+      border-left:1px solid #e5e7eb;
+      border-radius:0;
+    }
+
+    .party-modal-footer{
+      min-height:66px;
+      border-top:1px solid #e5e7eb;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 16px;
+    }
+
+    .party-cancel,
+    .party-save-new,
+    .party-save{
+      height:38px;
+      padding:0 28px;
+      border-radius:5px;
+      font-weight:600;
+      cursor:pointer;
+    }
+
+    .party-cancel{
+      background:#fff;
+      border:1px solid #d4d9e2;
+      color:#374151;
+    }
+
+    .party-save-buttons{
+      display:flex;
+      gap:12px;
+    }
+
+    .party-save-new{
+      background:#f3f4f6;
+      border:0;
+      color:#9ca3af;
+    }
+
+    .party-save{
+      background:#4f46e5;
+      border:0;
+      color:white;
+    }
+
+    .party-save:disabled,
+    .party-save-new:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+    }
+
+    @media(max-width:700px){
+
+      .party-grid{
+        grid-template-columns:1fr;
+      }
+
+      .party-sidebar{
+        width:170px;
+      }
+
+      .party-modal{
+        max-height:95vh;
+      }
+
+    }
+
+  `;
+
+  document.head.appendChild(style);
+}
+
+async function saveParty(saveAndNew = false){
 
   const name = document.getElementById("partyName").value.trim();
 
   if(!name){
-    alert("Please enter Customer Name");
+    alert("Please enter Party Name");
     return;
   }
+
+  const partyType = document.querySelector(
+    'input[name="partyType"]:checked'
+  )?.value || "Customer";
 
   const { data, error } = await supabase
     .from("parties")
@@ -1021,9 +1529,10 @@ async function saveParty(){
       phone: document.getElementById("partyPhone").value,
       email: document.getElementById("partyEmail").value,
       gstin: document.getElementById("partyGstin").value,
-      address: document.getElementById("partyAddress").value,
-      party_type: document.getElementById("partyType").value,
-      opening_balance: Number(document.getElementById("partyOpening").value) || 0
+      address: "",
+      party_type: partyType,
+      opening_balance:
+        Number(document.getElementById("partyOpening").value) || 0
     }])
     .select();
 
@@ -1033,8 +1542,13 @@ async function saveParty(){
     return;
   }
 
-  alert("Customer saved successfully!");
-  openPage("parties");
+  alert("Party saved successfully!");
+
+  if(saveAndNew){
+    openPartyForm();
+  }else{
+    openPage("parties");
+  }
 }
 
 function saveCompany(){
