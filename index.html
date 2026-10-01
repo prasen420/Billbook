@@ -512,96 +512,435 @@ if(page==="dashboard"){
 
 content.innerHTML=`
 
-<div class="cards">
+<style>
 
-<div class="card">
-<small>Total Sales</small>
-<h2>₹79,87,985</h2>
+.dashboard-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:18px;
+}
+
+.dashboard-header h2{
+margin:0;
+font-size:22px;
+color:#172033;
+}
+
+.dashboard-update{
+font-size:12px;
+color:#64748b;
+background:#f8fafc;
+padding:9px 14px;
+border-radius:6px;
+}
+
+.dashboard-cards{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:12px;
+margin-bottom:18px;
+}
+
+.dashboard-card{
+border:1px solid #dce2ea;
+border-radius:8px;
+padding:18px 20px;
+background:#fff;
+}
+
+.dashboard-card small{
+display:block;
+font-size:13px;
+margin-bottom:10px;
+}
+
+.dashboard-card h2{
+margin:0;
+font-size:22px;
+}
+
+.collect-card{
+background:#f2fff6;
+}
+
+.collect-card small{
+color:#16a34a;
+}
+
+.pay-card{
+background:#fff6f6;
+}
+
+.pay-card small{
+color:#ef4444;
+}
+
+.bank-card{
+background:#f5f9ff;
+}
+
+.bank-card small{
+color:#315b84;
+}
+
+.latest-box{
+background:#fff;
+border:1px solid #dce2ea;
+border-radius:8px;
+overflow:hidden;
+margin-bottom:18px;
+}
+
+.latest-title{
+padding:14px 12px;
+border-bottom:1px solid #dce2ea;
+font-size:15px;
+font-weight:600;
+}
+
+.latest-table{
+width:100%;
+border-collapse:collapse;
+}
+
+.latest-table th{
+text-align:left;
+background:#f8fafc;
+padding:11px;
+font-size:11px;
+color:#334155;
+border-bottom:1px solid #dce2ea;
+}
+
+.latest-table td{
+padding:11px;
+font-size:12px;
+border-bottom:1px solid #e5e7eb;
+}
+
+.empty-row{
+height:150px;
+text-align:center;
+color:#64748b;
+}
+
+.sales-report{
+background:#fff;
+border:1px solid #dce2ea;
+border-radius:8px;
+overflow:hidden;
+}
+
+.sales-report-title{
+padding:14px 12px;
+border-bottom:1px solid #dce2ea;
+font-size:15px;
+font-weight:600;
+}
+
+.sales-report-body{
+display:grid;
+grid-template-columns:1fr 220px;
+}
+
+.sales-chart{
+padding:20px;
+}
+
+.sales-chart svg{
+width:100%;
+height:280px;
+}
+
+.sales-summary{
+border-left:1px solid #e2e8f0;
+padding:22px;
+text-align:right;
+}
+
+.sales-summary select{
+width:100%;
+padding:9px;
+border:1px solid #d8dee8;
+border-radius:6px;
+margin-bottom:35px;
+background:white;
+}
+
+.sales-summary small{
+display:block;
+color:#94a3b8;
+margin-bottom:6px;
+}
+
+.sales-summary strong{
+display:block;
+font-size:18px;
+margin-bottom:25px;
+color:#111827;
+}
+
+@media(max-width:900px){
+
+.dashboard-cards{
+grid-template-columns:1fr;
+}
+
+.sales-report-body{
+grid-template-columns:1fr;
+}
+
+.sales-summary{
+border-left:none;
+border-top:1px solid #e2e8f0;
+text-align:left;
+}
+
+}
+
+</style>
+
+
+<div class="dashboard-header">
+
+<h2>Dashboard</h2>
+
+<div class="dashboard-update">
+Last Update: Today
 </div>
 
-<div class="card">
-<small>Paid</small>
-<h2>₹75,71,904</h2>
 </div>
 
-<div class="card">
-<small>Unpaid</small>
-<h2>₹4,16,082</h2>
+
+<!-- SUMMARY CARDS -->
+
+<div class="dashboard-cards">
+
+<div class="dashboard-card collect-card">
+
+<small>↓ To Collect</small>
+
+<h2>₹0</h2>
+
 </div>
 
-<div class="card">
-<small>Cash & Bank</small>
-<h2>₹80,74,522</h2>
+
+<div class="dashboard-card pay-card">
+
+<small>↑ To Pay</small>
+
+<h2>₹0</h2>
+
+</div>
+
+
+<div class="dashboard-card bank-card">
+
+<small>▤ Total Cash + Bank Balance</small>
+
+<h2>₹0</h2>
+
 </div>
 
 </div>
 
-<div class="two-column">
 
-<div class="box">
+<!-- LATEST TRANSACTIONS -->
 
-<h3>Recent Sales</h3>
+<div class="latest-box">
 
-<table>
+<div class="latest-title">
+Latest Transactions
+</div>
+
+
+<table class="latest-table">
+
+<thead>
 
 <tr>
-<th>Date</th>
-<th>Invoice</th>
-<th>Customer</th>
-<th>Amount</th>
-<th>Status</th>
+
+<th>DATE</th>
+
+<th>TYPE</th>
+
+<th>TXN NO</th>
+
+<th>PARTY NAME</th>
+
+<th>AMOUNT</th>
+
 </tr>
 
-<tr>
-<td>29 Sep 2026</td>
-<td>INV-001</td>
-<td>Customer One</td>
-<td>₹10,797</td>
-<td><span class="status">Paid</span></td>
-</tr>
+</thead>
+
+
+<tbody>
 
 <tr>
-<td>29 Sep 2026</td>
-<td>INV-002</td>
-<td>Customer Two</td>
-<td>₹8,867</td>
-<td><span class="status unpaid">Unpaid</span></td>
+
+<td colspan="5" class="empty-row">
+
+No transactions yet
+
+</td>
+
 </tr>
 
-<tr>
-<td>28 Sep 2026</td>
-<td>INV-003</td>
-<td>Customer Three</td>
-<td>₹12,500</td>
-<td><span class="status">Paid</span></td>
-</tr>
+</tbody>
 
 </table>
 
 </div>
 
-<div class="box">
 
-<h3>Quick Actions</h3>
+<!-- SALES REPORT -->
 
-<button class="primary"
-onclick="openPage('sales')">
-Create Sales Invoice
-</button>
+<div class="sales-report">
 
-<br><br>
+<div class="sales-report-title">
 
-<button class="primary"
-onclick="openPage('purchase')">
-Create Purchase
-</button>
+Sales Report - Last 7 Days
 
-<br><br>
+</div>
 
-<button class="primary"
-onclick="openPage('pos')">
-Open POS
-</button>
+
+<div class="sales-report-body">
+
+
+<div class="sales-chart">
+
+<svg viewBox="0 0 800 280">
+
+
+<!-- GRID -->
+
+<line x1="50" y1="20"
+x2="760" y2="20"
+stroke="#e5e7eb"/>
+
+<line x1="50" y1="65"
+x2="760" y2="65"
+stroke="#e5e7eb"/>
+
+<line x1="50" y1="110"
+x2="760" y2="110"
+stroke="#e5e7eb"/>
+
+<line x1="50" y1="155"
+x2="760" y2="155"
+stroke="#e5e7eb"/>
+
+<line x1="50" y1="200"
+x2="760" y2="200"
+stroke="#e5e7eb"/>
+
+<line x1="50" y1="245"
+x2="760" y2="245"
+stroke="#e5e7eb"/>
+
+
+<!-- GRAPH -->
+
+<path
+d="M50 245
+C120 205 160 145 250 95
+C330 50 370 75 420 245
+C470 245 510 245 560 195
+C620 135 680 150 760 220
+L760 245
+L50 245 Z"
+fill="#d9fbe1"
+opacity=".8"
+/>
+
+
+<path
+d="M50 245
+C120 205 160 145 250 95
+C330 50 370 75 420 245
+C470 245 510 245 560 195
+C620 135 680 150 760 220"
+fill="none"
+stroke="#16a34a"
+stroke-width="3"
+/>
+
+
+<!-- DAYS -->
+
+<text x="45" y="268"
+font-size="11"
+fill="#64748b">
+Thu
+</text>
+
+<text x="160" y="268"
+font-size="11"
+fill="#64748b">
+Fri
+</text>
+
+<text x="275" y="268"
+font-size="11"
+fill="#64748b">
+Sat
+</text>
+
+<text x="390" y="268"
+font-size="11"
+fill="#64748b">
+Sun
+</text>
+
+<text x="505" y="268"
+font-size="11"
+fill="#64748b">
+Mon
+</text>
+
+<text x="620" y="268"
+font-size="11"
+fill="#64748b">
+Tue
+</text>
+
+<text x="745" y="268"
+font-size="11"
+fill="#64748b">
+Wed
+</text>
+
+</svg>
+
+</div>
+
+
+<div class="sales-summary">
+
+<select>
+
+<option>Daily</option>
+
+<option>Weekly</option>
+
+<option>Monthly</option>
+
+</select>
+
+
+<small>Last 7 days sales</small>
+
+<strong>₹0</strong>
+
+
+<small>Invoices Made</small>
+
+<strong>0</strong>
+
+</div>
+
 
 </div>
 
@@ -610,6 +949,7 @@ Open POS
 `;
 
 return;
+
 }
 
 
