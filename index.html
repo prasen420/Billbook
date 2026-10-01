@@ -1814,7 +1814,170 @@ oninput="calculateInvoiceTotal()">
 
 
 document.body.appendChild(modal);
+/* =========================
+   LARGE SALES INVOICE UI
+   ========================= */
 
+if (!document.getElementById("largeInvoiceStyles")) {
+
+  const style = document.createElement("style");
+
+  style.id = "largeInvoiceStyles";
+
+  style.innerHTML = `
+
+    /* MAIN INVOICE */
+    #salesInvoiceModal .invoice-page{
+      font-size:15px !important;
+    }
+
+    /* TOP BAR */
+    #salesInvoiceModal .invoice-topbar{
+      min-height:64px !important;
+      padding:12px 20px !important;
+    }
+
+    #salesInvoiceModal .invoice-topbar h1,
+    #salesInvoiceModal .invoice-topbar h2,
+    #salesInvoiceModal .invoice-topbar strong{
+      font-size:22px !important;
+    }
+
+    #salesInvoiceModal button{
+      font-size:14px !important;
+      min-height:40px !important;
+      padding:9px 16px !important;
+    }
+
+    /* BILL TO + INVOICE DETAILS */
+    #salesInvoiceModal .invoice-head{
+      min-height:190px !important;
+      padding:20px !important;
+    }
+
+    #salesInvoiceModal .bill-section,
+    #salesInvoiceModal .details-section{
+      padding:18px !important;
+    }
+
+    #salesInvoiceModal label{
+      font-size:14px !important;
+    }
+
+    /* ADD PARTY */
+    #salesInvoiceModal .add-party,
+    #salesInvoiceModal .add-party-box{
+      min-height:115px !important;
+      min-width:200px !important;
+      font-size:16px !important;
+    }
+
+    /* INPUTS */
+    #salesInvoiceModal input,
+    #salesInvoiceModal select,
+    #salesInvoiceModal textarea{
+      font-size:15px !important;
+      min-height:42px !important;
+      padding:9px 12px !important;
+      box-sizing:border-box !important;
+    }
+
+    /* INVOICE TABLE */
+    #salesInvoiceModal .invoice-table{
+      font-size:14px !important;
+    }
+
+    #salesInvoiceModal .invoice-table th{
+      font-size:13px !important;
+      padding:14px 12px !important;
+      height:45px !important;
+    }
+
+    #salesInvoiceModal .invoice-table td{
+      padding:12px !important;
+      min-height:55px !important;
+    }
+
+    #salesInvoiceModal .invoice-table input,
+    #salesInvoiceModal .invoice-table select{
+      min-height:40px !important;
+      font-size:14px !important;
+    }
+
+    /* ADD ITEM */
+    #salesInvoiceModal .add-item{
+      min-height:50px !important;
+      font-size:15px !important;
+      padding:14px !important;
+    }
+
+    /* SCAN BARCODE */
+    #salesInvoiceModal .scan-barcode{
+      min-height:48px !important;
+      font-size:14px !important;
+    }
+
+    /* BOTTOM AREA */
+    #salesInvoiceModal .invoice-bottom{
+      min-height:330px !important;
+    }
+
+    #salesInvoiceModal .invoice-bottom > div{
+      padding:18px !important;
+    }
+
+    /* NOTES / TERMS / BANK / QR */
+    #salesInvoiceModal .invoice-option,
+    #salesInvoiceModal .invoice-action{
+      min-height:50px !important;
+      font-size:15px !important;
+      padding:14px 16px !important;
+    }
+
+    /* SUMMARY */
+    #salesInvoiceModal .invoice-summary{
+      font-size:15px !important;
+      padding:18px !important;
+    }
+
+    #salesInvoiceModal .invoice-summary span,
+    #salesInvoiceModal .invoice-summary label{
+      font-size:14px !important;
+    }
+
+    #salesInvoiceModal .invoice-summary strong{
+      font-size:17px !important;
+    }
+
+    #salesInvoiceModal #invoiceTotal{
+      font-size:23px !important;
+    }
+
+    #salesInvoiceModal #invoiceBalance{
+      font-size:18px !important;
+    }
+
+    /* SIGNATURE */
+    #salesInvoiceModal .add-signature{
+      min-height:55px !important;
+      font-size:14px !important;
+    }
+
+    /* MORE SPACE BETWEEN SECTIONS */
+    #salesInvoiceModal .invoice-section{
+      margin-bottom:12px !important;
+    }
+
+    /* BETTER SCREEN USAGE */
+    #salesInvoiceModal .invoice-main{
+      width:100% !important;
+      min-height:calc(100vh - 64px) !important;
+    }
+
+  `;
+
+  document.head.appendChild(style);
+}
 
 window.addInvoiceItem = function(){
 
