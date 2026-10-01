@@ -949,6 +949,142 @@ Wed
 
 `;
 
+
+// LOAD LATEST TRANSACTIONS FROM SUPABASE
+
+async function loadLatestTransactions(){
+
+const tbody = document.getElementById("latestTransactionsBody");
+
+if(!tbody) return;
+
+
+const { data: invoices, error } = await supabase
+
+.from("invoices")
+
+.select("id, created_at, invoice_no, total_amount, party_id, status")
+
+.order("created_at", { ascending:false })
+
+.limit(10);
+
+
+if(error){
+
+console.error("Invoice loading error:", error);
+
+tbody.innerHTML = `
+<tr>
+<td colspan="5" class="empty-row">
+Unable to load transactions
+</td>
+</tr>
+`;
+
+return;
+
+}
+
+
+if(!invoices || invoices.length === 0){
+
+tbody.innerHTML = `
+<tr>
+<td colspan="5" class="empty-row">
+No transactions yet
+</td>
+</tr>
+`;
+
+return;
+
+}
+
+
+// GET PARTY NAMES
+
+const partyIds = [...new Set(
+
+invoices
+
+.map(invoice => invoice.party_id)
+
+.filter(Boolean)
+
+)];
+
+
+let parties = [];
+
+if(partyIds.length > 0){
+
+const { data, error: partyError } = await supabase
+
+.from("parties")
+
+.select("id, name")
+
+.in("id", partyIds);
+
+
+if(!partyError){
+
+parties = data || [];
+
+}
+
+}
+
+
+const partyMap = {};
+
+parties.forEach(party => {
+
+partyMap[party.id] = party.name;
+
+});
+
+
+// SHOW TRANSACTIONS
+
+tbody.innerHTML = invoices.map(invoice => {
+
+const date = invoice.created_at
+
+? new Date(invoice.created_at).toLocaleDateString("en-IN")
+
+: "-";
+
+
+const partyName = partyMap[invoice.party_id] || "Cash Sale";
+
+
+return `
+
+<tr>
+
+<td>${date}</td>
+
+<td>Sale</td>
+
+<td>${invoice.invoice_no || "-"}</td>
+
+<td>${partyName}</td>
+
+<td>₹${Number(invoice.total_amount || 0).toFixed(2)}</td>
+
+</tr>
+
+`;
+
+}).join("");
+
+}
+
+
+loadLatestTransactions();
+
 return;
 
 }
