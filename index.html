@@ -1101,177 +1101,561 @@ modal.id = "salesInvoiceModal";
 
 modal.innerHTML = `
 
-<div style="
+<style>
+
+.invoice-page{
 position:fixed;
 inset:0;
-background:rgba(0,0,0,.45);
+background:#f5f7fb;
+z-index:9999;
+overflow:auto;
+font-family:Arial,sans-serif;
+color:#172033;
+}
+
+.invoice-topbar{
+height:52px;
+background:#fff;
+border-bottom:1px solid #dbe2ea;
 display:flex;
 align-items:center;
-justify-content:center;
-z-index:9999;
-">
+padding:0 18px;
+gap:18px;
+position:sticky;
+top:0;
+z-index:5;
+}
 
-<div style="
-width:90%;
-max-width:1000px;
-background:white;
-border-radius:10px;
-padding:20px;
-box-shadow:0 20px 50px rgba(0,0,0,.25);
-">
+.invoice-exit{
+border:1px solid #d8dee8;
+background:#fff;
+padding:7px 14px;
+border-radius:6px;
+cursor:pointer;
+}
 
-<div style="
+.invoice-title{
+font-size:15px;
+font-weight:600;
+flex:1;
+}
+
+.invoice-settings{
+border:1px solid #d8dee8;
+background:#fff;
+padding:8px 11px;
+border-radius:6px;
+cursor:pointer;
+}
+
+.invoice-save-new{
+border:1px solid #4f46e5;
+background:#fff;
+color:#4f46e5;
+padding:8px 14px;
+border-radius:6px;
+cursor:pointer;
+}
+
+.invoice-save{
+border:0;
+background:#4f46e5;
+color:#fff;
+padding:9px 18px;
+border-radius:6px;
+cursor:pointer;
+font-weight:600;
+}
+
+.invoice-content{
+padding:12px;
+}
+
+.invoice-main{
+background:#fff;
+border:1px solid #dbe2ea;
+border-radius:8px;
+min-height:calc(100vh - 90px);
+}
+
+.invoice-head{
+display:grid;
+grid-template-columns:58% 42%;
+border-bottom:1px solid #dbe2ea;
+}
+
+.bill-section{
+padding:16px;
+border-right:1px solid #dbe2ea;
+}
+
+.details-section{
+padding:16px;
+}
+
+.section-label{
+font-size:11px;
+color:#64748b;
+margin-bottom:10px;
+}
+
+.add-party{
+width:135px;
+height:95px;
+border:1px dashed #60a5fa;
+background:#fff;
+color:#2563eb;
+cursor:pointer;
+border-radius:3px;
+}
+
+.invoice-fields{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+}
+
+.invoice-field label{
+display:block;
+font-size:10px;
+color:#475569;
+margin-bottom:5px;
+}
+
+.invoice-field input,
+.invoice-field select{
+width:100%;
+box-sizing:border-box;
+height:34px;
+border:1px solid #cbd5e1;
+border-radius:4px;
+padding:7px 9px;
+background:#fff;
+}
+
+.due-date{
+margin-top:12px;
+border:1px dashed #60a5fa;
+padding:7px;
+text-align:center;
+font-size:11px;
+color:#2563eb;
+cursor:pointer;
+}
+
+.invoice-table-wrap{
+overflow:auto;
+}
+
+.invoice-table{
+width:100%;
+border-collapse:collapse;
+min-width:1000px;
+}
+
+.invoice-table th{
+background:#f8fafc;
+font-size:9px;
+font-weight:600;
+color:#475569;
+text-align:left;
+padding:10px 8px;
+border-bottom:1px solid #dbe2ea;
+}
+
+.invoice-table td{
+padding:8px;
+border-bottom:1px solid #e2e8f0;
+vertical-align:top;
+}
+
+.invoice-table input,
+.invoice-table select{
+width:100%;
+height:32px;
+box-sizing:border-box;
+border:1px solid #cbd5e1;
+border-radius:4px;
+padding:6px;
+font-size:12px;
+}
+
+.item-desc{
+min-height:45px !important;
+resize:none;
+}
+
+.tax-select{
+min-width:80px;
+}
+
+.remove-item{
+border:0;
+background:#fff;
+color:#ef4444;
+font-size:18px;
+cursor:pointer;
+}
+
+.add-item{
+margin:0 16px 12px;
+border:1px dashed #60a5fa;
+background:#fff;
+color:#2563eb;
+height:32px;
+width:calc(100% - 32px);
+cursor:pointer;
+border-radius:4px;
+}
+
+.invoice-bottom{
+display:grid;
+grid-template-columns:60% 40%;
+border-top:1px solid #dbe2ea;
+}
+
+.invoice-options{
+padding:10px 16px;
+}
+
+.invoice-option{
+padding:12px 0;
+border-bottom:1px solid #edf0f4;
+color:#2563eb;
+font-size:12px;
+cursor:pointer;
+}
+
+.invoice-summary{
+border-left:1px solid #dbe2ea;
+padding:14px 16px;
+}
+
+.summary-action{
 display:flex;
 justify-content:space-between;
 align-items:center;
-border-bottom:1px solid #ddd;
-padding-bottom:15px;
-margin-bottom:20px;
-">
+padding:8px 0;
+font-size:12px;
+}
 
-<h2 style="margin:0;">Create Sales Invoice</h2>
-
-<button
-onclick="document.getElementById('salesInvoiceModal').remove()"
-style="
-border:0;
-background:#f1f5f9;
-font-size:20px;
-width:35px;
-height:35px;
-border-radius:6px;
+.summary-action span:first-child{
+color:#2563eb;
 cursor:pointer;
-">
-×
+}
+
+.summary-row{
+display:flex;
+justify-content:space-between;
+padding:8px 0;
+font-size:12px;
+}
+
+.summary-row strong{
+font-weight:600;
+}
+
+.summary-total{
+border-top:1px solid #dbe2ea;
+margin-top:5px;
+padding-top:13px;
+font-size:16px;
+font-weight:700;
+}
+
+.received-box{
+margin-top:14px;
+}
+
+.received-box label{
+display:block;
+font-size:11px;
+margin-bottom:5px;
+}
+
+.received-row{
+display:flex;
+gap:8px;
+}
+
+.received-row input{
+flex:1;
+height:34px;
+box-sizing:border-box;
+border:1px solid #cbd5e1;
+border-radius:4px;
+padding:7px;
+}
+
+.received-row select{
+width:100px;
+height:34px;
+border:1px solid #cbd5e1;
+border-radius:4px;
+}
+
+.balance{
+color:#16a34a;
+font-weight:600;
+border-top:1px solid #e2e8f0;
+margin-top:12px;
+padding-top:12px;
+}
+
+.signature{
+margin-top:16px;
+height:60px;
+border:1px dashed #60a5fa;
+display:flex;
+align-items:center;
+justify-content:center;
+color:#2563eb;
+font-size:11px;
+}
+
+@media(max-width:800px){
+
+.invoice-head,
+.invoice-bottom{
+grid-template-columns:1fr;
+}
+
+.bill-section{
+border-right:0;
+border-bottom:1px solid #dbe2ea;
+}
+
+.invoice-summary{
+border-left:0;
+border-top:1px solid #dbe2ea;
+}
+
+.invoice-fields{
+grid-template-columns:1fr;
+}
+
+}
+
+</style>
+
+
+<div class="invoice-page">
+
+
+<div class="invoice-topbar">
+
+<button class="invoice-exit"
+onclick="document.getElementById('salesInvoiceModal').remove()">
+← Exit
+</button>
+
+<div class="invoice-title">
+Create Sales Invoice
+</div>
+
+<button class="invoice-settings">
+⚙
+</button>
+
+<button class="invoice-save-new">
+Save & New
+</button>
+
+<button class="invoice-save">
+Save
 </button>
 
 </div>
 
 
-<div style="
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:15px;
-">
+<div class="invoice-content">
 
-<div>
+<div class="invoice-main">
 
-<label>Invoice Number</label>
 
-<input
-id="newInvoiceNo"
-value="INV-${Date.now()}"
-style="width:100%;padding:10px;margin-top:5px;box-sizing:border-box;">
+<div class="invoice-head">
+
+
+<div class="bill-section">
+
+<div class="section-label">
+Bill To
+</div>
+
+<button class="add-party">
++ Add Party
+</button>
 
 </div>
 
 
-<div>
+<div class="details-section">
 
-<label>Invoice Date</label>
+<div class="section-label">
+Invoice Details
+</div>
+
+<div class="invoice-fields">
+
+
+<div class="invoice-field">
+
+<label>Sales Invoice No.</label>
 
 <input
+id="invoiceNumber"
+value="INV-${Date.now()}">
+
+</div>
+
+
+<div class="invoice-field">
+
+<label>Sales Invoice Date</label>
+
+<input
+id="invoiceDate"
 type="date"
-id="newInvoiceDate"
-value="${new Date().toISOString().split("T")[0]}"
-style="width:100%;padding:10px;margin-top:5px;box-sizing:border-box;">
-
-</div>
-
-
-<div>
-
-<label>Party</label>
-
-<select
-id="newInvoiceParty"
-style="width:100%;padding:10px;margin-top:5px;box-sizing:border-box;">
-
-<option>Select Party</option>
-
-</select>
+value="${new Date().toISOString().split("T")[0]}">
 
 </div>
 
 </div>
 
 
-<div style="
-margin-top:25px;
-border:1px solid #ddd;
-border-radius:8px;
-overflow:hidden;
-">
+<div class="due-date">
++ Add Due Date
+</div>
 
-<div style="
-padding:12px;
-background:#f8fafc;
-font-weight:600;
-">
-
-Invoice Items
+</div>
 
 </div>
 
 
-<table style="
-width:100%;
-border-collapse:collapse;
-">
+<div class="invoice-table-wrap">
+
+<table class="invoice-table">
 
 <thead>
 
 <tr>
 
-<th style="padding:10px;text-align:left;">Item</th>
+<th style="width:35px">NO</th>
 
-<th style="padding:10px;text-align:left;">Qty</th>
+<th style="width:31%">ITEMS</th>
 
-<th style="padding:10px;text-align:left;">Price</th>
+<th>HSN</th>
 
-<th style="padding:10px;text-align:left;">Amount</th>
+<th style="width:9%">QTY</th>
+
+<th style="width:11%">PRICE/ITEM (₹)</th>
+
+<th style="width:12%">DISCOUNT</th>
+
+<th style="width:11%">TAX</th>
+
+<th style="width:12%">AMOUNT (₹)</th>
+
+<th style="width:35px"></th>
 
 </tr>
 
 </thead>
 
 
-<tbody>
+<tbody id="invoiceItemsBody">
 
-<tr>
+<tr class="invoice-item-row">
 
-<td style="padding:10px;">
+<td>1</td>
 
-<select
-style="width:100%;padding:9px;">
+<td>
+
+<select class="invoice-item-select">
 
 <option>Select Item</option>
 
 </select>
 
+<textarea
+class="item-desc"
+placeholder="Enter Description (optional)"
+style="width:100%;margin-top:5px;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:4px;padding:6px;">
+</textarea>
+
 </td>
 
-<td style="padding:10px;">
+<td>
 
 <input
+class="item-hsn"
+placeholder="HSN">
+
+</td>
+
+<td>
+
+<input
+class="item-qty"
 type="number"
 value="1"
-style="width:100%;padding:9px;box-sizing:border-box;">
+min="1"
+oninput="calculateInvoiceTotal()">
 
 </td>
 
-<td style="padding:10px;">
+<td>
 
 <input
+class="item-price"
 type="number"
 value="0"
-style="width:100%;padding:9px;box-sizing:border-box;">
+oninput="calculateInvoiceTotal()">
 
 </td>
 
-<td style="padding:10px;">
+<td>
 
-₹0.00
+<input
+class="item-discount"
+type="number"
+value="0"
+oninput="calculateInvoiceTotal()">
+
+</td>
+
+<td>
+
+<select
+class="item-tax"
+onchange="calculateInvoiceTotal()">
+
+<option value="0">0%</option>
+<option value="5">5%</option>
+<option value="12">12%</option>
+<option value="18">18%</option>
+<option value="28">28%</option>
+
+</select>
+
+</td>
+
+<td>
+
+<input
+class="item-amount"
+value="0"
+readonly>
+
+</td>
+
+<td>
+
+<button
+class="remove-item"
+onclick="this.closest('tr').remove();calculateInvoiceTotal();">
+×
+</button>
 
 </td>
 
@@ -1284,101 +1668,142 @@ style="width:100%;padding:9px;box-sizing:border-box;">
 </div>
 
 
-<div style="
-display:flex;
-justify-content:flex-end;
-margin-top:20px;
-">
-
-<div style="
-width:300px;
-border:1px solid #ddd;
-border-radius:8px;
-padding:15px;
-">
-
-<div style="
-display:flex;
-justify-content:space-between;
-margin-bottom:12px;
-">
-
-<span>Subtotal</span>
-
-<strong>₹0.00</strong>
-
-</div>
-
-
-<div style="
-display:flex;
-justify-content:space-between;
-margin-bottom:12px;
-">
-
-<span>Tax</span>
-
-<strong>₹0.00</strong>
-
-</div>
-
-
-<div style="
-display:flex;
-justify-content:space-between;
-border-top:1px solid #ddd;
-padding-top:12px;
-font-size:18px;
-">
-
-<strong>Grand Total</strong>
-
-<strong>₹0.00</strong>
-
-</div>
-
-</div>
-
-</div>
-
-
-<div style="
-display:flex;
-justify-content:flex-end;
-gap:10px;
-margin-top:20px;
-border-top:1px solid #ddd;
-padding-top:15px;
-">
-
 <button
-onclick="document.getElementById('salesInvoiceModal').remove()"
-style="
-padding:10px 18px;
-border:1px solid #ccc;
-background:white;
-border-radius:6px;
-cursor:pointer;
-">
+class="add-item"
+onclick="addInvoiceItem()">
 
-Cancel
++ Add Item
 
 </button>
 
 
-<button
-style="
-padding:10px 20px;
-border:0;
-background:#4f46e5;
-color:white;
-border-radius:6px;
-cursor:pointer;
-">
+<div class="invoice-bottom">
 
-Save Invoice
 
-</button>
+<div class="invoice-options">
+
+<div class="invoice-option">
+＋ Add Notes
+</div>
+
+<div class="invoice-option">
+＋ Add Terms & Conditions
+</div>
+
+<div class="invoice-option">
+＋ Add Bank Account
+</div>
+
+<div class="invoice-option">
+▦ Add Payment QR
+</div>
+
+</div>
+
+
+<div class="invoice-summary">
+
+
+<div class="summary-action">
+
+<span>⊕ Add Discount</span>
+
+<strong id="invoiceDiscount">₹0</strong>
+
+</div>
+
+
+<div class="summary-action">
+
+<span>⊕ Add Additional Charges</span>
+
+<strong>₹0</strong>
+
+</div>
+
+
+<div class="summary-row">
+
+<span>Taxable Amount</span>
+
+<strong id="invoiceTaxable">₹0</strong>
+
+</div>
+
+
+<div class="summary-row">
+
+<label>
+<input type="checkbox">
+Auto Round Off
+</label>
+
+<strong>₹0</strong>
+
+</div>
+
+
+<div class="summary-row summary-total">
+
+<span>Total Amount:</span>
+
+<strong id="invoiceTotal">
+₹0
+</strong>
+
+</div>
+
+
+<div class="received-box">
+
+<label>
+Total Amount Received
+</label>
+
+<div class="received-row">
+
+<input
+id="invoiceReceived"
+type="number"
+value="0"
+oninput="calculateInvoiceTotal()">
+
+<select>
+
+<option>Cash</option>
+<option>UPI</option>
+<option>Bank</option>
+<option>Card</option>
+<option>Credit</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+<div class="summary-row balance">
+
+<span>Balance Amount</span>
+
+<strong id="invoiceBalance">
+₹0
+</strong>
+
+</div>
+
+
+<div class="signature">
+
++ Add Signature
+
+</div>
+
+</div>
+
+</div>
+
 
 </div>
 
@@ -1387,98 +1812,165 @@ Save Invoice
 </div>
 `;
 
+
 document.body.appendChild(modal);
 
 
-// LOAD PARTIES AND ITEMS FROM SUPABASE
+window.addInvoiceItem = function(){
 
-supabase
-.from("parties")
-.select("id,name")
-.order("name")
-.then(({ data, error }) => {
+const tbody =
+document.getElementById("invoiceItemsBody");
 
-if(error){
+const count =
+tbody.querySelectorAll("tr").length + 1;
 
-console.error("Party loading error:", error);
+const row =
+document.createElement("tr");
 
-return;
+row.className = "invoice-item-row";
 
-}
+row.innerHTML = `
 
-const partySelect =
-document.getElementById("newInvoiceParty");
+<td>${count}</td>
 
-if(partySelect){
+<td>
 
-partySelect.innerHTML =
-'<option value="">Select Party</option>';
+<select class="invoice-item-select">
 
-(data || []).forEach(party => {
+<option>Select Item</option>
 
-const option =
-document.createElement("option");
+</select>
 
-option.value = party.id;
+<textarea
+class="item-desc"
+placeholder="Enter Description (optional)"
+style="width:100%;margin-top:5px;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:4px;padding:6px;">
+</textarea>
 
-option.textContent = party.name;
+</td>
 
-partySelect.appendChild(option);
+<td>
+<input class="item-hsn" placeholder="HSN">
+</td>
 
-});
+<td>
+<input class="item-qty" type="number" value="1" min="1"
+oninput="calculateInvoiceTotal()">
+</td>
 
-}
+<td>
+<input class="item-price" type="number" value="0"
+oninput="calculateInvoiceTotal()">
+</td>
 
-});
+<td>
+<input class="item-discount" type="number" value="0"
+oninput="calculateInvoiceTotal()">
+</td>
 
+<td>
 
-supabase
-.from("items")
-.select("id,item_name,selling_price,tax_rate")
-.order("item_name")
-.then(({ data, error }) => {
+<select class="item-tax"
+onchange="calculateInvoiceTotal()">
 
-if(error){
+<option value="0">0%</option>
+<option value="5">5%</option>
+<option value="12">12%</option>
+<option value="18">18%</option>
+<option value="28">28%</option>
 
-console.error("Item loading error:", error);
+</select>
 
-return;
+</td>
 
-}
+<td>
 
-const itemSelect =
-document.querySelector("#salesInvoiceModal select:not(#newInvoiceParty)");
+<input class="item-amount" value="0" readonly>
 
-if(itemSelect){
+</td>
 
-itemSelect.innerHTML =
-'<option value="">Select Item</option>';
+<td>
 
-(data || []).forEach(item => {
+<button
+class="remove-item"
+onclick="this.closest('tr').remove();calculateInvoiceTotal();">
+×
+</button>
 
-const option =
-document.createElement("option");
+</td>
 
-option.value = item.id;
+`;
 
-option.textContent = item.item_name;
-
-option.dataset.price =
-item.selling_price || 0;
-
-option.dataset.tax =
-item.tax_rate || 0;
-
-itemSelect.appendChild(option);
-
-});
-
-}
-
-});
-
+tbody.appendChild(row);
 
 };
+
+
+window.calculateInvoiceTotal = function(){
+
+let taxable = 0;
+let tax = 0;
+
+document.querySelectorAll(".invoice-item-row").forEach(row => {
+
+const qty =
+Number(row.querySelector(".item-qty")?.value || 0);
+
+const price =
+Number(row.querySelector(".item-price")?.value || 0);
+
+const discount =
+Number(row.querySelector(".item-discount")?.value || 0);
+
+const taxRate =
+Number(row.querySelector(".item-tax")?.value || 0);
+
+const base =
+Math.max(0,(qty * price) - discount);
+
+const taxAmount =
+base * taxRate / 100;
+
+const amount =
+base + taxAmount;
+
+const amountBox =
+row.querySelector(".item-amount");
+
+if(amountBox){
+amountBox.value = amount.toFixed(2);
+}
+
+taxable += base;
+tax += taxAmount;
+
+});
+
+const total =
+taxable + tax;
+
+const received =
+Number(document.getElementById("invoiceReceived")?.value || 0);
+
+const balance =
+Math.max(0,total - received);
+
+document.getElementById("invoiceTaxable").textContent =
+"₹" + taxable.toFixed(2);
+
+document.getElementById("invoiceTotal").textContent =
+"₹" + total.toFixed(2);
+
+document.getElementById("invoiceBalance").textContent =
+"₹" + balance.toFixed(2);
+
+};
+
+
+calculateInvoiceTotal();
+
+};
+    
 // SALES
 
 if(page==="sales"){
