@@ -4826,30 +4826,7 @@ window.escapeInvoiceItem = function(value){
        TOP MODE SWITCH
        ===================================================== */
 
-    const title = modal.querySelector(".invoice-title");
-
-    if(title && !modal.querySelector(".invoice-mode-switch")){
-
-      const mode = document.createElement("div");
-
-      mode.className = "invoice-mode-switch";
-
-      mode.innerHTML = `
-
-        <button class="active" type="button">
-          ▣ Edit Mode
-        </button>
-
-        <button type="button">
-          ◉ Preview Mode
-        </button>
-
-      `;
-
-      title.after(mode);
-
-    }
-
+   
 
     /* =====================================================
        BILL TO SETTINGS
