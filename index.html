@@ -1389,6 +1389,95 @@ Save Invoice
 
 document.body.appendChild(modal);
 
+
+// LOAD PARTIES AND ITEMS FROM SUPABASE
+
+supabase
+.from("parties")
+.select("id,name")
+.order("name")
+.then(({ data, error }) => {
+
+if(error){
+
+console.error("Party loading error:", error);
+
+return;
+
+}
+
+const partySelect =
+document.getElementById("newInvoiceParty");
+
+if(partySelect){
+
+partySelect.innerHTML =
+'<option value="">Select Party</option>';
+
+(data || []).forEach(party => {
+
+const option =
+document.createElement("option");
+
+option.value = party.id;
+
+option.textContent = party.name;
+
+partySelect.appendChild(option);
+
+});
+
+}
+
+});
+
+
+supabase
+.from("items")
+.select("id,item_name,selling_price,tax_rate")
+.order("item_name")
+.then(({ data, error }) => {
+
+if(error){
+
+console.error("Item loading error:", error);
+
+return;
+
+}
+
+const itemSelect =
+document.querySelector("#salesInvoiceModal select:not(#newInvoiceParty)");
+
+if(itemSelect){
+
+itemSelect.innerHTML =
+'<option value="">Select Item</option>';
+
+(data || []).forEach(item => {
+
+const option =
+document.createElement("option");
+
+option.value = item.id;
+
+option.textContent = item.item_name;
+
+option.dataset.price =
+item.selling_price || 0;
+
+option.dataset.tax =
+item.tax_rate || 0;
+
+itemSelect.appendChild(option);
+
+});
+
+}
+
+});
+
+
 };
 // SALES
 
