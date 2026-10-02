@@ -651,7 +651,27 @@ menu.style.display="block";
 
 }
 
+function toggleCreateMenu(event){
 
+    event.stopPropagation();
+
+    const menu = document.getElementById("createDropdown");
+
+    if(!menu) return;
+
+    menu.classList.toggle("show");
+}
+
+
+document.addEventListener("click", function(){
+
+    const menu = document.getElementById("createDropdown");
+
+    if(menu){
+        menu.classList.remove("show");
+    }
+
+});
 function openPage(page){
     localStorage.setItem("currentPage", page);
 document.querySelectorAll(".menu").forEach(menu => {
