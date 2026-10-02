@@ -314,6 +314,83 @@ th{
 }
 
 }
+/* CREATE SALES INVOICE DROPDOWN */
+
+.create-menu-wrap{
+    position:relative;
+    width:100%;
+    display:flex;
+    margin-bottom:15px;
+}
+
+.create-main-btn{
+    flex:1;
+    width:auto !important;
+    margin-bottom:0 !important;
+    border-radius:25px 0 0 25px !important;
+}
+
+.create-arrow-btn{
+    width:38px;
+    border:0;
+    border-left:1px solid rgba(40,32,94,.15);
+    background:#e4defd;
+    color:#28205e;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    border-radius:0 25px 25px 0;
+}
+
+.create-arrow-btn:hover{
+    background:#d8d0fa;
+}
+
+.create-dropdown{
+    display:none;
+    position:absolute;
+    top:calc(100% + 5px);
+    left:0;
+    width:100%;
+    max-height:520px;
+    overflow-y:auto;
+    background:white;
+    border:1px solid #dfe3ea;
+    border-radius:8px;
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+    z-index:99999;
+}
+
+.create-dropdown.show{
+    display:block;
+}
+
+.dropdown-section-title{
+    padding:9px 14px 6px;
+    font-size:10px;
+    font-weight:600;
+    color:#64748b;
+    text-transform:uppercase;
+    background:#fafbfc;
+    border-top:1px solid #eef1f4;
+}
+
+.dropdown-section-title:first-child{
+    border-top:0;
+}
+
+.dropdown-item{
+    padding:10px 14px;
+    font-size:13px;
+    color:#475569;
+    cursor:pointer;
+    background:#fff;
+}
+
+.dropdown-item:hover{
+    background:#f3f0ff;
+    color:#4f46e5;
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -339,9 +416,105 @@ th{
 <small>Business ERP</small>
 </div>
 
-<button class="create-btn" onclick="openPage('sales')">
-＋ Create Sales Invoice
-</button>
+<div class="create-menu-wrap">
+
+    <button class="create-btn create-main-btn"
+        onclick="openPage('sales')">
+        ＋ Create Sales Invoice
+    </button>
+
+    <button class="create-arrow-btn"
+        onclick="toggleCreateMenu(event)">
+        ▾
+    </button>
+
+    <div id="createDropdown" class="create-dropdown">
+
+        <div class="dropdown-section-title">
+            GENERAL
+        </div>
+
+        <div class="dropdown-item"
+             onclick="openPage('parties')">
+            👤 Create Party
+        </div>
+
+        <div class="dropdown-item"
+             onclick="openPage('items')">
+            ◇ Create Item
+        </div>
+
+        <div class="dropdown-section-title">
+            SALES TRANSACTIONS
+        </div>
+
+        <div class="dropdown-item"
+             onclick="openPage('quotation')">
+            ▤ Quotation
+        </div>
+
+        <div class="dropdown-item"
+             onclick="openPage('paymentin')">
+            ⇩ Payment In
+        </div>
+
+        <div class="dropdown-item"
+             onclick="openPage('salesreturn')">
+            ↩ Sales Return
+        </div>
+
+        <div class="dropdown-item"
+             onclick="openPage('credit')">
+            ▣ Credit Note
+        </div>
+
+        <div class="dropdown-item"
+             onclick="openPage('delivery')">
+            ▤ Delivery Challan
+        </div>
+
+        <div class="dropdown-item"
+             onclick="openPage('proforma')">
+            ▤ Proforma Invoice
+        </div>
+
+        <div class="dropdown-section-title">
+            PURCHASE TRANSACTIONS
+        </div>
+
+        <div class="dropdown-item"
+             onclick="openPage('purchase')">
+            🛍 Purchase
+        </div>
+
+        <div class="dropdown-item"
+             onclick="openPage('paymentout')">
+            ⇧ Payment Out
+        </div>
+
+        <div class="dropdown-item"
+             onclick="openPage('purchasereturn')">
+            ↩ Purchase Return
+        </div>
+
+        <div class="dropdown-item"
+             onclick="openPage('debit')">
+            ▣ Debit Note
+        </div>
+
+        <div class="dropdown-item"
+             onclick="openPage('po')">
+            ▤ Purchase Orders
+        </div>
+
+        <div class="dropdown-item"
+             onclick="openPage('expense')">
+            ₹ Create Expense
+        </div>
+
+    </div>
+
+</div>
 
 <div class="section-title">GENERAL</div>
 
