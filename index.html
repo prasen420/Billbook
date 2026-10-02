@@ -91,7 +91,9 @@ body{
     font-size:13px;
 }
 
-.submenu div:hover{
+.submenu div:hover,
+.submenu div.active{
+    background:#2d3c76;
     color:white;
 }
 
@@ -681,10 +683,13 @@ document.querySelectorAll(".menu").forEach(menu => {
 });
 
 document.querySelectorAll(".menu").forEach(menu => {
-  if(menu.getAttribute("onclick")?.includes(`openPage('${page}')`)){
+ if(page !== "sales" && menu.getAttribute("onclick")?.includes(`openPage('${page}')`)){
     menu.classList.add("active");
   }
 });
+    if(page === "sales"){
+  document.querySelector("#salesMenu div")?.classList.add("active");
+}
 let title=page
 .replaceAll("_"," ")
 .replace(/\b\w/g,function(x){
