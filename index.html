@@ -5151,25 +5151,6 @@ function enhanceSalesInvoice(){
         }
 /* FINAL INVOICE ALIGNMENT */
 
-#salesInvoiceModal .repeat-invoice-box{
-    position:absolute !important;
-
-    top:10px !important;
-    right:52px !important;
-
-    height:32px !important;
-
-    display:flex !important;
-    align-items:center !important;
-    justify-content:flex-end !important;
-
-    gap:7px !important;
-
-    white-space:nowrap !important;
-
-    box-sizing:border-box !important;
-}
-
 #salesInvoiceModal .repeat-invoice-box{ 
     position:absolute !important; 
  
@@ -5178,7 +5159,7 @@ function enhanceSalesInvoice(){
  
     height:32px !important; 
  
-    display:flex !important; 
+    display:flex !important;
     flex-direction:row !important;
     align-items:center !important; 
     justify-content:flex-end !important; 
@@ -5190,14 +5171,15 @@ function enhanceSalesInvoice(){
     box-sizing:border-box !important; 
 } 
  
-/* TOGGLE FIRST */
+/* TOGGLE - FIRST */
 #salesInvoiceModal .repeat-switch{ 
     order:1 !important;
 
-    width:34px !important; 
+    width:36px !important; 
     height:20px !important; 
  
-    min-width:34px !important; 
+    min-width:36px !important;
+    max-width:36px !important;
  
     margin:0 !important; 
     padding:0 !important; 
@@ -5205,38 +5187,16 @@ function enhanceSalesInvoice(){
     border:0 !important; 
     border-radius:20px !important; 
  
-    background:#d1d5db !important; 
+    background:#d9dde3 !important; 
  
-    position:relative !important; 
+    position:relative !important;
+    display:block !important;
  
+    cursor:pointer !important;
     flex-shrink:0 !important; 
 }
 
-/* TEXT SECOND */
-#salesInvoiceModal .repeat-invoice-box > span{
-    order:2 !important;
-
-    display:inline-flex !important;
-    align-items:center !important;
-
-    white-space:nowrap !important;
-}
-
-/* SETTINGS THIRD */
-#salesInvoiceModal .repeat-setting-btn{
-    order:3 !important;
-
-    width:28px !important;
-    height:28px !important;
-
-    margin:0 !important;
-    padding:0 !important;
-
-    display:flex !important;
-    align-items:center !important;
-    justify-content:center !important;
-}
- 
+/* TOGGLE CIRCLE */
 #salesInvoiceModal .repeat-switch::after{ 
     content:"" !important; 
  
@@ -5252,15 +5212,44 @@ function enhanceSalesInvoice(){
  
     border-radius:50% !important; 
  
-    transition:.2s !important; 
-} 
- 
+    transition:left .2s ease !important; 
+}
+
+/* ACTIVE TOGGLE */
 #salesInvoiceModal .repeat-switch.active{ 
     background:#2563eb !important; 
 } 
  
 #salesInvoiceModal .repeat-switch.active::after{ 
-    left:16px !important; 
+    left:18px !important; 
+}
+
+/* REPEAT TEXT - SECOND */
+#salesInvoiceModal .repeat-invoice-box > span{
+    order:2 !important;
+
+    display:inline-flex !important;
+    align-items:center !important;
+
+    white-space:nowrap !important;
+
+    font-size:12px !important;
+    color:#475569 !important;
+}
+
+/* SETTINGS - THIRD, IF PRESENT */
+#salesInvoiceModal .repeat-setting-btn{
+    order:3 !important;
+
+    width:28px !important;
+    height:28px !important;
+
+    margin:0 !important;
+    padding:0 !important;
+
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
 }
 
 #salesInvoiceModal .invoice-setting-btn{
