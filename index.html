@@ -5145,7 +5145,109 @@ function enhanceSalesInvoice(){
 
             padding:5px;
         }
+/* FINAL INVOICE ALIGNMENT */
 
+#salesInvoiceModal .repeat-invoice-box{
+    position:absolute !important;
+    top:10px !important;
+    right:52px !important;
+
+    height:32px !important;
+
+    display:flex !important;
+    align-items:center !important;
+    gap:8px !important;
+
+    white-space:nowrap !important;
+}
+
+#salesInvoiceModal .invoice-setting-btn{
+    position:absolute !important;
+    top:10px !important;
+    right:10px !important;
+
+    width:32px !important;
+    height:32px !important;
+
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+}
+
+#salesInvoiceModal .invoice-item-actions{
+    display:flex !important;
+    align-items:stretch !important;
+    gap:12px !important;
+    width:100% !important;
+}
+
+#salesInvoiceModal .invoice-item-actions .add-item{
+    flex:1 !important;
+    height:42px !important;
+}
+
+#salesInvoiceModal .scan-barcode{
+    width:140px !important;
+    min-width:140px !important;
+    height:42px !important;
+
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+}
+
+#salesInvoiceModal .roundoff-row{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    min-height:42px !important;
+}
+
+#salesInvoiceModal .roundoff-left{
+    display:flex !important;
+    align-items:center !important;
+    gap:8px !important;
+}
+
+#salesInvoiceModal .roundoff-left input{
+    width:16px !important;
+    height:16px !important;
+    min-width:16px !important;
+    min-height:16px !important;
+    margin:0 !important;
+}
+
+#salesInvoiceModal .roundoff-control{
+    display:flex !important;
+    align-items:center !important;
+    height:32px !important;
+}
+
+#salesInvoiceModal .payment-extra-actions{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    width:100% !important;
+}
+
+#salesInvoiceModal .payment-extra-actions label{
+    display:flex !important;
+    align-items:center !important;
+    gap:8px !important;
+}
+
+#salesInvoiceModal .payment-extra-actions label input{
+    width:16px !important;
+    height:16px !important;
+    min-width:16px !important;
+    min-height:16px !important;
+    margin:0 !important;
+}
+
+#salesInvoiceModal .split-payment-btn{
+    margin-left:auto !important;
+    white-space:nowrap !important;
+}
     `;
 
     document.head.appendChild(style);
