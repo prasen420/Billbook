@@ -4677,7 +4677,509 @@ window.escapeInvoiceItem = function(value){
         .replace(/"/g,"&quot;")
         .replace(/'/g,"&#039;");
 };
+/* ===============================
+   SALES INVOICE EXTRA CONTROLS
+   =============================== */
 
+(function(){
+
+function enhanceSalesInvoice(){
+
+    const modal = document.getElementById("salesInvoiceModal");
+
+    if(!modal) return;
+
+    /* ---------- SETTINGS BUTTONS ---------- */
+
+    const bill = modal.querySelector(".bill-section");
+
+    if(bill && !bill.querySelector(".invoice-setting-btn")){
+
+        const btn = document.createElement("button");
+
+        btn.className = "invoice-setting-btn";
+        btn.type = "button";
+        btn.innerHTML = "⚙";
+        btn.title = "Bill To Settings";
+
+        bill.appendChild(btn);
+    }
+
+
+    const details = modal.querySelector(".details-section");
+
+    if(details){
+
+        if(!details.querySelector(".invoice-setting-btn")){
+
+            const btn = document.createElement("button");
+
+            btn.className = "invoice-setting-btn";
+            btn.type = "button";
+            btn.innerHTML = "⚙";
+            btn.title = "Invoice Settings";
+
+            details.appendChild(btn);
+        }
+
+
+        /* ---------- REPEAT THIS INVOICE ---------- */
+
+        if(!details.querySelector(".repeat-invoice-box")){
+
+            const repeat = document.createElement("div");
+
+            repeat.className = "repeat-invoice-box";
+
+            repeat.innerHTML = `
+                <span>Repeat this Invoice</span>
+
+                <button
+                    type="button"
+                    class="repeat-switch"
+                    onclick="this.classList.toggle('active')">
+                </button>
+
+                <button
+                    type="button"
+                    class="repeat-setting-btn">
+                    ⚙
+                </button>
+            `;
+
+            details.appendChild(repeat);
+        }
+
+    }
+
+
+    /* ---------- TABLE SETTINGS ---------- */
+
+    const table = modal.querySelector(".invoice-table");
+
+    if(table){
+
+        const lastHead =
+            table.querySelector("thead tr th:last-child");
+
+        if(lastHead &&
+           !lastHead.querySelector(".invoice-table-setting")){
+
+            lastHead.innerHTML = `
+                <button
+                    type="button"
+                    class="invoice-table-setting">
+                    ⚙
+                </button>
+            `;
+        }
+    }
+
+
+    /* ---------- ADD ITEM + SCAN BARCODE ---------- */
+
+    const addItem = modal.querySelector(".add-item");
+
+    if(addItem &&
+       !modal.querySelector(".invoice-item-actions")){
+
+        const wrap = document.createElement("div");
+
+        wrap.className = "invoice-item-actions";
+
+        addItem.parentNode.insertBefore(wrap,addItem);
+
+        wrap.appendChild(addItem);
+
+
+        const scan = document.createElement("button");
+
+        scan.type = "button";
+        scan.className = "scan-barcode";
+        scan.innerHTML = "▣ &nbsp; Scan Barcode";
+
+        scan.onclick = function(){
+
+            alert("Scan Barcode option opened.");
+
+        };
+
+        wrap.appendChild(scan);
+    }
+
+
+    /* ---------- AUTO ROUND OFF ---------- */
+
+    const roundRow =
+        Array.from(
+            modal.querySelectorAll(".summary-row")
+        ).find(row =>
+            row.innerText.includes("Auto Round Off")
+        );
+
+    if(roundRow){
+
+        roundRow.className = "summary-row roundoff-row";
+
+        roundRow.innerHTML = `
+            <label class="roundoff-left">
+
+                <input
+                    id="autoRoundOff"
+                    type="checkbox">
+
+                <span>Auto Round Off</span>
+
+            </label>
+
+            <div class="roundoff-control">
+
+                <button
+                    type="button">
+                    + Add
+                </button>
+
+                <span id="roundOffValue">
+                    0
+                </span>
+
+            </div>
+        `;
+    }
+
+
+    /* ---------- MARK FULLY PAID + SPLIT PAYMENT ---------- */
+
+    const receivedBox =
+        modal.querySelector(".received-box");
+
+    if(receivedBox &&
+       !receivedBox.querySelector(".payment-extra-actions")){
+
+        const actions =
+            document.createElement("div");
+
+        actions.className =
+            "payment-extra-actions";
+
+        actions.innerHTML = `
+            <label>
+
+                <input
+                    id="markFullyPaid"
+                    type="checkbox">
+
+                <span>Mark as fully paid</span>
+
+            </label>
+
+            <button
+                type="button"
+                class="split-payment-btn"
+                onclick="alert('Split Payment option opened.')">
+
+                ＋ Split Payment
+
+            </button>
+        `;
+
+        receivedBox.appendChild(actions);
+    }
+
+
+    /* ---------- CSS ---------- */
+
+    if(document.getElementById("invoiceExtraControlStyles"))
+        return;
+
+
+    const style =
+        document.createElement("style");
+
+    style.id =
+        "invoiceExtraControlStyles";
+
+    style.innerHTML = `
+
+        #salesInvoiceModal .bill-section,
+        #salesInvoiceModal .details-section{
+            position:relative;
+        }
+
+
+        .invoice-setting-btn{
+            position:absolute;
+            right:12px;
+            top:10px;
+
+            width:32px;
+            height:32px;
+
+            border:1px solid #dbe2ea;
+            background:#fff;
+
+            border-radius:6px;
+
+            cursor:pointer;
+
+            color:#475569;
+        }
+
+
+        .repeat-invoice-box{
+            position:absolute;
+            right:14px;
+            top:8px;
+
+            display:flex;
+            align-items:center;
+            gap:8px;
+
+            font-size:12px;
+            color:#475569;
+        }
+
+
+        .repeat-switch{
+            width:32px;
+            height:18px;
+
+            border:0;
+            border-radius:20px;
+
+            background:#d1d5db;
+
+            position:relative;
+            cursor:pointer;
+        }
+
+
+        .repeat-switch::after{
+            content:"";
+
+            position:absolute;
+
+            width:14px;
+            height:14px;
+
+            top:2px;
+            left:2px;
+
+            background:white;
+
+            border-radius:50%;
+
+            transition:.2s;
+        }
+
+
+        .repeat-switch.active{
+            background:#2563eb;
+        }
+
+
+        .repeat-switch.active::after{
+            left:16px;
+        }
+
+
+        .repeat-setting-btn{
+            border:0;
+            background:transparent;
+
+            cursor:pointer;
+
+            color:#64748b;
+        }
+
+
+        .invoice-table-setting{
+            width:30px;
+            height:30px;
+
+            border:1px solid #dbe2ea;
+            background:white;
+
+            border-radius:5px;
+
+            cursor:pointer;
+        }
+
+
+        .invoice-item-actions{
+            display:flex;
+            align-items:center;
+            gap:10px;
+
+            width:100%;
+        }
+
+
+        .invoice-item-actions .add-item{
+            flex:1;
+        }
+
+
+        .scan-barcode{
+            min-width:150px;
+
+            border:1px solid #dbe2ea;
+            background:white;
+
+            color:#475569;
+
+            border-radius:5px;
+
+            cursor:pointer;
+        }
+
+
+        .roundoff-row{
+            display:flex !important;
+
+            align-items:center;
+            justify-content:space-between;
+        }
+
+
+        .roundoff-left{
+            display:flex;
+
+            align-items:center;
+
+            gap:7px;
+        }
+
+
+        .roundoff-left input{
+            width:16px !important;
+            height:16px !important;
+
+            min-height:16px !important;
+
+            padding:0 !important;
+        }
+
+
+        .roundoff-control{
+            display:flex;
+
+            align-items:center;
+
+            height:34px;
+
+            border:1px solid #dbe2ea;
+
+            border-radius:5px;
+
+            overflow:hidden;
+        }
+
+
+        .roundoff-control button{
+            height:32px;
+
+            border:0;
+
+            background:white;
+
+            color:#2563eb;
+
+            padding:0 12px;
+
+            cursor:pointer;
+        }
+
+
+        .roundoff-control span{
+            min-width:35px;
+
+            text-align:center;
+        }
+
+
+        .payment-extra-actions{
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+            margin-top:12px;
+
+            padding-top:10px;
+
+            border-top:1px solid #e5e7eb;
+        }
+
+
+        .payment-extra-actions label{
+            display:flex;
+
+            align-items:center;
+
+            gap:7px;
+        }
+
+
+        .payment-extra-actions label input{
+            width:16px !important;
+            height:16px !important;
+
+            min-height:16px !important;
+
+            padding:0 !important;
+        }
+
+
+        .split-payment-btn{
+            border:0;
+
+            background:transparent;
+
+            color:#2563eb;
+
+            cursor:pointer;
+
+            font-size:12px;
+
+            padding:5px;
+        }
+
+    `;
+
+    document.head.appendChild(style);
+}
+
+
+/* নতুন invoice খুললে enhancement চালাবে */
+
+const oldOpenSalesInvoice =
+    window.openSalesInvoice;
+
+if(typeof oldOpenSalesInvoice === "function" &&
+   !oldOpenSalesInvoice.__enhanced){
+
+    const newOpenSalesInvoice =
+        function(){
+
+            oldOpenSalesInvoice();
+
+            setTimeout(
+                enhanceSalesInvoice,
+                100
+            );
+        };
+
+    newOpenSalesInvoice.__enhanced = true;
+
+    window.openSalesInvoice =
+        newOpenSalesInvoice;
+}
+
+
+})();
+    
 </script>
 
 </body>
