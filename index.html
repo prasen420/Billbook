@@ -4928,49 +4928,61 @@ window.escapeInvoiceItem = function(value){
 
       const oldDue = detailsSection.querySelector(".due-date");
 
-      if(oldDue){
+     const oldDue = detailsSection.querySelector(".due-date");
 
-        oldDue.outerHTML = `
+if(oldDue){
 
-          <div class="invoice-date-extra">
+  oldDue.style.cursor = "pointer";
 
-            <div class="date-extra-field">
+  oldDue.onclick = function(){
 
-              <label>Payment Terms</label>
+    if(detailsSection.querySelector(".invoice-date-extra")){
+      return;
+    }
 
-              <div class="payment-term-control">
+    oldDue.outerHTML = `
 
-                <input
-                  id="invoicePaymentTerms"
-                  type="number"
-                  min="0"
-                  value="30"
-                  oninput="updateInvoiceDueDate()">
+      <div class="invoice-date-extra">
 
-                <span>Days</span>
+        <div class="date-extra-field">
 
-              </div>
+          <label>Payment Terms</label>
 
-            </div>
+          <div class="payment-term-control">
 
+            <input
+              id="invoicePaymentTerms"
+              type="number"
+              min="0"
+              value="30"
+              oninput="updateInvoiceDueDate()">
 
-            <div class="date-extra-field">
-
-              <label>Due Date</label>
-
-              <input
-                id="invoiceDueDate"
-                type="date">
-
-            </div>
+            <span>Days</span>
 
           </div>
 
-        `;
+        </div>
 
-      }
 
-    }
+        <div class="date-extra-field">
+
+          <label>Due Date</label>
+
+          <input
+            id="invoiceDueDate"
+            type="date">
+
+        </div>
+
+      </div>
+
+    `;
+
+    updateInvoiceDueDate();
+
+  };
+
+}
 
 
     /* =====================================================
