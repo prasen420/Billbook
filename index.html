@@ -3844,8 +3844,24 @@ window.openSalesInvoiceDirect = function(){
     openPage("sales");
 
     if(typeof window.openSalesInvoice === "function"){
-        window.openSalesInvoice();
-    }
+
+    window.openSalesInvoice();
+
+    setTimeout(function(){
+
+        const modal =
+            document.getElementById("salesInvoiceModal");
+
+        if(
+            modal &&
+            typeof window.enhanceSalesInvoiceUI === "function"
+        ){
+            window.enhanceSalesInvoiceUI(modal);
+        }
+
+    },150);
+
+}
 
 };
 
