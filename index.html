@@ -4728,7 +4728,14 @@ if(oldDueDateBox){
             return;
         }
 
-        oldDueDateBox.outerHTML = `
+        const currentDueDateBox =
+    details.querySelector(".due-date");
+
+if(!currentDueDateBox){
+    return;
+}
+
+currentDueDateBox.outerHTML = `
 
             <div
                 class="invoice-date-extra"
