@@ -3854,9 +3854,9 @@ window.openSalesInvoiceDirect = function(){
 
         if(
             modal &&
-            typeof window.enhanceSalesInvoiceUI === "function"
+           typeof window.enhanceSalesInvoice === "function"
         ){
-            window.enhanceSalesInvoiceUI(modal);
+            window.enhanceSalesInvoice();
         }
 
     },150);
@@ -4661,7 +4661,7 @@ window.escapeInvoiceItem = function(value){
 
 (function(){
 
-function enhanceSalesInvoice(){
+window.enhanceSalesInvoice = function(){
 
     const modal = document.getElementById("salesInvoiceModal");
 
@@ -5399,9 +5399,9 @@ if(typeof oldOpenSalesInvoice === "function" &&
             oldOpenSalesInvoice();
 
             setTimeout(
-                enhanceSalesInvoice,
-                100
-            );
+    window.enhanceSalesInvoice,
+    100
+);
         };
 
     newOpenSalesInvoice.__enhanced = true;
