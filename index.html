@@ -4713,7 +4713,363 @@ window.enhanceSalesInvoice = function(){
         }
 
     }
+/* ---------- PAYMENT TERMS + DUE DATE ---------- */
 
+const oldDueDateBox =
+    details.querySelector(".due-date");
+
+if(oldDueDateBox){
+
+    oldDueDateBox.style.cursor = "pointer";
+
+    oldDueDateBox.onclick = function(){
+
+        if(details.querySelector(".invoice-date-extra")){
+            return;
+        }
+
+        oldDueDateBox.outerHTML = `
+
+            <div
+                class="invoice-date-extra"
+                style="
+                    position:relative;
+                    margin-top:12px;
+                    border:1px solid #dbe2ea;
+                    border-radius:6px;
+                    padding:12px;
+                    background:#fff;
+                    display:grid;
+                    grid-template-columns:1fr 1fr;
+                    gap:12px;
+                "
+            >
+
+                <button
+                    type="button"
+                    class="due-date-close"
+                    title="Remove Due Date"
+                    style="
+                        position:absolute;
+                        right:6px;
+                        top:4px;
+                        width:24px;
+                        height:24px;
+                        border:0;
+                        background:transparent;
+                        color:#64748b;
+                        font-size:18px;
+                        line-height:24px;
+                        cursor:pointer;
+                        padding:0;
+                    "
+                >
+                    ×
+                </button>
+
+
+                <div>
+
+                    <label
+                        style="
+                            display:block;
+                            font-size:11px;
+                            color:#64748b;
+                            margin-bottom:5px;
+                        "
+                    >
+                        Payment Terms
+                    </label>
+
+                    <div
+                        style="
+                            display:flex;
+                            align-items:center;
+                            height:38px;
+                            border:1px solid #cbd5e1;
+                            border-radius:5px;
+                            overflow:hidden;
+                            background:#fff;
+                        "
+                    >
+
+                        <input
+                            id="invoicePaymentTerms"
+                            type="number"
+                            min="0"
+                            value="30"
+                            style="
+                                width:100%;
+                                height:38px;
+                                border:0;
+                                outline:none;
+                                padding:0 9px;
+                                box-sizing:border-box;
+                                font-size:13px;
+                            "
+                        >
+
+                        <span
+                            style="
+                                height:100%;
+                                display:flex;
+                                align-items:center;
+                                padding:0 10px;
+                                border-left:1px solid #e2e8f0;
+                                color:#64748b;
+                                font-size:12px;
+                            "
+                        >
+                            Days
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <label
+                        style="
+                            display:block;
+                            font-size:11px;
+                            color:#64748b;
+                            margin-bottom:5px;
+                        "
+                    >
+                        Due Date
+                    </label>
+
+                    <input
+                        id="invoiceDueDate"
+                        type="date"
+                        style="
+                            width:100%;
+                            height:38px;
+                            box-sizing:border-box;
+                            border:1px solid #cbd5e1;
+                            border-radius:5px;
+                            background:#fff;
+                            padding:0 9px;
+                            outline:none;
+                            font-size:13px;
+                        "
+                    >
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        const dueBox =
+            details.querySelector(".invoice-date-extra");
+
+        const termsInput =
+            document.getElementById("invoicePaymentTerms");
+
+        const dueInput =
+            document.getElementById("invoiceDueDate");
+
+        const invoiceDateInput =
+            document.getElementById("invoiceDate");
+
+
+        /* ---------- DATE HELPERS ---------- */
+
+        function getLocalDate(value){
+
+            if(!value) return null;
+
+            const parts =
+                value.split("-").map(Number);
+
+            if(parts.length !== 3) return null;
+
+            const date =
+                new Date(
+                    parts[0],
+                    parts[1] - 1,
+                    parts[2]
+                );
+
+            if(isNaN(date.getTime())){
+                return null;
+            }
+
+            return date;
+        }
+
+
+        function formatLocalDate(date){
+
+            const y =
+                date.getFullYear();
+
+            const m =
+                String(
+                    date.getMonth() + 1
+                ).padStart(2,"0");
+
+            const d =
+                String(
+                    date.getDate()
+                ).padStart(2,"0");
+
+            return `${y}-${m}-${d}`;
+        }
+
+
+        /* ---------- DAYS → DATE ---------- */
+
+        function updateDueDateFromDays(){
+
+            if(
+                !invoiceDateInput ||
+                !termsInput ||
+                !dueInput
+            ){
+                return;
+            }
+
+            const invoiceDate =
+                getLocalDate(
+                    invoiceDateInput.value
+                );
+
+            if(!invoiceDate){
+                return;
+            }
+
+            const days =
+                Math.max(
+                    0,
+                    Number(
+                        termsInput.value || 0
+                    )
+                );
+
+            invoiceDate.setDate(
+                invoiceDate.getDate() + days
+            );
+
+            dueInput.value =
+                formatLocalDate(invoiceDate);
+        }
+
+
+        /* ---------- DATE → DAYS ---------- */
+
+        function updateDaysFromDueDate(){
+
+            if(
+                !invoiceDateInput ||
+                !termsInput ||
+                !dueInput
+            ){
+                return;
+            }
+
+            const invoiceDate =
+                getLocalDate(
+                    invoiceDateInput.value
+                );
+
+            const dueDate =
+                getLocalDate(
+                    dueInput.value
+                );
+
+            if(
+                !invoiceDate ||
+                !dueDate
+            ){
+                return;
+            }
+
+            const difference =
+                dueDate.getTime() -
+                invoiceDate.getTime();
+
+            const days =
+                Math.round(
+                    difference /
+                    (1000 * 60 * 60 * 24)
+                );
+
+            termsInput.value =
+                Math.max(0, days);
+        }
+
+
+        /* ---------- DAYS CHANGE ---------- */
+
+        termsInput.addEventListener(
+            "input",
+            updateDueDateFromDays
+        );
+
+
+        /* ---------- DUE DATE CHANGE ---------- */
+
+        dueInput.addEventListener(
+            "change",
+            updateDaysFromDueDate
+        );
+
+
+        /* ---------- INVOICE DATE CHANGE ---------- */
+
+        if(invoiceDateInput){
+
+            invoiceDateInput.addEventListener(
+                "change",
+                updateDueDateFromDays
+            );
+
+        }
+
+
+        /* ---------- INITIAL DATE ---------- */
+
+        updateDueDateFromDays();
+
+
+        /* ---------- CLOSE X ---------- */
+
+        const closeButton =
+            dueBox.querySelector(".due-date-close");
+
+        closeButton.onclick = function(){
+
+            dueBox.outerHTML = `
+
+                <div class="due-date">
+                    + Add Due Date
+                </div>
+
+            `;
+
+            const newDue =
+                details.querySelector(".due-date");
+
+            if(newDue){
+
+                newDue.style.cursor =
+                    "pointer";
+
+                newDue.onclick =
+                    oldDueDateBox.onclick;
+
+            }
+
+        };
+
+    };
+
+}
 
     /* ---------- TABLE SETTINGS ---------- */
 
