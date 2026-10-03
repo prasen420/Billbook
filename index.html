@@ -419,7 +419,7 @@ th{
 <div class="create-menu-wrap">
 
     <button class="create-btn create-main-btn"
-        onclick="openSalesInvoice()">
+        onclick="openSalesInvoiceDirect()">
     ＋ Create Sales Invoice
 </button>
 
@@ -3839,7 +3839,15 @@ alert("Company name updated!");
 }
 
 }
+window.openSalesInvoiceDirect = function(){
 
+    openPage("sales");
+
+    if(typeof window.openSalesInvoice === "function"){
+        window.openSalesInvoice();
+    }
+
+};
 
 // START
 
