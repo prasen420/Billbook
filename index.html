@@ -5677,31 +5677,38 @@ currentDueDateBox.outerHTML = `
 #salesInvoiceModal .invoice-item-actions{
     display:flex !important;
     align-items:stretch !important;
+
     gap:8px !important;
-    width:100% !important;
-    padding:0 8px !important;
+
+    width:calc(100% - 16px) !important;
+    margin:0 8px !important;
+
+    padding:0 !important;
+
     box-sizing:border-box !important;
 }
 
 #salesInvoiceModal .invoice-item-actions .add-item{
-    flex:1 !important;
+    flex:1 1 auto !important;
+    width:auto !important;
     height:42px !important;
+
     margin:8px 0 0 0 !important;
+
     box-sizing:border-box !important;
 }
 
 #salesInvoiceModal .scan-barcode{
+    flex:0 0 130px !important;
+
     width:130px !important;
     min-width:130px !important;
     height:42px !important;
 
+    margin-top:8px !important;
+
     padding:0 12px !important;
 
-    display:flex !important;
-    align-items:center !important;
-    justify-content:center !important;
-
-    white-space:nowrap !important;
     box-sizing:border-box !important;
 
     border:1px dashed #60a5fa !important;
@@ -5710,9 +5717,11 @@ currentDueDateBox.outerHTML = `
     background:#fff !important;
     color:#2563eb !important;
 
-    cursor:pointer;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
 
-    margin-top:8px !important;
+    cursor:pointer;
 }
 
 #salesInvoiceModal .roundoff-row{
