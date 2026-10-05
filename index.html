@@ -1814,7 +1814,9 @@ onclick="openItemPicker()">
 
 <div class="summary-action">
 
-<span>⊕ Add Discount</span>
+<span onclick="openInvoiceDiscount()" style="cursor:pointer;">
+    ⊕ Add Discount
+</span>
 
 <strong id="invoiceDiscount">₹0</strong>
 
@@ -4662,7 +4664,364 @@ window.calculateInvoicePickerTotals = function(){
         totalElement.textContent =
             "₹" + grandTotal.toFixed(2);
 };
+/* =========================================
+   INVOICE OVERALL DISCOUNT
+   ========================================= */
 
+window.invoiceOverallDiscountPercent = 0;
+
+
+window.openInvoiceDiscount = function(){
+
+    const old =
+        document.getElementById("invoiceDiscountPopup");
+
+    if(old) old.remove();
+
+
+    const popup =
+        document.createElement("div");
+
+    popup.id = "invoiceDiscountPopup";
+
+
+    popup.innerHTML = `
+
+        <div style="
+            position:fixed;
+            inset:0;
+            background:rgba(15,23,42,.35);
+            z-index:120000;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        ">
+
+            <div style="
+                width:360px;
+                background:#fff;
+                border-radius:10px;
+                padding:22px;
+                box-shadow:0 20px 60px rgba(0,0,0,.25);
+            ">
+
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    margin-bottom:18px;
+                ">
+
+                    <strong style="font-size:16px;">
+                        Add Discount
+                    </strong>
+
+                    <button
+                        type="button"
+                        onclick="
+                            document
+                            .getElementById('invoiceDiscountPopup')
+                            .remove()
+                        "
+                        style="
+                            border:0;
+                            background:#f1f5f9;
+                            width:30px;
+                            height:30px;
+                            border-radius:6px;
+                            cursor:pointer;
+                            font-size:18px;
+                        "
+                    >
+                        ×
+                    </button>
+
+                </div>
+
+
+                <label style="
+                    display:block;
+                    font-size:12px;
+                    color:#475569;
+                    margin-bottom:6px;
+                ">
+                    Discount Percentage
+                </label>
+
+
+                <div style="
+                    display:flex;
+                    align-items:center;
+                    border:1px solid #cbd5e1;
+                    border-radius:6px;
+                    height:42px;
+                    overflow:hidden;
+                ">
+
+                    <input
+                        id="invoiceOverallDiscountInput"
+                        type="number"
+                        min="0"
+                        max="100"
+                        step="0.01"
+                        value="${window.invoiceOverallDiscountPercent}"
+                        style="
+                            flex:1;
+                            height:100%;
+                            border:0;
+                            outline:none;
+                            padding:0 10px;
+                            box-sizing:border-box;
+                            font-size:14px;
+                        "
+                    >
+
+                    <span style="
+                        padding:0 12px;
+                        color:#64748b;
+                        border-left:1px solid #e2e8f0;
+                        height:100%;
+                        display:flex;
+                        align-items:center;
+                    ">
+                        %
+                    </span>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    onclick="applyInvoiceDiscount()"
+                    style="
+                        width:100%;
+                        margin-top:16px;
+                        height:42px;
+                        border:0;
+                        border-radius:6px;
+                        background:#2563eb;
+                        color:#fff;
+                        cursor:pointer;
+                        font-weight:600;
+                    "
+                >
+                    Apply Discount
+                </button>
+
+            </div>
+
+        </div>
+    `;
+
+
+    document.body.appendChild(popup);
+
+};
+
+
+
+window.applyInvoiceDiscount = function(){
+
+    const input =
+        document.getElementById(
+            "invoiceOverallDiscountInput"
+        );
+
+    if(!input) return;
+
+
+    let percent =
+        Number(input.value || 0);
+
+
+    if(percent < 0) percent = 0;
+
+    if(percent > 100) percent = 100;
+
+
+    window.invoiceOverallDiscountPercent =
+        percent;
+
+
+    const popup =
+        document.getElementById(
+            "invoiceDiscountPopup"
+        );
+
+    if(popup) popup.remove();
+
+
+    calculateInvoicePickerTotals();
+
+};
+
+
+
+window.calculateInvoicePickerTotals = function(){
+
+    const rows =
+        document.querySelectorAll(
+            "#invoiceItemsBody .invoice-item-row"
+        );
+
+
+    let subtotal = 0;
+    let taxTotal = 0;
+
+
+    rows.forEach(row => {
+
+        const qty =
+            Number(
+                row.querySelector(".invoice-qty")?.value || 0
+            );
+
+        const price =
+            Number(
+                row.querySelector(".invoice-price")?.value || 0
+            );
+
+        const discount =
+            Number(
+                row.querySelector(".invoice-discount")?.value || 0
+            );
+
+        const tax =
+            Number(
+                row.querySelector(".invoice-tax")?.value || 0
+            );
+
+
+        let taxable =
+            qty * price - discount;
+
+
+        if(taxable < 0)
+            taxable = 0;
+
+
+        const taxAmount =
+            taxable * tax / 100;
+
+
+        subtotal += taxable;
+        taxTotal += taxAmount;
+
+    });
+
+
+    const discountPercent =
+        Number(
+            window.invoiceOverallDiscountPercent || 0
+        );
+
+
+    const discountAmount =
+        subtotal * discountPercent / 100;
+
+
+    const finalTaxable =
+        Math.max(
+            0,
+            subtotal - discountAmount
+        );
+
+
+    let finalTax =
+        0;
+
+
+    if(subtotal > 0){
+
+        finalTax =
+            taxTotal *
+            (finalTaxable / subtotal);
+
+    }
+
+
+    const grandTotal =
+        finalTaxable + finalTax;
+
+
+    const received =
+        Number(
+            document.getElementById(
+                "invoiceReceived"
+            )?.value || 0
+        );
+
+
+    const balance =
+        Math.max(
+            0,
+            grandTotal - received
+        );
+
+
+    const discountElement =
+        document.getElementById(
+            "invoiceDiscount"
+        );
+
+
+    const taxableElement =
+        document.getElementById(
+            "invoiceTaxable"
+        );
+
+
+    const totalElement =
+        document.getElementById(
+            "invoiceTotal"
+        );
+
+
+    const balanceElement =
+        document.getElementById(
+            "invoiceBalance"
+        );
+
+
+    if(discountElement){
+
+        discountElement.textContent =
+            "₹" +
+            discountAmount.toFixed(2) +
+            " (" +
+            discountPercent +
+            "%)";
+
+    }
+
+
+    if(taxableElement){
+
+        taxableElement.textContent =
+            "₹" +
+            finalTaxable.toFixed(2);
+
+    }
+
+
+    if(totalElement){
+
+        totalElement.textContent =
+            "₹" +
+            grandTotal.toFixed(2);
+
+    }
+
+
+    if(balanceElement){
+
+        balanceElement.textContent =
+            "₹" +
+            balance.toFixed(2);
+
+    }
+
+};
 
 window.closeItemPicker = function(){
 
