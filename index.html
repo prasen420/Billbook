@@ -2254,22 +2254,57 @@ window.openInvoiceDiscount = function(){
                 "
             >
 
-            <span style="
-                color:#64748b;
-                font-size:12px;
-            ">
-                %
-            </span>
+            <div style="
+    display:flex;
+    align-items:center;
+    gap:5px;
+">
 
-            <strong
-                id="invoiceDiscount"
-                style="
-                    margin-left:auto;
-                    white-space:nowrap;
-                "
-            >
-                ₹0
-            </strong>
+    <input
+        id="invoiceOverallDiscountInput"
+        type="text"
+        value="${window.invoiceOverallDiscountPercent}"
+        oninput="applyInvoiceDiscountInline()"
+        style="
+            width:55px;
+            height:32px;
+            border:1px solid #cbd5e1;
+            border-radius:4px;
+            padding:6px 8px;
+            text-align:right;
+            box-sizing:border-box;
+            outline:none;
+        "
+    >
+
+    <span style="
+        color:#64748b;
+        font-size:12px;
+    ">
+        %
+    </span>
+
+</div>
+
+<div
+    id="invoiceDiscount"
+    style="
+        width:85px;
+        height:32px;
+        display:flex;
+        align-items:center;
+        justify-content:flex-end;
+        padding:0 8px;
+        box-sizing:border-box;
+        border:1px solid #cbd5e1;
+        border-radius:4px;
+        background:#fff;
+        font-size:12px;
+        font-weight:600;
+    "
+>
+    ₹0.00
+</div>
 
             <button
                 type="button"
