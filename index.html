@@ -2212,35 +2212,27 @@ tbody.appendChild(row);
 
 window.invoiceOverallDiscountPercent = 0;
 
-
 window.openInvoiceDiscount = function(){
 
     const box =
-        document.getElementById(
-            "invoiceDiscountAction"
-        );
+        document.getElementById("invoiceDiscountAction");
 
     if(!box) return;
 
-
     box.innerHTML = `
-
         <div style="
             width:100%;
             display:flex;
             align-items:center;
             gap:8px;
-            box-sizing:border-box;
         ">
 
             <span style="
                 color:#2563eb;
                 font-size:12px;
-                white-space:nowrap;
             ">
                 Discount
             </span>
-
 
             <input
                 id="invoiceOverallDiscountInput"
@@ -2253,15 +2245,13 @@ window.openInvoiceDiscount = function(){
                 style="
                     width:65px;
                     height:32px;
-                    box-sizing:border-box;
                     border:1px solid #cbd5e1;
                     border-radius:4px;
                     padding:6px 8px;
-                    outline:none;
                     text-align:right;
+                    box-sizing:border-box;
                 "
             >
-
 
             <span style="
                 color:#64748b;
@@ -2269,7 +2259,6 @@ window.openInvoiceDiscount = function(){
             ">
                 %
             </span>
-
 
             <strong
                 id="invoiceDiscount"
@@ -2280,7 +2269,6 @@ window.openInvoiceDiscount = function(){
             >
                 ₹0
             </strong>
-
 
             <button
                 type="button"
@@ -2301,7 +2289,6 @@ window.openInvoiceDiscount = function(){
         </div>
     `;
 
-
     const input =
         document.getElementById(
             "invoiceOverallDiscountInput"
@@ -2311,10 +2298,7 @@ window.openInvoiceDiscount = function(){
         input.focus();
         input.select();
     }
-
 };
-
-
 
 window.applyInvoiceDiscountInline = function(){
 
@@ -2325,36 +2309,22 @@ window.applyInvoiceDiscountInline = function(){
 
     if(!input) return;
 
-
     let percent =
         Number(input.value || 0);
-
 
     if(percent < 0)
         percent = 0;
 
-
     if(percent > 100)
         percent = 100;
-
 
     window.invoiceOverallDiscountPercent =
         percent;
 
-
     calculateInvoiceTotal();
-
 };
 
-
-
 window.closeInvoiceDiscount = function(){
-
-    const percent =
-        Number(
-            window.invoiceOverallDiscountPercent || 0
-        );
-
 
     const box =
         document.getElementById(
@@ -2363,9 +2333,7 @@ window.closeInvoiceDiscount = function(){
 
     if(!box) return;
 
-
     box.innerHTML = `
-
         <span
             onclick="openInvoiceDiscount()"
             style="cursor:pointer;"
@@ -2376,12 +2344,9 @@ window.closeInvoiceDiscount = function(){
         <strong id="invoiceDiscount">
             ₹0
         </strong>
-
     `;
 
-
     calculateInvoiceTotal();
-
 };
 
 window.calculateInvoiceTotal = function(){
