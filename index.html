@@ -2765,22 +2765,16 @@ window.calculateInvoiceTotal = function(){
         window.invoiceAdditionalChargePercent || 0
     );
 
-const additionalChargeAmount =
-    finalTaxable *
-    additionalChargePercent /
-    100;
+let additionalChargeAmount = 0;
 
-const additionalChargeBox =
-    document.getElementById(
-        "invoiceAdditionalCharge"
-    );
+window.invoiceAdditionalCharges.forEach(
+    charge => {
 
-if(additionalChargeBox){
+        additionalChargeAmount +=
+            Number(charge.amount || 0);
 
-    additionalChargeBox.innerText =
-        "₹" +
-        additionalChargeAmount.toFixed(2);
-}
+    }
+);
 
     const total =
     finalTaxable +
