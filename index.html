@@ -2364,11 +2364,14 @@ window.closeInvoiceDiscount = function(){
     calculateInvoiceTotal();
 };
 
-    /* =========================================
-   INLINE ADDITIONAL CHARGES
+/* =========================================
+   MULTIPLE ADDITIONAL CHARGES
    ========================================= */
 
-window.invoiceAdditionalChargePercent = 0;
+window.invoiceAdditionalCharges = [];
+
+
+/* OPEN / ADD NEW CHARGE */
 
 window.openInvoiceAdditionalCharge = function(){
 
@@ -2379,87 +2382,26 @@ window.openInvoiceAdditionalCharge = function(){
 
     if(!box) return;
 
-    box.innerHTML = `
-        <span style="
-            color:#2563eb;
-            font-size:12px;
-        ">
-            Additional Charges
-        </span>
 
-        <div style="
-            display:flex;
-            align-items:center;
-            gap:5px;
-            margin-left:auto;
-        ">
+    const chargeId =
+        Date.now();
 
-            <input
-                id="invoiceAdditionalChargeInput"
-                type="text"
-                value="${window.invoiceAdditionalChargePercent}"
-                oninput="applyInvoiceAdditionalChargeInline()"
-                style="
-                    width:55px;
-                    height:32px !important;
-                    min-height:32px !important;
-                    border:1px solid #cbd5e1;
-                    border-radius:4px;
-                    padding:6px 8px;
-                    text-align:right;
-                    box-sizing:border-box;
-                    outline:none;
-                "
-            >
 
-            <span style="
-                color:#64748b;
-                font-size:12px;
-            ">
-                %
-            </span>
+    window.invoiceAdditionalCharges.push({
+        id: chargeId,
+        name: "",
+        amount: 0
+    });
 
-            <div
-                id="invoiceAdditionalCharge"
-                style="
-                    width:85px;
-                    height:32px;
-                    display:flex;
-                    align-items:center;
-                    justify-content:flex-end;
-                    padding:0 8px;
-                    box-sizing:border-box;
-                    border:1px solid #cbd5e1;
-                    border-radius:4px;
-                    background:#fff;
-                    font-size:12px;
-                    font-weight:600;
-                "
-            >
-                ₹0.00
-            </div>
 
-            <button
-                type="button"
-                onclick="closeInvoiceAdditionalCharge()"
-                style="
-                    border:0;
-                    background:transparent;
-                    color:#475569;
-                    width:28px;
-                    height:32px;
-                    border-radius:4px;
-                    cursor:pointer;
-                "
-            >
-                X
-            </button>
+    renderInvoiceAdditionalCharges();
 
-        </div>
-    `;
 };
 
-window.closeInvoiceAdditionalCharge = function(){
+
+/* RENDER ALL CHARGES */
+
+window.renderInvoiceAdditionalCharges = function(){
 
     const box =
         document.getElementById(
@@ -2468,42 +2410,217 @@ window.closeInvoiceAdditionalCharge = function(){
 
     if(!box) return;
 
-    box.innerHTML = `
-        <span
-            onclick="openInvoiceAdditionalCharge()"
-            style="cursor:pointer;"
+
+    let html = "";
+
+
+    window.invoiceAdditionalCharges.forEach(
+        charge => {
+
+            html += `
+
+                <div
+                    style="
+                        width:100%;
+                        display:flex;
+                        align-items:center;
+                        gap:5px;
+                        margin-bottom:6px;
+                    "
+                >
+
+                    <input
+                        type="text"
+                        value="${charge.name}"
+                        placeholder="Charge Name"
+                        oninput="
+                            updateInvoiceAdditionalChargeName(
+                                ${charge.id},
+                                this.value
+                            )
+                        "
+                        style="
+                            flex:1;
+                            height:32px !important;
+                            min-height:32px !important;
+                            border:1px solid #cbd5e1;
+                            border-radius:4px;
+                            padding:6px 8px;
+                            box-sizing:border-box;
+                            outline:none;
+                            font-size:12px;
+                        "
+                    >
+
+                    <div
+                        style="
+                            width:85px;
+                            height:32px;
+                            display:flex;
+                            align-items:center;
+                            box-sizing:border-box;
+                            border:1px solid #cbd5e1;
+                            border-radius:4px;
+                            background:#fff;
+                        "
+                    >
+
+                        <span
+                            style="
+                                padding-left:8px;
+                                color:#64748b;
+                                font-size:12px;
+                            "
+                        >
+                            ₹
+                        </span>
+
+                        <input
+                            type="text"
+                            value="${charge.amount}"
+                            placeholder="0.00"
+                            oninput="
+                                updateInvoiceAdditionalChargeAmount(
+                                    ${charge.id},
+                                    this.value
+                                )
+                            "
+                            style="
+                                width:100%;
+                                height:30px !important;
+                                min-height:30px !important;
+                                border:0;
+                                outline:none;
+                                padding:4px 7px;
+                                text-align:right;
+                                box-sizing:border-box;
+                                font-size:12px;
+                                background:transparent;
+                            "
+                        >
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        onclick="
+                            removeInvoiceAdditionalCharge(
+                                ${charge.id}
+                            )
+                        "
+                        style="
+                            border:0;
+                            background:transparent;
+                            color:#475569;
+                            width:28px;
+                            height:32px;
+                            cursor:pointer;
+                            padding:0;
+                        "
+                    >
+                        X
+                    </button>
+
+                </div>
+
+            `;
+
+        }
+    );
+
+
+    html += `
+
+        <div
+            style="
+                margin-top:4px;
+            "
         >
-            Add Additional Charges
-        </span>
+
+            <span
+                onclick="openInvoiceAdditionalCharge()"
+                style="
+                    cursor:pointer;
+                    color:#2563eb;
+                    font-size:12px;
+                "
+            >
+                ⊕ Add Additional Charges
+            </span>
+
+        </div>
+
     `;
 
-    window.invoiceAdditionalChargePercent = 0;
 
-    calculateInvoiceTotal();
+    box.innerHTML = html;
+
 };
-    
-window.applyInvoiceAdditionalChargeInline = function(){
 
-    const input =
-        document.getElementById(
-            "invoiceAdditionalChargeInput"
+
+/* UPDATE CHARGE NAME */
+
+window.updateInvoiceAdditionalChargeName =
+function(id, value){
+
+    const charge =
+        window.invoiceAdditionalCharges.find(
+            item => item.id === id
         );
 
-    if(!input) return;
+    if(!charge) return;
 
-    let percent =
-        Number(input.value || 0);
 
-    if(percent < 0)
-        percent = 0;
+    charge.name = value;
 
-    if(percent > 100)
-        percent = 100;
+};
 
-    window.invoiceAdditionalChargePercent =
-        percent;
+
+/* UPDATE CHARGE AMOUNT */
+
+window.updateInvoiceAdditionalChargeAmount =
+function(id, value){
+
+    const charge =
+        window.invoiceAdditionalCharges.find(
+            item => item.id === id
+        );
+
+    if(!charge) return;
+
+
+    let amount =
+        Number(value || 0);
+
+
+    if(amount < 0)
+        amount = 0;
+
+
+    charge.amount = amount;
+
 
     calculateInvoiceTotal();
+
+};
+
+
+/* REMOVE ONE CHARGE */
+
+window.removeInvoiceAdditionalCharge =
+function(id){
+
+    window.invoiceAdditionalCharges =
+        window.invoiceAdditionalCharges.filter(
+            item => item.id !== id
+        );
+
+
+    renderInvoiceAdditionalCharges();
+
+    calculateInvoiceTotal();
+
 };
     
 window.calculateInvoiceTotal = function(){
