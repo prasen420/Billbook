@@ -2459,6 +2459,29 @@ window.openInvoiceAdditionalCharge = function(){
     `;
 };
 
+window.closeInvoiceAdditionalCharge = function(){
+
+    const box =
+        document.getElementById(
+            "invoiceAdditionalChargeAction"
+        );
+
+    if(!box) return;
+
+    box.innerHTML = `
+        <span
+            onclick="openInvoiceAdditionalCharge()"
+            style="cursor:pointer;"
+        >
+            ⊕ Add Additional Charges
+        </span>
+    `;
+
+    window.invoiceAdditionalChargePercent = 0;
+
+    calculateInvoiceTotal();
+};
+    
 window.applyInvoiceAdditionalChargeInline = function(){
 
     const input =
@@ -2620,9 +2643,32 @@ window.calculateInvoiceTotal = function(){
 
     });
 
+    const additionalChargePercent =
+    Number(
+        window.invoiceAdditionalChargePercent || 0
+    );
+
+const additionalChargeAmount =
+    finalTaxable *
+    additionalChargePercent /
+    100;
+
+const additionalChargeBox =
+    document.getElementById(
+        "invoiceAdditionalCharge"
+    );
+
+if(additionalChargeBox){
+
+    additionalChargeBox.innerText =
+        "₹" +
+        additionalChargeAmount.toFixed(2);
+}
 
     const total =
-        finalTaxable + finalTax;
+    finalTaxable +
+    finalTax +
+    additionalChargeAmount;
 
 
     const received =
