@@ -2684,6 +2684,50 @@ window.toggleInvoiceRoundOff = function(checkbox){
     calculateInvoiceTotal();
 
 };
+
+window.markInvoiceFullyPaid = function(checkbox){
+
+    const receivedInput =
+        document.getElementById(
+            "invoiceReceived"
+        );
+
+    if(!receivedInput) return;
+
+
+    if(checkbox.checked){
+
+        const totalElement =
+            document.getElementById(
+                "invoiceTotal"
+            );
+
+        let total = 0;
+
+        if(totalElement){
+
+            total =
+                Number(
+                    totalElement.textContent
+                        .replace(/[₹,]/g, "")
+                        .trim()
+                ) || 0;
+
+        }
+
+        receivedInput.value =
+            total.toFixed(2);
+
+    }else{
+
+        receivedInput.value = "0";
+
+    }
+
+
+    calculateInvoiceTotal();
+
+};
     
 window.calculateInvoiceTotal = function(){
 
@@ -5993,8 +6037,9 @@ currentDueDateBox.outerHTML = `
             <label>
 
                 <input
-                    id="markFullyPaid"
-                    type="checkbox">
+    id="markFullyPaid"
+    type="checkbox"
+    onchange="markInvoiceFullyPaid(this)">
 
                 <span>Mark as fully paid</span>
 
