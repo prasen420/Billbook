@@ -3256,45 +3256,39 @@ window.updatePaymentMethodBox = function(select){
 
     if(!receivedRow) return;
 
-
     const receivedInput =
         receivedRow.querySelector(
             "#invoiceReceived"
         );
-
 
     let accountBox =
         receivedRow.querySelector(
             "#paymentAccountNumber"
         );
 
-
     /* CASH */
 
     if(select.value === "Cash"){
 
         if(accountBox){
-
             accountBox.remove();
-
         }
 
-
         if(receivedInput){
-
             receivedInput.style.flex =
-                "1";
+                "0 0 105px";
+
+            receivedInput.style.width =
+                "105px";
 
             receivedInput.style.minWidth =
                 "0";
-
         }
 
         return;
     }
 
-
-    /* OTHER PAYMENT METHODS */
+    /* ACCOUNT / TRANSACTION BOX */
 
     if(!accountBox){
 
@@ -3310,11 +3304,10 @@ window.updatePaymentMethodBox = function(select){
         accountBox.placeholder =
             "Account / Transaction No.";
 
-
         accountBox.style.cssText = `
-            flex:1 1 0;
+            flex:0 0 190px;
+            width:190px;
             min-width:0;
-            width:0;
             height:34px;
             box-sizing:border-box;
             border:1px solid #cbd5e1;
@@ -3325,35 +3318,30 @@ window.updatePaymentMethodBox = function(select){
             background:#fff;
         `;
 
-
         receivedRow.insertBefore(
             accountBox,
             select
         );
-
     }
 
-
-    /* COMPACT RECEIVED AMOUNT */
+    /* RECEIVED AMOUNT — SLIGHTLY BIGGER */
 
     if(receivedInput){
 
         receivedInput.style.flex =
-            "0 0 85px";
+            "0 0 105px";
 
         receivedInput.style.width =
-            "85px";
+            "105px";
 
         receivedInput.style.minWidth =
             "0";
 
         receivedInput.style.padding =
             "6px";
-
     }
 
-
-    /* COMPACT PAYMENT METHOD */
+    /* PAYMENT METHOD */
 
     select.style.flex =
         "0 0 78px";
