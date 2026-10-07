@@ -2409,7 +2409,9 @@ window.renderInvoiceAdditionalCharges = function(){
         );
 
     if(!box) return;
-
+box.style.flexDirection = "column";
+box.style.alignItems = "stretch";
+box.style.justifyContent = "flex-start";
 
     let html = "";
 
