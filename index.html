@@ -2653,6 +2653,29 @@ function(id){
     calculateInvoiceTotal();
 
 };
+
+window.toggleInvoiceRoundOff = function(checkbox){
+
+    const control =
+        document.getElementById(
+            "roundOffControl"
+        );
+
+    if(!control) return;
+
+    if(checkbox.checked){
+
+        control.style.display = "none";
+
+    }else{
+
+        control.style.display = "flex";
+
+    }
+
+    calculateInvoiceTotal();
+
+};
     
 window.calculateInvoiceTotal = function(){
 
@@ -5814,8 +5837,9 @@ currentDueDateBox.outerHTML = `
             <label class="roundoff-left">
 
                 <input
-                    id="autoRoundOff"
-                    type="checkbox">
+    id="autoRoundOff"
+    type="checkbox"
+    onchange="toggleInvoiceRoundOff(this)">
 
                 <span>Auto Round Off</span>
 
