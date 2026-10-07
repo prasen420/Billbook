@@ -1880,14 +1880,16 @@ type="number"
 value="0"
 oninput="calculateInvoiceTotal()">
 
-<select>
+<select
+    onchange="updatePaymentMethodBox(this)"
+>
 
-<option>Cash</option>
-<option>UPI</option>
-<option>Bank</option>
-<option>Card</option>
-<option>Netbanking</option>
-<option>Cheque</option>
+<option value="Cash">Cash</option>
+<option value="UPI">UPI</option>
+<option value="Bank Transfer">Bank Transfer</option>
+<option value="Card">Card</option>
+<option value="Net Banking">Net Banking</option>
+<option value="Cheque">Cheque</option>
 
 </select>
 
@@ -3236,6 +3238,72 @@ window.closeSplitPayment = function(){
 
     if(modal)
         modal.remove();
+
+};
+
+/* =========================================
+   PAYMENT METHOD ACCOUNT / TRANSACTION BOX
+   ========================================= */
+
+window.updatePaymentMethodBox = function(select){
+
+    const receivedRow =
+        select.closest(".received-row");
+
+    if(!receivedRow) return;
+
+
+    let accountBox =
+        receivedRow.querySelector(
+            "#paymentAccountNumber"
+        );
+
+
+    if(select.value === "Cash"){
+
+        if(accountBox){
+
+            accountBox.remove();
+
+        }
+
+        return;
+    }
+
+
+    if(accountBox) return;
+
+
+    accountBox =
+        document.createElement("input");
+
+    accountBox.id =
+        "paymentAccountNumber";
+
+    accountBox.type =
+        "text";
+
+    accountBox.placeholder =
+        "Account / Transaction No.";
+
+    accountBox.style.cssText = `
+        flex:1;
+        height:34px;
+        min-height:34px;
+        box-sizing:border-box;
+        border:1px solid #cbd5e1;
+        border-radius:4px;
+        padding:7px 9px;
+        outline:none;
+        font-size:12px;
+        background:#fff;
+    `;
+
+
+    receivedRow.insertBefore(
+        accountBox,
+        select
+    );
 
 };
     
