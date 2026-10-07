@@ -2381,7 +2381,35 @@ window.openInvoiceAdditionalCharge = function(){
         );
 
     if(!box) return;
+    if(window.invoiceAdditionalCharges.length > 0){
 
+        const lastCharge =
+            window.invoiceAdditionalCharges[
+                window.invoiceAdditionalCharges.length - 1
+            ];
+
+        if(!lastCharge.name.trim()){
+
+            const input =
+                document.querySelector(
+                    `[data-additional-charge-name="${lastCharge.id}"]`
+                );
+
+            if(input){
+
+                input.style.border =
+                    "1px solid #ef4444";
+
+                input.placeholder =
+                    "Please fill this";
+
+                input.focus();
+
+            }
+
+            return;
+        }
+    }
 
     const chargeId =
         Date.now();
@@ -2433,6 +2461,7 @@ box.style.justifyContent = "flex-start";
 
                     <input
                         type="text"
+                        data-additional-charge-name="${charge.id}"
                         value="${charge.name}"
                         placeholder="Charge Name"
                         oninput="
