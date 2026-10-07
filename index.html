@@ -3266,60 +3266,63 @@ window.updatePaymentMethodBox = function(select){
             "#paymentAccountNumber"
         );
 
-    /* CASH */
 
-if(select.value === "Cash"){
+    /* =========================
+       CASH PAYMENT
+       ========================= */
 
-    if(accountBox){
-        accountBox.remove();
+    if(select.value === "Cash"){
+
+        /* Remove account / transaction box */
+
+        if(accountBox){
+            accountBox.remove();
+        }
+
+
+        /* Restore original large amount box */
+
+        if(receivedInput){
+
+            receivedInput.style.removeProperty(
+                "flex"
+            );
+
+            receivedInput.style.removeProperty(
+                "width"
+            );
+
+            receivedInput.style.removeProperty(
+                "min-width"
+            );
+
+            receivedInput.style.removeProperty(
+                "padding"
+            );
+        }
+
+
+        /* Restore original payment method width */
+
+        select.style.removeProperty(
+            "flex"
+        );
+
+        select.style.removeProperty(
+            "width"
+        );
+
+        select.style.removeProperty(
+            "min-width"
+        );
+
+        return;
     }
 
-    if(receivedInput){
 
-        receivedInput.style.setProperty(
-            "flex",
-            "0 0 120px",
-            "important"
-        );
-
-        receivedInput.style.setProperty(
-            "width",
-            "120px",
-            "important"
-        );
-
-        receivedInput.style.setProperty(
-            "min-width",
-            "120px",
-            "important"
-        );
-
-        receivedInput.style.padding =
-            "6px 8px";
-    }
-
-    select.style.setProperty(
-        "flex",
-        "0 0 78px",
-        "important"
-    );
-
-    select.style.setProperty(
-        "width",
-        "78px",
-        "important"
-    );
-
-    select.style.setProperty(
-        "min-width",
-        "78px",
-        "important"
-    );
-
-    return;
-}
-
-    /* ACCOUNT / TRANSACTION BOX */
+    /* =========================
+       OTHER PAYMENT METHODS
+       ========================= */
 
     if(!accountBox){
 
@@ -3355,33 +3358,50 @@ if(select.value === "Cash"){
         );
     }
 
-    /* RECEIVED AMOUNT — একটু বড় */
+
+    /* Make amount box smaller */
 
     if(receivedInput){
 
-        receivedInput.style.flex =
-            "0 0 105px";
+        receivedInput.style.setProperty(
+            "flex",
+            "0 0 105px",
+            "important"
+        );
 
-        receivedInput.style.width =
-            "105px";
+        receivedInput.style.setProperty(
+            "width",
+            "105px",
+            "important"
+        );
 
-        receivedInput.style.minWidth =
-            "0";
-
-        receivedInput.style.padding =
-            "6px";
+        receivedInput.style.setProperty(
+            "min-width",
+            "105px",
+            "important"
+        );
     }
 
-    /* PAYMENT METHOD */
 
-    select.style.flex =
-        "0 0 78px";
+    /* Set payment method width */
 
-    select.style.width =
-        "78px";
+    select.style.setProperty(
+        "flex",
+        "0 0 78px",
+        "important"
+    );
 
-    select.style.minWidth =
-        "0";
+    select.style.setProperty(
+        "width",
+        "78px",
+        "important"
+    );
+
+    select.style.setProperty(
+        "min-width",
+        "78px",
+        "important"
+    );
 
 };
     
