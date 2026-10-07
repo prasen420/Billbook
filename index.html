@@ -1577,8 +1577,12 @@ margin-bottom:5px;
 }
 
 .received-row{
-display:flex;
-gap:8px;
+    display:flex;
+    gap:5px;
+    width:100%;
+    box-sizing:border-box;
+    align-items:center;
+    overflow:hidden;
 }
 
 .received-row input{
@@ -3253,11 +3257,19 @@ window.updatePaymentMethodBox = function(select){
     if(!receivedRow) return;
 
 
+    const receivedInput =
+        receivedRow.querySelector(
+            "#invoiceReceived"
+        );
+
+
     let accountBox =
         receivedRow.querySelector(
             "#paymentAccountNumber"
         );
 
+
+    /* CASH */
 
     if(select.value === "Cash"){
 
@@ -3267,43 +3279,90 @@ window.updatePaymentMethodBox = function(select){
 
         }
 
+
+        if(receivedInput){
+
+            receivedInput.style.flex =
+                "1";
+
+            receivedInput.style.minWidth =
+                "0";
+
+        }
+
         return;
     }
 
 
-    if(accountBox) return;
+    /* OTHER PAYMENT METHODS */
+
+    if(!accountBox){
+
+        accountBox =
+            document.createElement("input");
+
+        accountBox.id =
+            "paymentAccountNumber";
+
+        accountBox.type =
+            "text";
+
+        accountBox.placeholder =
+            "Account / Transaction No.";
 
 
-    accountBox =
-        document.createElement("input");
-
-    accountBox.id =
-        "paymentAccountNumber";
-
-    accountBox.type =
-        "text";
-
-    accountBox.placeholder =
-        "Account / Transaction No.";
-
-    accountBox.style.cssText = `
-        flex:1;
-        height:34px;
-        min-height:34px;
-        box-sizing:border-box;
-        border:1px solid #cbd5e1;
-        border-radius:4px;
-        padding:7px 9px;
-        outline:none;
-        font-size:12px;
-        background:#fff;
-    `;
+        accountBox.style.cssText = `
+            flex:1 1 0;
+            min-width:0;
+            width:0;
+            height:34px;
+            box-sizing:border-box;
+            border:1px solid #cbd5e1;
+            border-radius:4px;
+            padding:6px 8px;
+            outline:none;
+            font-size:11px;
+            background:#fff;
+        `;
 
 
-    receivedRow.insertBefore(
-        accountBox,
-        select
-    );
+        receivedRow.insertBefore(
+            accountBox,
+            select
+        );
+
+    }
+
+
+    /* COMPACT RECEIVED AMOUNT */
+
+    if(receivedInput){
+
+        receivedInput.style.flex =
+            "0 0 85px";
+
+        receivedInput.style.width =
+            "85px";
+
+        receivedInput.style.minWidth =
+            "0";
+
+        receivedInput.style.padding =
+            "6px";
+
+    }
+
+
+    /* COMPACT PAYMENT METHOD */
+
+    select.style.flex =
+        "0 0 78px";
+
+    select.style.width =
+        "78px";
+
+    select.style.minWidth =
+        "0";
 
 };
     
