@@ -2665,11 +2665,19 @@ window.toggleInvoiceRoundOff = function(checkbox){
 
     if(checkbox.checked){
 
-        control.style.display = "none";
+        control.style.setProperty(
+    "display",
+    "none",
+    "important"
+);
 
     }else{
 
-        control.style.display = "flex";
+        control.style.setProperty(
+    "display",
+    "flex",
+    "important"
+);
 
     }
 
