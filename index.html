@@ -3268,25 +3268,56 @@ window.updatePaymentMethodBox = function(select){
 
     /* CASH */
 
-    if(select.value === "Cash"){
+if(select.value === "Cash"){
 
-        if(accountBox){
-            accountBox.remove();
-        }
-
-        if(receivedInput){
-            receivedInput.style.flex =
-                "0 0 105px";
-
-            receivedInput.style.width =
-                "105px";
-
-            receivedInput.style.minWidth =
-                "0";
-        }
-
-        return;
+    if(accountBox){
+        accountBox.remove();
     }
+
+    if(receivedInput){
+
+        receivedInput.style.setProperty(
+            "flex",
+            "0 0 120px",
+            "important"
+        );
+
+        receivedInput.style.setProperty(
+            "width",
+            "120px",
+            "important"
+        );
+
+        receivedInput.style.setProperty(
+            "min-width",
+            "120px",
+            "important"
+        );
+
+        receivedInput.style.padding =
+            "6px 8px";
+    }
+
+    select.style.setProperty(
+        "flex",
+        "0 0 78px",
+        "important"
+    );
+
+    select.style.setProperty(
+        "width",
+        "78px",
+        "important"
+    );
+
+    select.style.setProperty(
+        "min-width",
+        "78px",
+        "important"
+    );
+
+    return;
+}
 
     /* ACCOUNT / TRANSACTION BOX */
 
