@@ -2830,10 +2830,82 @@ window.invoiceAdditionalCharges.forEach(
     }
 );
 
-    const total =
+    const totalBeforeRoundOff =
     finalTaxable +
     finalTax +
     additionalChargeAmount;
+
+
+const roundOffCheckbox =
+    document.getElementById(
+        "autoRoundOff"
+    );
+
+const roundOffType =
+    document.getElementById(
+        "roundOffType"
+    );
+
+const roundOffValue =
+    document.getElementById(
+        "roundOffValue"
+    );
+
+
+let roundOffAmount = 0;
+
+
+if(
+    roundOffCheckbox &&
+    roundOffCheckbox.checked
+){
+
+    roundOffAmount =
+        Math.round(
+            totalBeforeRoundOff
+        ) -
+        totalBeforeRoundOff;
+
+
+    if(roundOffValue){
+
+        roundOffValue.value =
+            roundOffAmount.toFixed(2);
+
+    }
+
+}else{
+
+    const manualAmount =
+        Number(
+            roundOffValue?.value || 0
+        );
+
+
+    if(
+        roundOffType &&
+        roundOffType.value === "reduce"
+    ){
+
+        roundOffAmount =
+            -Math.abs(manualAmount);
+
+    }else{
+
+        roundOffAmount =
+            Math.abs(manualAmount);
+
+    }
+
+}
+
+
+const total =
+    Math.max(
+        0,
+        totalBeforeRoundOff +
+        roundOffAmount
+    );
 
 
     const received =
