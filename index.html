@@ -2736,289 +2736,53 @@ window.markInvoiceFullyPaid = function(checkbox){
 
 };
 
-/* =========================================
-   SPLIT PAYMENT
-   ========================================= */
-
 window.splitPayments = [];
 
 
+/* =========================================
+   INLINE SPLIT PAYMENT
+   ========================================= */
+
 window.openSplitPayment = function(){
-
-    const totalElement =
-        document.getElementById("invoiceTotal");
-
-    let total = 0;
-
-    if(totalElement){
-
-        total =
-            Number(
-                totalElement.textContent
-                    .replace(/[₹,]/g, "")
-                    .trim()
-            ) || 0;
-
-    }
-
-
-    const existing =
-        document.getElementById(
-            "splitPaymentModal"
-        );
-
-    if(existing)
-        existing.remove();
-
-
-    const modal =
-        document.createElement("div");
-
-    modal.id =
-        "splitPaymentModal";
-
-    modal.innerHTML = `
-
-        <div style="
-            position:fixed;
-            inset:0;
-            background:rgba(15,23,42,.45);
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            z-index:99999;
-            padding:20px;
-        ">
-
-            <div style="
-                width:500px;
-                max-width:100%;
-                background:#fff;
-                border-radius:8px;
-                box-shadow:0 20px 60px rgba(0,0,0,.25);
-                overflow:hidden;
-            ">
-
-                <div style="
-                    padding:16px 18px;
-                    border-bottom:1px solid #e5e7eb;
-                    display:flex;
-                    align-items:center;
-                    justify-content:space-between;
-                ">
-
-                    <strong style="
-                        font-size:16px;
-                    ">
-                        Split Payment
-                    </strong>
-
-                    <button
-                        type="button"
-                        onclick="closeSplitPayment()"
-                        style="
-                            border:0;
-                            background:transparent;
-                            font-size:20px;
-                            cursor:pointer;
-                            color:#64748b;
-                        "
-                    >
-                        ×
-                    </button>
-
-                </div>
-
-
-                <div style="
-                    padding:18px;
-                ">
-
-                    <div style="
-                        display:flex;
-                        justify-content:space-between;
-                        margin-bottom:15px;
-                        font-size:13px;
-                    ">
-
-                        <span>
-                            Total Amount
-                        </span>
-
-                        <strong id="splitPaymentTotal">
-                            ₹${total.toFixed(2)}
-                        </strong>
-
-                    </div>
-
-
-                    <div
-                        id="splitPaymentRows"
-                    ></div>
-
-
-                    <button
-                        type="button"
-                        onclick="addSplitPaymentRow()"
-                        style="
-                            border:0;
-                            background:transparent;
-                            color:#2563eb;
-                            cursor:pointer;
-                            font-size:13px;
-                            padding:8px 0;
-                        "
-                    >
-                        ＋ Add Payment
-                    </button>
-
-
-                    <div style="
-                        margin-top:12px;
-                        padding-top:12px;
-                        border-top:1px solid #e5e7eb;
-                        display:flex;
-                        justify-content:space-between;
-                        font-size:13px;
-                    ">
-
-                        <span>
-                            Total Split
-                        </span>
-
-                        <strong id="splitPaymentEntered">
-                            ₹0.00
-                        </strong>
-
-                    </div>
-
-
-                    <div
-                        id="splitPaymentError"
-                        style="
-                            display:none;
-                            margin-top:8px;
-                            color:#dc2626;
-                            font-size:12px;
-                        "
-                    ></div>
-
-                </div>
-
-
-                <div style="
-                    padding:14px 18px;
-                    border-top:1px solid #e5e7eb;
-                    display:flex;
-                    justify-content:flex-end;
-                    gap:8px;
-                ">
-
-                    <button
-                        type="button"
-                        onclick="closeSplitPayment()"
-                        style="
-                            height:36px;
-                            padding:0 16px;
-                            border:1px solid #cbd5e1;
-                            background:#fff;
-                            border-radius:5px;
-                            cursor:pointer;
-                        "
-                    >
-                        Cancel
-                    </button>
-
-
-                    <button
-                        type="button"
-                        onclick="saveSplitPayment()"
-                        style="
-                            height:36px;
-                            padding:0 18px;
-                            border:0;
-                            background:#2563eb;
-                            color:#fff;
-                            border-radius:5px;
-                            cursor:pointer;
-                        "
-                    >
-                        Save Payment
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    `;
-
-
-    document.body.appendChild(modal);
-
-
-    window.splitPayments = [];
 
     addSplitPaymentRow();
 
 };
 
 
-/* ADD PAYMENT ROW */
-
 window.addSplitPaymentRow = function(){
 
-    const container =
-        document.getElementById(
-            "splitPaymentRows"
+    const receivedBox =
+        document.querySelector(
+            ".received-box"
         );
 
-    if(!container) return;
+    if(!receivedBox) return;
+
+
+    const actions =
+        receivedBox.querySelector(
+            ".payment-extra-actions"
+        );
 
 
     const row =
         document.createElement("div");
 
+    row.className =
+        "split-payment-row";
+
     row.style.cssText = `
         display:flex;
         align-items:center;
-        gap:8px;
-        margin-bottom:8px;
+        gap:5px;
+        width:100%;
+        box-sizing:border-box;
+        margin-top:6px;
     `;
 
 
     row.innerHTML = `
-
-        <select
-            class="split-payment-method"
-            style="
-                flex:1;
-                height:36px;
-                border:1px solid #cbd5e1;
-                border-radius:5px;
-                padding:0 8px;
-                outline:none;
-                background:#fff;
-            "
-        >
-            <option value="Cash">
-                Cash
-            </option>
-
-            <option value="UPI">
-                UPI
-            </option>
-
-            <option value="Card">
-                Card
-            </option>
-
-            <option value="Bank Transfer">
-                Bank Transfer
-            </option>
-        </select>
-
 
         <input
             type="text"
@@ -3027,29 +2791,77 @@ window.addSplitPaymentRow = function(){
             placeholder="Amount"
             oninput="updateSplitPaymentTotal()"
             style="
-                width:110px;
-                height:36px;
-                border:1px solid #cbd5e1;
-                border-radius:5px;
-                padding:0 8px;
-                text-align:right;
+                flex:0 0 105px;
+                width:105px;
+                min-width:105px;
+                height:34px;
                 box-sizing:border-box;
+                border:1px solid #cbd5e1;
+                border-radius:4px;
+                padding:6px 8px;
                 outline:none;
+                font-size:12px;
             "
         >
 
 
+        <select
+            class="split-payment-method"
+            onchange="updateSplitPaymentRowMethod(this)"
+            style="
+                flex:1 1 0;
+                width:0;
+                min-width:0;
+                height:34px;
+                border:1px solid #cbd5e1;
+                border-radius:4px;
+                padding:0 8px;
+                outline:none;
+                background:#fff;
+                font-size:12px;
+            "
+        >
+
+            <option value="Cash">
+                Cash
+            </option>
+
+            <option value="UPI">
+                UPI
+            </option>
+
+            <option value="Bank Transfer">
+                Bank Transfer
+            </option>
+
+            <option value="Card">
+                Card
+            </option>
+
+            <option value="Net Banking">
+                Net Banking
+            </option>
+
+            <option value="Cheque">
+                Cheque
+            </option>
+
+        </select>
+
+
         <button
             type="button"
-            onclick="this.parentElement.remove();updateSplitPaymentTotal()"
+            onclick="removeSplitPaymentRow(this)"
             style="
-                width:30px;
-                height:30px;
+                width:24px;
+                height:34px;
+                flex:0 0 24px;
                 border:0;
                 background:transparent;
                 color:#64748b;
                 cursor:pointer;
                 font-size:16px;
+                padding:0;
             "
         >
             ×
@@ -3058,91 +2870,149 @@ window.addSplitPaymentRow = function(){
     `;
 
 
-    container.appendChild(row);
+    if(actions){
+
+        receivedBox.insertBefore(
+            row,
+            actions
+        );
+
+    }else{
+
+        receivedBox.appendChild(
+            row
+        );
+
+    }
+
+
+    updateSplitPaymentTotal();
 
 };
 
 
-/* UPDATE SPLIT TOTAL */
+window.updateSplitPaymentRowMethod =
+function(select){
 
-window.updateSplitPaymentTotal = function(){
+    const row =
+        select.closest(
+            ".split-payment-row"
+        );
 
-    const amounts =
-        document.querySelectorAll(
-            ".split-payment-amount"
+    if(!row) return;
+
+
+    let accountBox =
+        row.querySelector(
+            ".split-payment-account"
         );
 
 
-    let total = 0;
+    if(select.value === "Cash"){
+
+        if(accountBox){
+            accountBox.remove();
+        }
+
+        return;
+    }
 
 
-    amounts.forEach(input => {
+    if(accountBox) return;
 
-        total +=
-            Number(input.value || 0);
+
+    accountBox =
+        document.createElement("input");
+
+    accountBox.type =
+        "text";
+
+    accountBox.className =
+        "split-payment-account";
+
+    accountBox.placeholder =
+        "Account / Transaction No.";
+
+    accountBox.style.cssText = `
+        flex:1 1 0;
+        width:0;
+        min-width:0;
+        height:34px;
+        box-sizing:border-box;
+        border:1px solid #cbd5e1;
+        border-radius:4px;
+        padding:6px 8px;
+        outline:none;
+        font-size:11px;
+        background:#fff;
+    `;
+
+
+    row.insertBefore(
+        accountBox,
+        select
+    );
+
+};
+
+
+window.removeSplitPaymentRow =
+function(button){
+
+    const row =
+        button.closest(
+            ".split-payment-row"
+        );
+
+    if(row){
+        row.remove();
+    }
+
+    updateSplitPaymentTotal();
+
+};
+
+
+window.updateSplitPaymentTotal =
+function(){
+
+    let totalReceived = 0;
+
+
+    const mainReceived =
+        document.getElementById(
+            "invoiceReceived"
+        );
+
+
+    if(mainReceived){
+
+        totalReceived +=
+            Number(
+                mainReceived.value || 0
+            );
+
+    }
+
+
+    document.querySelectorAll(
+        ".split-payment-amount"
+    ).forEach(input => {
+
+        totalReceived +=
+            Number(
+                input.value || 0
+            );
 
     });
 
 
-    const entered =
-        document.getElementById(
-            "splitPaymentEntered"
-        );
+    window.splitPayments = [];
 
 
-    if(entered){
-
-        entered.textContent =
-            "₹" +
-            total.toFixed(2);
-
-    }
-
-};
-
-
-/* SAVE SPLIT PAYMENT */
-
-window.saveSplitPayment = function(){
-
-    const totalElement =
-        document.getElementById(
-            "invoiceTotal"
-        );
-
-    let invoiceTotal = 0;
-
-
-    if(totalElement){
-
-        invoiceTotal =
-            Number(
-                totalElement.textContent
-                    .replace(/[₹,]/g, "")
-                    .trim()
-            ) || 0;
-
-    }
-
-
-    const rows =
-        document.querySelectorAll(
-            "#splitPaymentRows > div"
-        );
-
-
-    let enteredTotal = 0;
-
-    const payments = [];
-
-
-    rows.forEach(row => {
-
-        const method =
-            row.querySelector(
-                ".split-payment-method"
-            )?.value || "Cash";
-
+    document.querySelectorAll(
+        ".split-payment-row"
+    ).forEach(row => {
 
         const amount =
             Number(
@@ -3151,97 +3021,63 @@ window.saveSplitPayment = function(){
                 )?.value || 0
             );
 
+        const method =
+            row.querySelector(
+                ".split-payment-method"
+            )?.value || "Cash";
+
+        const account =
+            row.querySelector(
+                ".split-payment-account"
+            )?.value || "";
+
 
         if(amount > 0){
 
-            payments.push({
+            window.splitPayments.push({
                 method: method,
-                amount: amount
+                amount: amount,
+                account: account
             });
-
-            enteredTotal += amount;
 
         }
 
     });
 
 
-    const error =
+    const totalElement =
         document.getElementById(
-            "splitPaymentError"
+            "invoiceTotal"
+        );
+
+    const total =
+        Number(
+            totalElement?.textContent
+                .replace(/[₹,]/g, "")
+                .trim() || 0
         );
 
 
-    if(
-        Math.abs(
-            enteredTotal - invoiceTotal
-        ) > 0.01
-    ){
+    const balance =
+        Math.max(
+            0,
+            total - totalReceived
+        );
 
-        if(error){
 
-            error.style.display =
-                "block";
+    const balanceElement =
+        document.getElementById(
+            "invoiceBalance"
+        );
 
-            error.textContent =
-                "Payment total must equal invoice total.";
 
-        }
+    if(balanceElement){
 
-        return;
+        balanceElement.textContent =
+            "₹" +
+            balance.toFixed(2);
 
     }
-
-
-    window.splitPayments =
-        payments;
-
-
-    const receivedInput =
-        document.getElementById(
-            "invoiceReceived"
-        );
-
-
-    if(receivedInput){
-
-        receivedInput.value =
-            enteredTotal.toFixed(2);
-
-    }
-
-
-    const markPaid =
-        document.getElementById(
-            "markFullyPaid"
-        );
-
-
-    if(markPaid){
-
-        markPaid.checked = true;
-
-    }
-
-
-    calculateInvoiceTotal();
-
-    closeSplitPayment();
-
-};
-
-
-/* CLOSE */
-
-window.closeSplitPayment = function(){
-
-    const modal =
-        document.getElementById(
-            "splitPaymentModal"
-        );
-
-    if(modal)
-        modal.remove();
 
 };
 
@@ -3633,12 +3469,24 @@ const total =
     roundOffAmount;
 
 
-    const received =
+    let received =
+    Number(
+        document.getElementById(
+            "invoiceReceived"
+        )?.value || 0
+    );
+
+
+document.querySelectorAll(
+    ".split-payment-amount"
+).forEach(input => {
+
+    received +=
         Number(
-            document.getElementById(
-                "invoiceReceived"
-            )?.value || 0
+            input.value || 0
         );
+
+});
 
 
     const balance =
