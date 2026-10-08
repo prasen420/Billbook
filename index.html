@@ -2745,7 +2745,18 @@ window.splitPayments = [];
 
 window.openSplitPayment = function(){
 
+    const rows =
+        document.querySelectorAll(
+            ".split-payment-row"
+        );
+
+    if(rows.length >= 2){
+        return;
+    }
+
     addSplitPaymentRow();
+
+    updateSplitPaymentControls();
 
 };
 
@@ -2970,8 +2981,124 @@ function(button){
 
     updateSplitPaymentTotal();
 
+    updateSplitPaymentControls();
+
 };
 
+    window.updateSplitPaymentControls =
+function(){
+
+    const rows =
+        document.querySelectorAll(
+            ".split-payment-row"
+        );
+
+    const splitButton =
+        document.querySelector(
+            ".split-payment-btn"
+        );
+
+    const markFullyPaid =
+        document.getElementById(
+            "markFullyPaid"
+        );
+
+    const markFullyPaidLabel =
+        markFullyPaid?.closest(
+            "label"
+        );
+
+
+    /* Disable Split Payment after 2 rows */
+
+    if(splitButton){
+
+        if(rows.length >= 2){
+
+            splitButton.disabled = true;
+
+            splitButton.style.opacity =
+                "0.45";
+
+            splitButton.style.cursor =
+                "not-allowed";
+
+        }else{
+
+            splitButton.disabled = false;
+
+            splitButton.style.opacity =
+                "1";
+
+            splitButton.style.cursor =
+                "pointer";
+        }
+    }
+
+
+    /* Disable Mark as Fully Paid when split payment exists */
+
+    if(markFullyPaid){
+
+        if(rows.length > 0){
+
+            markFullyPaid.disabled = true;
+
+            markFullyPaid.checked = false;
+
+            markFullyPaid.style.cursor =
+                "not-allowed";
+
+        }else{
+
+            markFullyPaid.disabled = false;
+
+            markFullyPaid.style.cursor =
+                "pointer";
+        }
+    }
+
+
+    if(markFullyPaidLabel){
+
+        if(rows.length > 0){
+
+            markFullyPaidLabel.style.opacity =
+                "0.45";
+
+            markFullyPaidLabel.style.cursor =
+                "not-allowed";
+
+            markFullyPaidLabel.title =
+                "Remove Split Payment to enable this";
+
+            markFullyPaidLabel.onclick =
+                function(event){
+
+                    event.preventDefault();
+
+                    alert(
+                        "Remove Split Payment to enable this"
+                    );
+
+                };
+
+        }else{
+
+            markFullyPaidLabel.style.opacity =
+                "1";
+
+            markFullyPaidLabel.style.cursor =
+                "pointer";
+
+            markFullyPaidLabel.title = "";
+
+            markFullyPaidLabel.onclick = null;
+
+        }
+    }
+
+};
 
 window.updateSplitPaymentTotal =
 function(){
