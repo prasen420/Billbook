@@ -3049,7 +3049,7 @@ if(splitButton){
     }
 
 
-    if(markFullyPaidLabel){
+   if(markFullyPaidLabel){
 
     if(rows.length > 0){
 
@@ -3059,10 +3059,66 @@ if(splitButton){
         markFullyPaidLabel.style.cursor =
             "not-allowed";
 
-        markFullyPaidLabel.title =
-            "Remove Split Payment to enable this";
+        markFullyPaidLabel.title = "";
 
         markFullyPaidLabel.onclick = null;
+
+        markFullyPaidLabel.style.position =
+            "relative";
+
+        markFullyPaidLabel.onmouseenter =
+            function(){
+
+                let tooltip =
+                    document.getElementById(
+                        "splitPaymentTooltip"
+                    );
+
+                if(tooltip) return;
+
+                tooltip =
+                    document.createElement("div");
+
+                tooltip.id =
+                    "splitPaymentTooltip";
+
+                tooltip.textContent =
+                    "Remove Split Payment to enable this";
+
+                tooltip.style.cssText = `
+                    position:absolute;
+                    left:0;
+                    top:100%;
+                    margin-top:5px;
+                    background:#172033;
+                    color:#fff;
+                    padding:6px 9px;
+                    border-radius:4px;
+                    font-size:11px;
+                    white-space:nowrap;
+                    z-index:999999;
+                    pointer-events:none;
+                `;
+
+                markFullyPaidLabel.appendChild(
+                    tooltip
+                );
+
+            };
+
+        markFullyPaidLabel.onmouseleave =
+            function(){
+
+                const tooltip =
+                    document.getElementById(
+                        "splitPaymentTooltip"
+                    );
+
+                if(tooltip){
+                    tooltip.remove();
+                }
+
+            };
 
     }else{
 
@@ -3075,6 +3131,10 @@ if(splitButton){
         markFullyPaidLabel.title = "";
 
         markFullyPaidLabel.onclick = null;
+
+        markFullyPaidLabel.onmouseenter = null;
+
+        markFullyPaidLabel.onmouseleave = null;
 
     }
 }
