@@ -3009,31 +3009,21 @@ function(){
         );
 
 
-    /* Disable Split Payment after 2 rows */
+    /* Hide Split Payment after 2 rows */
 
-    if(splitButton){
+if(splitButton){
 
-        if(rows.length >= 2){
+    if(rows.length >= 2){
 
-            splitButton.disabled = true;
+        splitButton.style.display =
+            "none";
 
-            splitButton.style.opacity =
-                "0.45";
+    }else{
 
-            splitButton.style.cursor =
-                "not-allowed";
-
-        }else{
-
-            splitButton.disabled = false;
-
-            splitButton.style.opacity =
-                "1";
-
-            splitButton.style.cursor =
-                "pointer";
-        }
+        splitButton.style.display =
+            "inline-block";
     }
+}
 
 
     /* Disable Mark as Fully Paid when split payment exists */
