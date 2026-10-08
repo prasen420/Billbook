@@ -3051,42 +3051,33 @@ if(splitButton){
 
     if(markFullyPaidLabel){
 
-        if(rows.length > 0){
+    if(rows.length > 0){
 
-            markFullyPaidLabel.style.opacity =
-                "0.45";
+        markFullyPaidLabel.style.opacity =
+            "0.45";
 
-            markFullyPaidLabel.style.cursor =
-                "not-allowed";
+        markFullyPaidLabel.style.cursor =
+            "not-allowed";
 
-            markFullyPaidLabel.title =
-                "Remove Split Payment to enable this";
+        markFullyPaidLabel.title =
+            "Remove Split Payment to enable this";
 
-            markFullyPaidLabel.onclick =
-                function(event){
+        markFullyPaidLabel.onclick = null;
 
-                    event.preventDefault();
+    }else{
 
-                    alert(
-                        "Remove Split Payment to enable this"
-                    );
+        markFullyPaidLabel.style.opacity =
+            "1";
 
-                };
+        markFullyPaidLabel.style.cursor =
+            "pointer";
 
-        }else{
+        markFullyPaidLabel.title = "";
 
-            markFullyPaidLabel.style.opacity =
-                "1";
+        markFullyPaidLabel.onclick = null;
 
-            markFullyPaidLabel.style.cursor =
-                "pointer";
-
-            markFullyPaidLabel.title = "";
-
-            markFullyPaidLabel.onclick = null;
-
-        }
     }
+}
 
 };
 
