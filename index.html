@@ -416,7 +416,7 @@ th{
 <small>Business ERP</small>
 </div>
 
-<div class="create-menu-wrap">
+<div class="create-menu-wrap" id="createSalesMenuWrap">
 
     <button class="create-btn create-main-btn"
         onclick="openSalesInvoiceDirect()">
@@ -516,6 +516,14 @@ th{
 
 </div>
 
+<div id="settingsBackButtonWrap" style="display:none;">
+    <button class="create-btn"
+        style="width:100%;"
+        onclick="exitSettingsMode()">
+        ← Back to Dashboard
+    </button>
+</div>
+    
 <div class="section-title">GENERAL</div>
 
 <div class="menu" data-page="dashboard" onclick="openPage('dashboard')">
@@ -667,6 +675,12 @@ document.addEventListener("click", function(){
     }
 
 });
+function exitSettingsMode() {
+    document.getElementById("settingsBackButtonWrap").style.display = "none";
+    document.getElementById("createSalesMenuWrap").style.display = "flex";
+    openPage("dashboard");
+}
+    
 function openPage(page){
     localStorage.setItem("currentPage", page);
 document.querySelectorAll(".menu").forEach(menu => {
