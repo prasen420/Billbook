@@ -4019,7 +4019,7 @@ if(page==="settings"){
         <style>
             .settings-layout{
                 display:grid;
-                grid-template-columns:230px minmax(0,1fr);
+                grid-template-columns:minmax(0,1fr);
                 gap:20px;
                 min-height:calc(100vh - 110px);
             }
@@ -4149,24 +4149,6 @@ if(page==="settings"){
 
         <div class="settings-layout">
 
-            <aside class="settings-sidebar">
-                <div class="settings-heading">Business Settings</div>
-
-                <div class="settings-menu-list">
-                    <div class="settings-menu-item" onclick="openSettingsSection('Account',this)">Account</div>
-                    <div class="settings-menu-item active" onclick="openSettingsSection('Manage Business',this)">Manage Business</div>
-                    <div class="settings-menu-item" onclick="openSettingsSection('Invoice Settings',this)">Invoice Settings</div>
-                    <div class="settings-menu-item" onclick="openSettingsSection('Print Settings',this)">Print Settings</div>
-                    <div class="settings-menu-item" onclick="openSettingsSection('Manage Users',this)">Manage Users</div>
-                    <div class="settings-menu-item" onclick="openSettingsSection('Reminders',this)">Reminders</div>
-                    <div class="settings-menu-item" onclick="openSettingsSection('CA Reports Sharing',this)">CA Reports Sharing</div>
-                    <div class="settings-menu-item" onclick="openSettingsSection('Pricing',this)">Pricing</div>
-                    <div class="settings-menu-item" onclick="openSettingsSection('Refer & Earn',this)">Refer & Earn</div>
-                    <div class="settings-menu-item" onclick="openSettingsSection('Help And Support',this)">Help And Support</div>
-                    <div class="settings-menu-item" onclick="openSettingsSection('Logout',this)">Logout</div>
-                    <div class="settings-menu-item" onclick="openPage('dashboard')">← Back to Dashboard</div>
-                </div>
-            </aside>
 
             <section class="settings-panel" id="settingsPanel">
                 <h2>Manage Business</h2>
