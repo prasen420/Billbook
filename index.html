@@ -4356,60 +4356,510 @@ if(page==="settings"){
         `;
     };
 
-    window.renderManageBusinessSettings = function(){
-        const panel = document.getElementById("settingsPanel");
-        if(!panel) return;
+   
+window.renderManageBusinessSettings = function(){
+    const panel = document.getElementById("settingsPanel");
+    if(!panel) return;
 
-        panel.innerHTML = `
-            <h2>Manage Business</h2>
+    panel.innerHTML = `
+        <style>
+            .mb-page {
+                margin:-18px;
+                background:#fff;
+                color:#334155;
+                font-size:12px;
+            }
+            .mb-header {
+                display:flex;
+                align-items:center;
+                gap:14px;
+                flex-wrap:wrap;
+                padding:14px 18px;
+                border-bottom:1px solid #d8dee8;
+                position:sticky;
+                top:0;
+                background:#fff;
+                z-index:5;
+            }
+            .mb-header-title {
+                min-width:190px;
+                margin-right:auto;
+            }
+            .mb-header-title h2 {
+                font-size:17px;
+                font-weight:400;
+                margin-bottom:4px;
+            }
+            .mb-header-title small {
+                color:#64748b;
+            }
+            .mb-btn {
+                border:1px solid #d6d9e2;
+                background:#fff;
+                color:#334155;
+                border-radius:4px;
+                padding:10px 14px;
+                cursor:pointer;
+                font-size:11px;
+                font-weight:500;
+            }
+            .mb-btn-orange {
+                background:#e85d13;
+                border-color:#e85d13;
+                color:#fff;
+            }
+            .mb-btn-purple {
+                background:#4d3bd5;
+                border-color:#4d3bd5;
+                color:#fff;
+            }
+            .mb-btn:disabled {
+                opacity:.45;
+                cursor:not-allowed;
+            }
+            .mb-form {
+                display:grid;
+                grid-template-columns:minmax(0, 1fr) minmax(0, 1.2fr);
+                gap:28px;
+                padding:18px;
+            }
+            .mb-column {
+                min-width:0;
+            }
+            .mb-field {
+                margin-bottom:16px;
+                min-width:0;
+            }
+            .mb-field label {
+                display:block;
+                font-size:11px;
+                color:#64748b;
+                margin-bottom:7px;
+            }
+            .mb-field input:not([type="checkbox"]):not([type="file"]),
+            .mb-field select,
+            .mb-field textarea {
+                width:100%;
+                min-height:36px;
+                padding:9px 11px;
+                border:1px solid #d6dce6;
+                border-radius:4px;
+                background:#fff;
+                color:#334155;
+                font-size:12px;
+                box-sizing:border-box;
+            }
+            .mb-field textarea {
+                min-height:70px;
+                resize:vertical;
+            }
+            .mb-two {
+                display:grid;
+                grid-template-columns:1fr 1fr;
+                gap:14px;
+            }
+            .mb-logo-row {
+                display:grid;
+                grid-template-columns:108px minmax(0,1fr);
+                gap:20px;
+                align-items:center;
+                margin-bottom:16px;
+            }
+            .mb-logo-preview {
+                height:108px;
+                width:108px;
+                border:1px solid #e2e8f0;
+                border-radius:4px;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                overflow:hidden;
+                color:#94a3b8;
+                background:#f8fafc;
+                text-align:center;
+            }
+            .mb-logo-preview img {
+                width:100%;
+                height:100%;
+                object-fit:contain;
+            }
+            .mb-choice-row {
+                display:flex;
+                gap:8px;
+            }
+            .mb-choice {
+                flex:1;
+                display:flex;
+                align-items:center;
+                justify-content:space-between;
+                border:1px solid #d6d9e2;
+                border-radius:4px;
+                padding:11px;
+                cursor:pointer;
+            }
+            .mb-choice input {
+                accent-color:#4d3bd5;
+            }
+            .mb-toggle-row {
+                display:flex;
+                align-items:center;
+                justify-content:space-between;
+                gap:12px;
+                padding:13px 0;
+                border-bottom:1px solid #edf0f4;
+                font-size:12px;
+            }
+            .mb-toggle-row input {
+                width:17px;
+                height:17px;
+                accent-color:#4d3bd5;
+            }
+            .mb-info-card {
+                border:1px solid #d9dce4;
+                border-radius:6px;
+                margin-bottom:18px;
+                overflow:hidden;
+            }
+            .mb-card-heading {
+                padding:13px 15px;
+                border-bottom:1px solid #d9dce4;
+                background:#fff;
+            }
+            .mb-card-heading strong {
+                font-size:12px;
+                font-weight:500;
+            }
+            .mb-card-heading p {
+                color:#94a3b8;
+                margin-top:6px;
+                font-size:10px;
+            }
+            .mb-card-body {
+                padding:14px;
+            }
+            .mb-website-row {
+                display:grid;
+                grid-template-columns:1fr 16px 1fr 115px;
+                gap:8px;
+                align-items:center;
+            }
+            .mb-website-row input {
+                width:100%;
+                min-width:0;
+                padding:10px;
+                border:1px solid #d6dce6;
+                border-radius:4px;
+                box-sizing:border-box;
+                font-size:11px;
+            }
+            .mb-section-strip {
+                padding:10px;
+                border-top:1px solid #d9dce4;
+                border-bottom:1px solid #d9dce4;
+                background:#fcfcfd;
+                font-size:12px;
+            }
+            .mb-tally-card {
+                display:inline-flex;
+                align-items:center;
+                gap:12px;
+                border:1px solid #d9dce4;
+                border-radius:4px;
+                padding:14px;
+                color:#475569;
+                max-width:300px;
+            }
+            .mb-tally-card small {
+                display:block;
+                color:#94a3b8;
+                margin-top:5px;
+            }
+            .mb-new-business {
+                text-align:center;
+                padding:22px 12px;
+            }
+            .mb-store-art {
+                display:flex;
+                justify-content:center;
+                align-items:center;
+                gap:25px;
+                font-size:35px;
+                margin-bottom:12px;
+            }
+            .mb-new-business p {
+                margin-bottom:12px;
+                color:#64748b;
+            }
+            .mb-bottom-actions {
+                display:flex;
+                justify-content:flex-end;
+                gap:10px;
+                padding:14px 18px;
+                border-top:1px solid #e2e8f0;
+            }
+            @media(max-width:850px) {
+                .mb-form {
+                    grid-template-columns:1fr;
+                    gap:8px;
+                }
+                .mb-header {
+                    position:static;
+                }
+                .mb-website-row {
+                    grid-template-columns:1fr;
+                }
+                .mb-website-row span {
+                    display:none;
+                }
+            }
+            @media(max-width:500px) {
+                .mb-two {
+                    grid-template-columns:1fr;
+                    gap:0;
+                }
+                .mb-logo-row {
+                    grid-template-columns:80px minmax(0,1fr);
+                    gap:12px;
+                }
+                .mb-logo-preview {
+                    width:80px;
+                    height:80px;
+                }
+            }
+        </style>
 
-            <div class="settings-section">
-                <h3>Business Information</h3>
-                <div class="settings-form-grid">
-                    <div class="settings-field"><label>Business Logo</label><input type="file" id="settingsBusinessLogo" accept="image/*"></div>
-                    <div class="settings-field"><label>Business Name</label><input id="settingsBusinessName" placeholder="Enter Business Name"></div>
-                    <div class="settings-field"><label>Business Type</label><select id="settingsBusinessType"><option value="">Select Business Type</option><option>Retailer</option><option>Wholesaler</option><option>Manufacturer</option><option>Service Provider</option><option>Others</option></select></div>
-                    <div class="settings-field"><label>Industry Type</label><select id="settingsIndustryType"><option value="">Select Industry</option><option>Retailer</option><option>Wholesaler</option><option>Engineering</option><option>Printing and Packaging</option><option>F&B</option><option>FMCG</option><option>Fashion and Lifestyle</option><option>Automobile and Spare Parts</option><option>Electronics and Appliances</option><option>Others</option></select></div>
-                    <div class="settings-field"><label>Company Phone Number</label><input id="settingsPhone" type="tel" placeholder="Enter Phone Number"></div>
-                    <div class="settings-field"><label>Company Email ID</label><input id="settingsEmail" type="email" placeholder="Enter Email ID"></div>
-                    <div class="settings-field"><label>Business Registration Type</label><select id="settingsRegistrationType"><option value="">Select Registration Type</option><option>GST Regular</option><option>GST Composition</option><option>GST Exempted</option><option>Unregistered</option><option>Consumer</option><option>Non-GST</option></select></div>
-                    <div class="settings-field"><label>GSTIN</label><input id="settingsGSTIN" placeholder="Enter GSTIN"></div>
+        <div class="mb-page">
+            <div class="mb-header">
+                <div class="mb-header-title">
+                    <h2>Business Settings</h2>
+                    <small>Edit Your Company Settings And Information</small>
+                </div>
+                <button class="mb-btn mb-btn-orange"
+                    onclick="alert('Multiple business setup can be connected next.')">
+                    Create new business
+                </button>
+                <button class="mb-btn" title="Keyboard shortcuts">▦</button>
+                <button class="mb-btn" onclick="alert('Chat Support is not connected yet.')">◉ Chat Support</button>
+                <button class="mb-btn" onclick="alert('Financial year settings can be configured next.')">▣ Close Financial Year</button>
+                <button class="mb-btn" onclick="loadBusinessSettings()">Cancel</button>
+                <button class="mb-btn mb-btn-purple" onclick="saveBusinessSettings()">Save Changes</button>
+            </div>
+
+            <div class="mb-form">
+                <div class="mb-column">
+                    <div class="mb-logo-row">
+                        <div class="mb-logo-preview" id="mbLogoPreview">Business Logo</div>
+                        <div class="mb-field" style="margin:0;">
+                            <label>Business Name <span style="color:#ef4444">*</span></label>
+                            <input id="settingsBusinessName" placeholder="Enter Business Name">
+                        </div>
+                    </div>
+
+                    <div class="mb-two">
+                        <div class="mb-field">
+                            <label>Company Phone Number</label>
+                            <input id="settingsPhone" type="tel" placeholder="Enter Phone Number">
+                        </div>
+                        <div class="mb-field">
+                            <label>Company E-Mail</label>
+                            <input id="settingsEmail" type="email" placeholder="Enter company e-mail">
+                        </div>
+                    </div>
+
+                    <div class="mb-field">
+                        <label>Billing Address</label>
+                        <textarea id="settingsAddress" placeholder="Enter Billing Address"></textarea>
+                    </div>
+
+                    <div class="mb-two">
+                        <div class="mb-field">
+                            <label>State</label>
+                            <input id="settingsState" placeholder="Enter State">
+                        </div>
+                        <div class="mb-field">
+                            <label>Pincode</label>
+                            <input id="settingsPinCode" inputmode="numeric" placeholder="Enter Pincode">
+                        </div>
+                    </div>
+
+                    <div class="mb-field">
+                        <label>City</label>
+                        <input id="settingsCity" placeholder="Enter City">
+                    </div>
+
+                    <div class="mb-field">
+                        <label>Are you GST Registered?</label>
+                        <div class="mb-choice-row">
+                            <label class="mb-choice">Yes
+                                <input id="settingsGSTRegistered" type="checkbox">
+                            </label>
+                            <label class="mb-choice">No
+                                <input id="settingsGSTNotRegistered" type="checkbox">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="mb-field" style="border:1px solid #c4b5fd;padding:11px;border-radius:4px;">
+                        <label style="display:flex;justify-content:space-between;align-items:center;margin:0;">
+                            <span>Enable e-Invoicing <small style="color:#94a3b8;">New</small></span>
+                            <input id="settingsEInvoice" type="checkbox">
+                        </label>
+                    </div>
+
+                    <div class="mb-field">
+                        <label>PAN Number</label>
+                        <input id="settingsPAN" placeholder="Enter your PAN Number">
+                    </div>
+
+                    <label class="mb-toggle-row">Enable TDS
+                        <input id="settingsTDS" type="checkbox">
+                    </label>
+                    <label class="mb-toggle-row">Enable TCS
+                        <input id="settingsTCS" type="checkbox">
+                    </label>
+                </div>
+
+                <div class="mb-column">
+                    <div class="mb-two">
+                        <div class="mb-field">
+                            <label>Business Type (Select multiple, if applicable)</label>
+                            <select id="settingsBusinessType">
+                                <option value="">Select Business Type</option>
+                                <option>Retailer</option>
+                                <option>Wholesaler</option>
+                                <option>Manufacturer</option>
+                                <option>Service Provider</option>
+                                <option>Others</option>
+                            </select>
+                        </div>
+                        <div class="mb-field">
+                            <label>Industry Type</label>
+                            <select id="settingsIndustryType">
+                                <option value="">Select Industry</option>
+                                <option>Retailer</option>
+                                <option>Wholesaler</option>
+                                <option>Engineering</option>
+                                <option>Printing and Packaging</option>
+                                <option>F&amp;B</option>
+                                <option>FMCG</option>
+                                <option>Fashion and Lifestyle</option>
+                                <option>Automobile and Spare Parts</option>
+                                <option>Electronics and Appliances</option>
+                                <option>Others</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-field">
+                        <label>Business Registration Type</label>
+                        <select id="settingsRegistrationType">
+                            <option value="">Select Registration Type</option>
+                            <option>GST Regular</option>
+                            <option>GST Composition</option>
+                            <option>GST Exempted</option>
+                            <option>Unregistered</option>
+                            <option>Consumer</option>
+                            <option>Non-GST</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-field">
+                        <label>GSTIN</label>
+                        <input id="settingsGSTIN" placeholder="Enter GSTIN">
+                    </div>
+
+                    <div class="mb-field">
+                        <label>Signature</label>
+                        <input id="settingsSignature" type="file" accept="image/*">
+                    </div>
+
+                    <div class="mb-info-card">
+                        <div class="mb-card-heading">
+                            <strong>Add Business Details</strong>
+                            <p>Add additional business information such as MSME number, Website etc.</p>
+                        </div>
+                        <div class="mb-card-body">
+                            <div class="mb-website-row">
+                                <input id="mbWebsiteLabel" placeholder="Website">
+                                <span>=</span>
+                                <input id="mbWebsiteValue" placeholder="www.website.com">
+                                <button class="mb-btn mb-btn-purple" onclick="addBusinessWebsite()">Add</button>
+                            </div>
+                            <div id="mbWebsiteList" style="margin-top:10px;"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="settings-section">
-                <h3>Billing Address</h3>
-                <div class="settings-form-grid">
-                    <div class="settings-field"><label>Billing Address</label><textarea id="settingsAddress" placeholder="Enter Billing Address"></textarea></div>
-                    <div class="settings-field"><label>State</label><input id="settingsState" placeholder="Enter State"></div>
-                    <div class="settings-field"><label>City</label><input id="settingsCity" placeholder="Enter City"></div>
-                    <div class="settings-field"><label>PIN Code</label><input id="settingsPinCode" inputmode="numeric" placeholder="Enter PIN Code"></div>
-                    <div class="settings-field"><label>PAN Number</label><input id="settingsPAN" placeholder="Enter PAN Number"></div>
-                    <div class="settings-field"><label>Signature</label><input id="settingsSignature" type="file" accept="image/*"></div>
+            <div class="mb-section-strip">Company Settings</div>
+            <div style="padding:14px 16px;">
+                <label class="mb-tally-card">
+                    <span style="font-size:18px;">↗</span>
+                    <span>Data Export to Tally
+                        <small>Transfer vouchers, items and parties to Tally</small>
+                    </span>
+                    <small style="color:#4d3bd5;">New</small>
+                </label>
+
+                <div style="margin-top:15px;">
+                    <label class="mb-toggle-row" style="max-width:420px;">
+                        Hide GST details in all invoices
+                        <input id="settingsHideGST" type="checkbox">
+                    </label>
                 </div>
             </div>
 
-            <div class="settings-section">
-                <h3>GST and Tax Settings</h3>
-                <label class="settings-toggle-row"><input id="settingsGSTRegistered" type="checkbox"> GST Registered</label>
-                <label class="settings-toggle-row"><input id="settingsEInvoice" type="checkbox"> Enable e-Invoicing</label>
-                <label class="settings-toggle-row"><input id="settingsTDS" type="checkbox"> Enable TDS</label>
-                <label class="settings-toggle-row"><input id="settingsTCS" type="checkbox"> Enable TCS</label>
+            <div class="mb-section-strip">Add New Business</div>
+            <div class="mb-new-business">
+                <div class="mb-store-art">
+                    <span>🏪</span><span style="color:#4d3bd5;">⇄</span><span>🏬</span>
+                </div>
+                <p>Easily manage all your businesses in one place</p>
+                <button class="mb-btn mb-btn-purple"
+                    onclick="alert('Create New Business feature can be connected next.')">
+                    Create New Business
+                </button>
             </div>
 
-            <div class="settings-section">
-                <h3>Company Settings</h3>
-                <label class="settings-toggle-row"><input id="settingsHideGST" type="checkbox"> Hide GST details in all invoices</label>
+            <div class="mb-bottom-actions">
+                <button class="mb-btn" onclick="loadBusinessSettings()">Cancel</button>
+                <button class="mb-btn mb-btn-purple" onclick="saveBusinessSettings()">Save Changes</button>
             </div>
+        </div>
+    `;
 
-            <div class="settings-actions">
-                <button class="settings-secondary" onclick="openPage('dashboard')">Cancel</button>
-                <button class="primary" onclick="saveBusinessSettings()">Save Changes</button>
-            </div>
-        `;
+    loadBusinessSettings();
+};
 
-        loadBusinessSettings();
-    };
+window.addBusinessWebsite = function(){
+    const label = document.getElementById("mbWebsiteLabel");
+    const value = document.getElementById("mbWebsiteValue");
+    const list = document.getElementById("mbWebsiteList");
+
+    if(!label || !value || !list) return;
+
+    if(!label.value.trim() || !value.value.trim()){
+        alert("Please enter both the detail name and value.");
+        return;
+    }
+
+    const row = document.createElement("div");
+    row.style.cssText = "display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid #edf0f4;";
+    const detail = document.createElement("span");
+    detail.style.flex = "1";
+    detail.textContent = label.value.trim() + " = " + value.value.trim();
+
+    const remove = document.createElement("button");
+    remove.className = "mb-btn";
+    remove.textContent = "Remove";
+    remove.onclick = () => row.remove();
+
+    row.append(detail, remove);
+    list.appendChild(row);
+
+    label.value = "";
+    value.value = "";
+};
 
     window.saveBusinessSettings = function(){
         const fields = [
