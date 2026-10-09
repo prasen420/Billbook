@@ -699,7 +699,20 @@ document.addEventListener("click", function(){
     document.getElementById("settingsSidebarMenu").style.display = "block";
     openPage("settings");
 }
+
     
+document.getElementById("settingsSidebarMenu").addEventListener("click", function(event) {
+    const clickedMenu = event.target.closest(".menu");
+
+    if (!clickedMenu) return;
+
+    this.querySelectorAll(".menu").forEach(function(menu) {
+        menu.classList.remove("active");
+    });
+
+    clickedMenu.classList.add("active");
+});
+
 
 function exitSettingsMode() {
     document.getElementById("settingsSidebarMenu").style.display = "none";
