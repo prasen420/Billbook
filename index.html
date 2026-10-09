@@ -748,7 +748,8 @@ return x.toUpperCase();
 });
 
 document.getElementById("pageTitle").innerText=title;
-
+document.querySelector(".topbar").style.display =
+    page === "settings" ? "none" : "";
 let content=document.getElementById("content");
 
 
