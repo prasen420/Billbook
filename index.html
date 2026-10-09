@@ -3969,12 +3969,474 @@ return;
 
 // SETTINGS
 
+
 if(page==="settings"){
 
-    content.innerHTML = "";
+    content.innerHTML = `
+        <style>
+            .settings-layout{
+                display:grid;
+                grid-template-columns:230px minmax(0,1fr);
+                gap:20px;
+                min-height:calc(100vh - 110px);
+            }
+
+            .settings-sidebar{
+                border-right:1px solid #e2e8f0;
+                padding-right:12px;
+            }
+
+            .settings-heading{
+                font-size:21px;
+                font-weight:700;
+                margin-bottom:20px;
+            }
+
+            .settings-menu-item{
+                padding:12px;
+                border-radius:6px;
+                cursor:pointer;
+                font-size:14px;
+                margin-bottom:4px;
+            }
+
+            .settings-menu-item:hover,
+            .settings-menu-item.active{
+                background:#eeeaff;
+                color:#4d3bd5;
+                font-weight:600;
+            }
+
+            .settings-panel{
+                min-width:0;
+            }
+
+            .settings-panel h2{
+                font-size:20px;
+                margin-bottom:20px;
+            }
+
+            .settings-form-grid{
+                display:grid;
+                grid-template-columns:repeat(2,minmax(0,1fr));
+                gap:18px;
+            }
+
+            .settings-field label{
+                display:block;
+                font-size:13px;
+                margin-bottom:7px;
+                color:#475569;
+            }
+
+            .settings-field input,
+            .settings-field select,
+            .settings-field textarea{
+                width:100%;
+                min-height:40px;
+                border:1px solid #cbd5e1;
+                border-radius:5px;
+                padding:9px 10px;
+                background:#fff;
+                box-sizing:border-box;
+            }
+
+            .settings-section{
+                border:1px solid #e2e8f0;
+                border-radius:8px;
+                padding:18px;
+                margin-bottom:18px;
+            }
+
+            .settings-section h3{
+                font-size:15px;
+                margin-bottom:18px;
+            }
+
+            .settings-actions{
+                display:flex;
+                justify-content:flex-end;
+                gap:10px;
+                margin-top:20px;
+            }
+
+            .settings-secondary{
+                border:1px solid #cbd5e1;
+                background:#fff;
+                padding:10px 16px;
+                border-radius:5px;
+                cursor:pointer;
+            }
+
+            .settings-toggle-row{
+                display:flex;
+                align-items:center;
+                gap:10px;
+                margin:12px 0;
+                font-size:14px;
+            }
+
+            .settings-toggle-row input{
+                width:16px;
+                height:16px;
+            }
+
+            @media(max-width:750px){
+                .settings-layout{
+                    grid-template-columns:1fr;
+                }
+
+                .settings-sidebar{
+                    border-right:0;
+                    border-bottom:1px solid #e2e8f0;
+                    padding-bottom:12px;
+                }
+
+                .settings-menu-list{
+                    display:grid;
+                    grid-template-columns:repeat(2,minmax(0,1fr));
+                    gap:4px;
+                }
+
+                .settings-form-grid{
+                    grid-template-columns:1fr;
+                }
+            }
+        </style>
+
+        <div class="settings-layout">
+
+            <aside class="settings-sidebar">
+                <div class="settings-heading">Business Settings</div>
+
+                <div class="settings-menu-list">
+                    <div class="settings-menu-item" onclick="openSettingsSection('Account',this)">Account</div>
+                    <div class="settings-menu-item active" onclick="openSettingsSection('Manage Business',this)">Manage Business</div>
+                    <div class="settings-menu-item" onclick="openSettingsSection('Invoice Settings',this)">Invoice Settings</div>
+                    <div class="settings-menu-item" onclick="openSettingsSection('Print Settings',this)">Print Settings</div>
+                    <div class="settings-menu-item" onclick="openSettingsSection('Manage Users',this)">Manage Users</div>
+                    <div class="settings-menu-item" onclick="openSettingsSection('Reminders',this)">Reminders</div>
+                    <div class="settings-menu-item" onclick="openSettingsSection('CA Reports Sharing',this)">CA Reports Sharing</div>
+                    <div class="settings-menu-item" onclick="openSettingsSection('Pricing',this)">Pricing</div>
+                    <div class="settings-menu-item" onclick="openSettingsSection('Refer & Earn',this)">Refer & Earn</div>
+                    <div class="settings-menu-item" onclick="openSettingsSection('Help And Support',this)">Help And Support</div>
+                    <div class="settings-menu-item" onclick="openSettingsSection('Logout',this)">Logout</div>
+                    <div class="settings-menu-item" onclick="openPage('dashboard')">← Back to Dashboard</div>
+                </div>
+            </aside>
+
+            <section class="settings-panel" id="settingsPanel">
+                <h2>Manage Business</h2>
+
+                <div class="settings-section">
+                    <h3>Business Information</h3>
+
+                    <div class="settings-form-grid">
+                        <div class="settings-field">
+                            <label>Business Logo</label>
+                            <input type="file" id="settingsBusinessLogo" accept="image/*">
+                        </div>
+
+                        <div class="settings-field">
+                            <label>Business Name</label>
+                            <input id="settingsBusinessName" placeholder="Enter Business Name">
+                        </div>
+
+                        <div class="settings-field">
+                            <label>Business Type</label>
+                            <select id="settingsBusinessType">
+                                <option value="">Select Business Type</option>
+                                <option>Retailer</option>
+                                <option>Wholesaler</option>
+                                <option>Manufacturer</option>
+                                <option>Service Provider</option>
+                                <option>Others</option>
+                            </select>
+                        </div>
+
+                        <div class="settings-field">
+                            <label>Industry Type</label>
+                            <select id="settingsIndustryType">
+                                <option value="">Select Industry</option>
+                                <option>Retailer</option>
+                                <option>Wholesaler</option>
+                                <option>Engineering</option>
+                                <option>Printing and Packaging</option>
+                                <option>F&B</option>
+                                <option>FMCG</option>
+                                <option>Fashion and Lifestyle</option>
+                                <option>Automobile and Spare Parts</option>
+                                <option>Electronics and Appliances</option>
+                                <option>Others</option>
+                            </select>
+                        </div>
+
+                        <div class="settings-field">
+                            <label>Company Phone Number</label>
+                            <input id="settingsPhone" type="tel" placeholder="Enter Phone Number">
+                        </div>
+
+                        <div class="settings-field">
+                            <label>Company Email ID</label>
+                            <input id="settingsEmail" type="email" placeholder="Enter Email ID">
+                        </div>
+
+                        <div class="settings-field">
+                            <label>Business Registration Type</label>
+                            <select id="settingsRegistrationType">
+                                <option value="">Select Registration Type</option>
+                                <option>GST Regular</option>
+                                <option>GST Composition</option>
+                                <option>GST Exempted</option>
+                                <option>Unregistered</option>
+                                <option>Consumer</option>
+                                <option>Non-GST</option>
+                            </select>
+                        </div>
+
+                        <div class="settings-field">
+                            <label>GSTIN</label>
+                            <input id="settingsGSTIN" placeholder="Enter GSTIN">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Billing Address</h3>
+
+                    <div class="settings-form-grid">
+                        <div class="settings-field">
+                            <label>Billing Address</label>
+                            <textarea id="settingsAddress" placeholder="Enter Billing Address"></textarea>
+                        </div>
+
+                        <div class="settings-field">
+                            <label>State</label>
+                            <input id="settingsState" placeholder="Enter State">
+                        </div>
+
+                        <div class="settings-field">
+                            <label>City</label>
+                            <input id="settingsCity" placeholder="Enter City">
+                        </div>
+
+                        <div class="settings-field">
+                            <label>PIN Code</label>
+                            <input id="settingsPinCode" inputmode="numeric" placeholder="Enter PIN Code">
+                        </div>
+
+                        <div class="settings-field">
+                            <label>PAN Number</label>
+                            <input id="settingsPAN" placeholder="Enter PAN Number">
+                        </div>
+
+                        <div class="settings-field">
+                            <label>Signature</label>
+                            <input id="settingsSignature" type="file" accept="image/*">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>GST and Tax Settings</h3>
+
+                    <label class="settings-toggle-row">
+                        <input id="settingsGSTRegistered" type="checkbox">
+                        GST Registered
+                    </label>
+
+                    <label class="settings-toggle-row">
+                        <input id="settingsEInvoice" type="checkbox">
+                        Enable e-Invoicing
+                    </label>
+
+                    <label class="settings-toggle-row">
+                        <input id="settingsTDS" type="checkbox">
+                        Enable TDS
+                    </label>
+
+                    <label class="settings-toggle-row">
+                        <input id="settingsTCS" type="checkbox">
+                        Enable TCS
+                    </label>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Company Settings</h3>
+
+                    <label class="settings-toggle-row">
+                        <input id="settingsHideGST" type="checkbox">
+                        Hide GST details in all invoices
+                    </label>
+                </div>
+
+                <div class="settings-actions">
+                    <button class="settings-secondary" onclick="openPage('dashboard')">Cancel</button>
+                    <button class="primary" onclick="saveBusinessSettings()">Save Changes</button>
+                </div>
+            </section>
+
+        </div>
+    `;
+
+    window.openSettingsSection = function(section, element){
+        document.querySelectorAll(".settings-menu-item").forEach(item => {
+            item.classList.remove("active");
+        });
+
+        if(element) element.classList.add("active");
+
+        const panel = document.getElementById("settingsPanel");
+        if(!panel) return;
+
+        if(section === "Manage Business"){
+            renderManageBusinessSettings();
+            return;
+        }
+
+        if(section === "Logout"){
+            panel.innerHTML = `
+                <h2>Logout</h2>
+                <div class="settings-section">
+                    <p>Are you sure you want to logout?</p>
+                    <br>
+                    <button class="primary" onclick="localStorage.removeItem('currentPage');openPage('dashboard')">Confirm Logout</button>
+                </div>
+            `;
+            return;
+        }
+
+        panel.innerHTML = `
+            <h2>${section}</h2>
+            <div class="settings-section">
+                <p>${section} page is ready for configuration.</p>
+                <p style="margin-top:10px;color:#64748b;font-size:13px;">
+                    The detailed options for this section can be added next.
+                </p>
+            </div>
+        `;
+    };
+
+    window.renderManageBusinessSettings = function(){
+        const panel = document.getElementById("settingsPanel");
+        if(!panel) return;
+
+        panel.innerHTML = `
+            <h2>Manage Business</h2>
+
+            <div class="settings-section">
+                <h3>Business Information</h3>
+                <div class="settings-form-grid">
+                    <div class="settings-field"><label>Business Logo</label><input type="file" id="settingsBusinessLogo" accept="image/*"></div>
+                    <div class="settings-field"><label>Business Name</label><input id="settingsBusinessName" placeholder="Enter Business Name"></div>
+                    <div class="settings-field"><label>Business Type</label><select id="settingsBusinessType"><option value="">Select Business Type</option><option>Retailer</option><option>Wholesaler</option><option>Manufacturer</option><option>Service Provider</option><option>Others</option></select></div>
+                    <div class="settings-field"><label>Industry Type</label><select id="settingsIndustryType"><option value="">Select Industry</option><option>Retailer</option><option>Wholesaler</option><option>Engineering</option><option>Printing and Packaging</option><option>F&B</option><option>FMCG</option><option>Fashion and Lifestyle</option><option>Automobile and Spare Parts</option><option>Electronics and Appliances</option><option>Others</option></select></div>
+                    <div class="settings-field"><label>Company Phone Number</label><input id="settingsPhone" type="tel" placeholder="Enter Phone Number"></div>
+                    <div class="settings-field"><label>Company Email ID</label><input id="settingsEmail" type="email" placeholder="Enter Email ID"></div>
+                    <div class="settings-field"><label>Business Registration Type</label><select id="settingsRegistrationType"><option value="">Select Registration Type</option><option>GST Regular</option><option>GST Composition</option><option>GST Exempted</option><option>Unregistered</option><option>Consumer</option><option>Non-GST</option></select></div>
+                    <div class="settings-field"><label>GSTIN</label><input id="settingsGSTIN" placeholder="Enter GSTIN"></div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>Billing Address</h3>
+                <div class="settings-form-grid">
+                    <div class="settings-field"><label>Billing Address</label><textarea id="settingsAddress" placeholder="Enter Billing Address"></textarea></div>
+                    <div class="settings-field"><label>State</label><input id="settingsState" placeholder="Enter State"></div>
+                    <div class="settings-field"><label>City</label><input id="settingsCity" placeholder="Enter City"></div>
+                    <div class="settings-field"><label>PIN Code</label><input id="settingsPinCode" inputmode="numeric" placeholder="Enter PIN Code"></div>
+                    <div class="settings-field"><label>PAN Number</label><input id="settingsPAN" placeholder="Enter PAN Number"></div>
+                    <div class="settings-field"><label>Signature</label><input id="settingsSignature" type="file" accept="image/*"></div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>GST and Tax Settings</h3>
+                <label class="settings-toggle-row"><input id="settingsGSTRegistered" type="checkbox"> GST Registered</label>
+                <label class="settings-toggle-row"><input id="settingsEInvoice" type="checkbox"> Enable e-Invoicing</label>
+                <label class="settings-toggle-row"><input id="settingsTDS" type="checkbox"> Enable TDS</label>
+                <label class="settings-toggle-row"><input id="settingsTCS" type="checkbox"> Enable TCS</label>
+            </div>
+
+            <div class="settings-section">
+                <h3>Company Settings</h3>
+                <label class="settings-toggle-row"><input id="settingsHideGST" type="checkbox"> Hide GST details in all invoices</label>
+            </div>
+
+            <div class="settings-actions">
+                <button class="settings-secondary" onclick="openPage('dashboard')">Cancel</button>
+                <button class="primary" onclick="saveBusinessSettings()">Save Changes</button>
+            </div>
+        `;
+
+        loadBusinessSettings();
+    };
+
+    window.saveBusinessSettings = function(){
+        const fields = [
+            "settingsBusinessName",
+            "settingsBusinessType",
+            "settingsIndustryType",
+            "settingsPhone",
+            "settingsEmail",
+            "settingsRegistrationType",
+            "settingsGSTIN",
+            "settingsAddress",
+            "settingsState",
+            "settingsCity",
+            "settingsPinCode",
+            "settingsPAN"
+        ];
+
+        const data = {};
+
+        fields.forEach(id => {
+            const element = document.getElementById(id);
+            if(element) data[id] = element.value;
+        });
+
+        [
+            "settingsGSTRegistered",
+            "settingsEInvoice",
+            "settingsTDS",
+            "settingsTCS",
+            "settingsHideGST"
+        ].forEach(id => {
+            const element = document.getElementById(id);
+            if(element) data[id] = element.checked;
+        });
+
+        localStorage.setItem("businessSettings", JSON.stringify(data));
+
+        const companyName = data.settingsBusinessName || "YOUR COMPANY";
+        localStorage.setItem("companyName", companyName);
+
+        const logo = document.getElementById("companyName");
+        if(logo) logo.innerText = companyName;
+
+        alert("Business settings saved successfully.");
+    };
+
+    window.loadBusinessSettings = function(){
+        const saved = JSON.parse(localStorage.getItem("businessSettings") || "{}");
+
+        Object.keys(saved).forEach(id => {
+            const element = document.getElementById(id);
+            if(!element) return;
+
+            if(element.type === "checkbox"){
+                element.checked = Boolean(saved[id]);
+            } else {
+                element.value = saved[id];
+            }
+        });
+    };
+
+    window.renderManageBusinessSettings();
 
     return;
 }
+
 
 
 // OTHER MODULES
