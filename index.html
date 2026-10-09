@@ -524,6 +524,7 @@ th{
     </button>
 </div>
     
+<div id="normalSidebarMenu">
 <div class="section-title">GENERAL</div>
 
 <div class="menu" data-page="dashboard" onclick="openPage('dashboard')">
@@ -615,12 +616,28 @@ BUSINESS TOOLS
 ✉ SMS Marketing
 </div>
 
-<div class="menu" onclick="openPage('settings')">
+<div class="menu" onclick="showSettingsMode()">
 ⚙ Settings
 </div>
-
+</div>
 </div>
 
+
+<div id="settingsSidebarMenu" style="display:none;">
+    <div class="section-title">BUSINESS SETTINGS</div>
+
+    <div class="menu" onclick="openSettingsSection('Account', this)">Account</div>
+    <div class="menu" onclick="openSettingsSection('Manage Business', this)">Manage Business</div>
+    <div class="menu" onclick="openSettingsSection('Invoice Settings', this)">Invoice Settings</div>
+    <div class="menu" onclick="openSettingsSection('Print Settings', this)">Print Settings</div>
+    <div class="menu" onclick="openSettingsSection('Manage Users', this)">Manage Users</div>
+    <div class="menu" onclick="openSettingsSection('Reminders', this)">Reminders</div>
+    <div class="menu" onclick="openSettingsSection('CA Reports Sharing', this)">CA Reports Sharing</div>
+    <div class="menu" onclick="openSettingsSection('Pricing', this)">Pricing</div>
+    <div class="menu" onclick="openSettingsSection('Refer & Earn', this)">Refer & Earn</div>
+    <div class="menu" onclick="openSettingsSection('Help And Support', this)">Help And Support</div>
+    <div class="menu" onclick="openSettingsSection('Logout', this)">Logout</div>
+</div>
 
 <!-- MAIN -->
 
@@ -675,11 +692,24 @@ document.addEventListener("click", function(){
     }
 
 });
+
+    function showSettingsMode() {
+    document.getElementById("normalSidebarMenu").style.display = "none";
+    document.getElementById("createSalesMenuWrap").style.display = "none";
+    document.getElementById("settingsBackButtonWrap").style.display = "block";
+    document.getElementById("settingsSidebarMenu").style.display = "block";
+    openPage("settings");
+}
+    
+
 function exitSettingsMode() {
+    document.getElementById("settingsSidebarMenu").style.display = "none";
+    document.getElementById("normalSidebarMenu").style.display = "block";
     document.getElementById("settingsBackButtonWrap").style.display = "none";
     document.getElementById("createSalesMenuWrap").style.display = "flex";
     openPage("dashboard");
 }
+
     
 function openPage(page){
     localStorage.setItem("currentPage", page);
