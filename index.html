@@ -4324,7 +4324,7 @@ window.createInventoryItem = async function () {
 
     document.body.appendChild(modal);
 
-    document.getElementById("invCreateForm").onsubmit = function (event) {
+    document.getElementById("invCreateForm").onsubmit = async function (event) {
         event.preventDefault();
 
         const f = new FormData(this);
