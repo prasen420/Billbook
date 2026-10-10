@@ -4136,7 +4136,7 @@ if (page === "items") {
     };
 
 
-window.createInventoryItem = function () {
+window.createInventoryItem = async function () {
     const old = document.getElementById("invCreateModal");
     if (old) old.remove();
 
@@ -4361,8 +4361,28 @@ window.createInventoryItem = function () {
             createdAt: new Date().toISOString()
         };
 
-        items.push(item);
-        localStorage.setItem("erpInventoryItems", JSON.stringify(items));
+        const { data: savedItem, error } = await supabase
+    .from("items")
+    .insert([{
+        item_name: item.name,
+        sku: item.code || null,
+        hsn: item.hsn || null,
+        category: item.category || null,
+        unit: item.unit || "PCS",
+        purchase_price: item.purchase || 0,
+        selling_price: item.selling || 0,
+        mrp: item.mrp || 0,
+        stock_qty: item.qty || 0,
+        tax_rate: item.gstRate || 0,
+        barcode: item.barcode || null
+    }])
+    .select();
+
+if (error) {
+    console.error("Supabase save error:", error);
+    alert("Item was not saved: " + error.message);
+    return;
+}
 
         modal.remove();
 
