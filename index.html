@@ -4948,21 +4948,49 @@ if (gstRegistered) {
     gstRegistered.addEventListener("change", updateGSTNumberField);
 }
 
+
 function updateGSTNumberField() {
-    const registered = document.getElementById("settingsGSTRegistered");
-    const gstField = document.getElementById("gstNumberField");
-    const gstInput = document.getElementById("settingsGSTIN");
+    const yes = document.getElementById("settingsGSTRegistered");
+    const no = document.getElementById("settingsGSTNotRegistered");
+    const field = document.getElementById("gstNumberField");
+    const input = document.getElementById("settingsGSTIN");
 
-    if (!registered || !gstField || !gstInput) return;
+    if (!yes || !no) return;
 
-    gstField.style.display = registered.checked ? "" : "none";
-    gstInput.disabled = !registered.checked;
-    gstInput.required = registered.checked;
+    if (yes.checked) {
+        no.checked = false;
+    } else if (no.checked) {
+        yes.checked = false;
+    } else {
+        no.checked = true;
+    }
 
-    if (!registered.checked) {
-        gstInput.value = "";
+    if (field && input) {
+        field.style.display = yes.checked ? "" : "none";
+        input.disabled = !yes.checked;
+        input.required = yes.checked;
+
+        if (!yes.checked) input.value = "";
     }
 }
+
+const gstYes = document.getElementById("settingsGSTRegistered");
+const gstNo = document.getElementById("settingsGSTNotRegistered");
+
+if (gstYes && gstNo) {
+    gstYes.addEventListener("change", function () {
+        if (gstYes.checked) gstNo.checked = false;
+        else gstNo.checked = true;
+        updateGSTNumberField();
+    });
+
+    gstNo.addEventListener("change", function () {
+        if (gstNo.checked) gstYes.checked = false;
+        else gstYes.checked = true;
+        updateGSTNumberField();
+    });
+}
+
     loadBusinessSettings();
 };
 
@@ -5244,6 +5272,12 @@ loadBusinessLogoPreview();
             } else {
                 element.value = saved[id];
             }
+            const yes = document.getElementById("settingsGSTRegistered");
+const no = document.getElementById("settingsGSTNotRegistered");
+
+if (yes && no && !yes.checked && !no.checked) {
+    no.checked = true;
+}
         });
         updateGSTNumberField();
     };
