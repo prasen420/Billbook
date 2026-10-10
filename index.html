@@ -4802,6 +4802,7 @@ window.renderManageBusinessSettings = function(){
     </div>
 </div>
 
+
 <div class="mb-field" id="gstNumberField" style="display:none;">
     <label for="settingsGSTIN">
         GSTIN <span style="color:red;">*</span>
@@ -4810,7 +4811,13 @@ window.renderManageBusinessSettings = function(){
            placeholder="Enter GSTIN"
            style="text-transform:uppercase;"
            disabled>
+
+    <small id="gstinRequiredError"
+           style="display:none;color:red;">
+        This is a required field
+    </small>
 </div>
+
 
 
                     <div class="mb-field" style="border:1px solid #c4b5fd;padding:11px;border-radius:4px;">
@@ -4954,6 +4961,7 @@ function updateGSTNumberField() {
     const no = document.getElementById("settingsGSTNotRegistered");
     const field = document.getElementById("gstNumberField");
     const input = document.getElementById("settingsGSTIN");
+    const error = document.getElementById("gstinRequiredError");
 
     if (!yes || !no) return;
 
@@ -4972,6 +4980,25 @@ function updateGSTNumberField() {
 
         if (!yes.checked) input.value = "";
     }
+        if (error && input) {
+        error.style.display =
+            yes.checked && !input.value.trim() ? "" : "none";
+    }
+}
+
+    
+const gstinInput = document.getElementById("settingsGSTIN");
+
+if (gstinInput) {
+    gstinInput.addEventListener("input", function () {
+        const error = document.getElementById("gstinRequiredError");
+
+        if (error) {
+            error.style.display =
+                this.value.trim() ? "none" :
+                (document.getElementById("settingsGSTRegistered").checked ? "" : "none");
+        }
+    });
 }
 
 const gstYes = document.getElementById("settingsGSTRegistered");
