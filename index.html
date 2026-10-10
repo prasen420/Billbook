@@ -5272,13 +5272,13 @@ loadBusinessLogoPreview();
             } else {
                 element.value = saved[id];
             }
-            const yes = document.getElementById("settingsGSTRegistered");
+        });
+        const yes = document.getElementById("settingsGSTRegistered");
 const no = document.getElementById("settingsGSTNotRegistered");
 
 if (yes && no && !yes.checked && !no.checked) {
     no.checked = true;
 }
-        });
         updateGSTNumberField();
     };
 
