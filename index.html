@@ -4281,10 +4281,17 @@ if(page==="settings"){
                             </select>
                         </div>
 
-                        <div class="settings-field">
-                            <label>GSTIN</label>
-                            <input id="settingsGSTIN" placeholder="Enter GSTIN">
-                        </div>
+                        <div class="settings-field" id="gstNumberField" style="display:none;">
+    <label for="settingsGSTIN">
+        GST Number <span style="color:red;">*</span>
+    </label>
+    <input
+        id="settingsGSTIN"
+        placeholder="Enter your GST Number"
+        required
+        disabled
+    >
+</div>
                     </div>
                 </div>
 
@@ -4926,7 +4933,27 @@ window.renderManageBusinessSettings = function(){
             </div>
         </div>
     `;
+const gstRegistered = document.getElementById("settingsGSTRegistered");
 
+if (gstRegistered) {
+    gstRegistered.addEventListener("change", updateGSTNumberField);
+}
+
+function updateGSTNumberField() {
+    const registered = document.getElementById("settingsGSTRegistered");
+    const gstField = document.getElementById("gstNumberField");
+    const gstInput = document.getElementById("settingsGSTIN");
+
+    if (!registered || !gstField || !gstInput) return;
+
+    gstField.style.display = registered.checked ? "" : "none";
+    gstInput.disabled = !registered.checked;
+    gstInput.required = registered.checked;
+
+    if (!registered.checked) {
+        gstInput.value = "";
+    }
+}
     loadBusinessSettings();
 };
 
@@ -5141,6 +5168,17 @@ window.previewBusinessSignature = function(event) {
 };
 
     window.saveBusinessSettings = function(){
+        ```javascript
+const gstRegistered = document.getElementById("settingsGSTRegistered");
+const gstInput = document.getElementById("settingsGSTIN");
+
+if (gstRegistered && gstRegistered.checked &&
+    (!gstInput || !gstInput.value.trim())) {
+    alert("Please enter GST Number.");
+    gstInput?.focus();
+    return;
+}
+```
         const fields = [
             "settingsBusinessName",
             "settingsBusinessType",
@@ -5198,6 +5236,7 @@ loadBusinessLogoPreview();
                 element.value = saved[id];
             }
         });
+        updateGSTNumberField();
     };
 
     window.renderManageBusinessSettings();
