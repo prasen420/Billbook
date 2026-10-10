@@ -4787,17 +4787,31 @@ window.renderManageBusinessSettings = function(){
                         <input id="settingsCity" placeholder="Enter City">
                     </div>
 
-                    <div class="mb-field">
-                        <label>Are you GST Registered?</label>
-                        <div class="mb-choice-row">
-                            <label class="mb-choice">Yes
-                                <input id="settingsGSTRegistered" type="checkbox">
-                            </label>
-                            <label class="mb-choice">No
-                                <input id="settingsGSTNotRegistered" type="checkbox">
-                            </label>
-                        </div>
-                    </div>
+                    
+<div class="mb-field">
+    <label>Are you GST Registered?</label>
+    <div class="mb-choice-row">
+        <label class="mb-choice">
+            Yes
+            <input id="settingsGSTRegistered" type="checkbox">
+        </label>
+        <label class="mb-choice">
+            No
+            <input id="settingsGSTNotRegistered" type="checkbox">
+        </label>
+    </div>
+</div>
+
+<div class="mb-field" id="gstNumberField" style="display:none;">
+    <label for="settingsGSTIN">
+        GSTIN <span style="color:red;">*</span>
+    </label>
+    <input id="settingsGSTIN"
+           placeholder="Enter GSTIN"
+           style="text-transform:uppercase;"
+           disabled>
+</div>
+
 
                     <div class="mb-field" style="border:1px solid #c4b5fd;padding:11px;border-radius:4px;">
                         <label style="display:flex;justify-content:space-between;align-items:center;margin:0;">
