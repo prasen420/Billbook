@@ -7318,8 +7318,8 @@ window.loadInvoicePickerItems = async function(){
     `;
 
 
-    const { data, error } = await supabase
-        .from("items")
+    const { data, error } = await supabaseClient
+    .from("items")
         .select(`
             id,
             item_name,
