@@ -4384,13 +4384,27 @@ if (error) {
     return;
 }
 
-        modal.remove();
+if (savedItem && savedItem.length > 0) {
+    const saved = savedItem[0];
 
-        if (typeof window.renderInventoryTable === "function") {
-            window.renderInventoryTable();
-        }
+    const items = window.getInventoryItems();
 
-        alert("Item saved successfully!");
+    items.push({
+        ...item,
+        id: String(saved.id),
+        supabaseId: saved.id
+    });
+
+    localStorage.setItem("erpInventoryItems", JSON.stringify(items));
+}
+
+modal.remove();
+
+if (typeof window.renderInventoryTable === "function") {
+    window.renderInventoryTable();
+}
+
+alert("Item saved successfully!");
     };
 };
 
