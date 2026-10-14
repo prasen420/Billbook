@@ -4147,7 +4147,8 @@ if (page === "items") {
                 <td>${safe(i.qty)} ${safe(i.unit || "PCS")}</td>
                 <td>₹${Number(i.selling || 0).toLocaleString("en-IN")}</td>
                 <td>₹${Number(i.purchase || 0).toLocaleString("en-IN")}</td>
-                <td><button class="inv-delete" onclick="window.removeInventoryItem('${safe(i.id)}')">Delete</button></td>
+                <td><button onclick="window.editInventoryItem('${safe(i.id)}')">Edit</button>
+    <button class="inv-delete" onclick="window.removeInventoryItem('${safe(i.id)}')">Delete</button></td>
             </tr>`;
         }).join("");
     };
