@@ -4154,7 +4154,7 @@ if (page === "items") {
     };
 
 
-window.createInventoryItem = async function () {
+window.createInventoryItem = async function (editItem = null) {
     const old = document.getElementById("invCreateModal");
     if (old) old.remove();
 
@@ -4166,7 +4166,7 @@ window.createInventoryItem = async function () {
         <div class="inv-modal-card" style="width:min(850px,100%);">
             <div style="display:flex;justify-content:space-between;gap:12px;align-items:start;">
                 <div>
-                    <h3>Create Item</h3>
+                    <h3>${editItem ? "Edit Item" : "Create Item"}</h3>
                     <div class="inv-muted">Add product details, pricing, stock and GST information.</div>
                 </div>
                 <button type="button" class="inv-btn"
@@ -4356,7 +4356,7 @@ window.createInventoryItem = async function () {
         const items = window.getInventoryItems();
 
         const item = {
-            id: Date.now().toString(),
+            id: editItem ? editItem.id : Date.now().toString(),
             itemType: String(f.get("itemType") || "Product"),
             name: name,
             code: String(f.get("code") || "").trim(),
@@ -4425,7 +4425,90 @@ if (typeof window.renderInventoryTable === "function") {
 alert("Item saved successfully!");
     };
 };
+window.editInventoryItem = async function (id) {
+    const items = window.getInventoryItems();
+    const item = items.find(i => String(i.id) === String(id));
 
+    if (!item) {
+        alert("Item not found!");
+        return;
+    }
+
+    const newName = prompt("Item Name:", item.name || "");
+    if (newName === null) return;
+
+    const newCode = prompt("Item Code:", item.code || "");
+    if (newCode === null) return;
+
+    const newHsn = prompt("HSN Code:", item.hsn || "");
+    if (newHsn === null) return;
+
+    const newQty = prompt("Stock Quantity:", item.qty ?? 0);
+    if (newQty === null || newQty.trim() === "" || !Number.isFinite(Number(newQty))) {
+        alert("Enter a valid stock quantity.");
+        return;
+    }
+
+    const newSelling = prompt("Selling Price:", item.selling ?? 0);
+    if (newSelling === null || newSelling.trim() === "" || !Number.isFinite(Number(newSelling))) {
+        alert("Enter a valid selling price.");
+        return;
+    }
+
+    const newPurchase = prompt("Purchase Price:", item.purchase ?? 0);
+    if (newPurchase === null || newPurchase.trim() === "" || !Number.isFinite(Number(newPurchase))) {
+        alert("Enter a valid purchase price.");
+        return;
+    }
+
+    const updatedItem = {
+        ...item,
+        name: newName.trim(),
+        code: newCode.trim(),
+        hsn: newHsn.trim(),
+        qty: Number(newQty),
+        selling: Number(newSelling),
+        purchase: Number(newPurchase)
+    };
+
+    if (!updatedItem.name) {
+        alert("Item name cannot be empty.");
+        return;
+    }
+
+    const { data, error } = await supabaseClient
+        .from("items")
+        .update({
+            item_name: updatedItem.name,
+            sku: updatedItem.code || null,
+            hsn: updatedItem.hsn || null,
+            stock_qty: updatedItem.qty,
+            selling_price: updatedItem.selling,
+            purchase_price: updatedItem.purchase
+        })
+        .eq("id", item.supabaseId || item.supabase_id || item.id)
+        .select();
+
+    if (error) {
+        console.error("Item update error:", error);
+        alert("Item update failed: " + error.message);
+        return;
+    }
+
+    const index = items.findIndex(i => String(i.id) === String(id));
+    if (index !== -1) {
+        items[index] = {
+            ...updatedItem,
+            id: String(data[0].id),
+            supabaseId: data[0].id
+        };
+
+        localStorage.setItem("erpInventoryItems", JSON.stringify(items));
+    }
+
+    window.renderInventoryTable();
+    alert("Item updated successfully!");
+};
 
     window.removeInventoryItem = function (id) {
         if (!confirm("Delete this inventory item?")) return;
