@@ -1271,7 +1271,7 @@ const tbody = document.getElementById("latestTransactionsBody");
 if(!tbody) return;
 
 
-const { data: invoices, error } = await supabase
+const { data: invoices, error } = await supabaseClient
 
 .from("invoices")
 
@@ -1331,7 +1331,7 @@ let parties = [];
 
 if(partyIds.length > 0){
 
-const { data, error: partyError } = await supabase
+const { data, error: partyError } = await supabaseClient
 
 .from("parties")
 
@@ -7015,7 +7015,7 @@ async function saveParty(saveAndNew = false){
     'input[name="partyType"]:checked'
   )?.value || "Customer";
 
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from("parties")
     .insert([{
       name: name,
