@@ -4433,7 +4433,24 @@ alert("Item saved successfully!");
         localStorage.setItem("erpInventoryItems", JSON.stringify(items));
         window.renderInventoryTable();
     };
+window.editInventoryItem = async function (id) {
+    const items = window.getInventoryItems();
+    const item = items.find(i => String(i.id) === String(id));
 
+    if (!item) {
+        alert("Item not found!");
+        return;
+    }
+
+    alert("Selected item: " + item.name +
+          "\nItem Code: " + (item.code || "") +
+          "\nHSN: " + (item.hsn || "") +
+          "\nSelling Price: " + (item.selling || 0) +
+          "\nPurchase Price: " + (item.purchase || 0));
+
+    // Open the existing item form for editing
+    await window.createInventoryItem();
+};
     window.toggleAllInventory = function (checked) {
         document.querySelectorAll(".inv-row-check").forEach(c => c.checked = checked);
     };
