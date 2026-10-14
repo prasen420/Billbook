@@ -451,6 +451,11 @@ const supabase = window.supabase.createClient(
 );
 
   console.log("Supabase connected");
+supabase.auth.onAuthStateChange((event, session) => {
+    if (event === "SIGNED_OUT") {
+        console.log("Supabase user signed out");
+    }
+});
 </script>
 </head> 
 <body>
