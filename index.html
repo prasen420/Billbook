@@ -445,17 +445,11 @@ th{
   const SUPABASE_URL = "https://uwceeoiinamwjezmsqqu.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_LLQ64QQV3B4tNyw2NfjMmg_56PX5N1i";
 
-const supabase = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
 );
 
-  console.log("Supabase connected");
-supabase.auth.onAuthStateChange((event, session) => {
-    if (event === "SIGNED_OUT") {
-        console.log("Supabase user signed out");
-    }
-});
 </script>
 </head> 
 <body>
@@ -4384,7 +4378,7 @@ window.createInventoryItem = async function () {
             createdAt: new Date().toISOString()
         };
 
-        const { data: savedItem, error } = await supabase
+        const { data: savedItem, error } = await supabaseClient
     .from("items")
     .insert([{
         item_name: item.name,
@@ -9067,7 +9061,7 @@ if(typeof oldOpenSalesInvoice === "function" &&
         loginBox.style.display = "none";
     }
 
-    const { data, error } = await supabase.auth.getSession();
+    const { data, error } = await supabaseClient.auth.getSession();
 
     if (error) {
         showLogin();
@@ -9088,7 +9082,7 @@ if(typeof oldOpenSalesInvoice === "function" &&
         const email = document.getElementById("loginEmail").value;
         const password = document.getElementById("loginPassword").value;
 
-        const { error } = await supabase.auth.signInWithPassword({
+        const { error } = await supabaseClient.auth.signInWithPassword({
             email: email,
             password: password
         });
